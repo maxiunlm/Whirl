@@ -1,0 +1,107 @@
+/*
+body {
+	color: white;
+	background-image: url(space.jpg);
+	background-color: black;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+.life {
+	position: absolute;
+	top: 30px;
+	z-index: 9000;
+	width: 20pt;
+	height: 35pt;
+}
+
+.scoreText {
+	font-family: 'cursive', 'Comic Sans MS', 'Comic Sans', 'Sand', 'Marker Felt', 'Textile';
+	font-size: 24pt;
+	color: Azure;
+	text-shadow: -1px 0 Aquamarine, 0 1px Aquamarine, 1px 0 Aquamarine, 0 -1px Aquamarine;
+	position: absolute;
+	top: 0px;
+	z-index: 9000;
+}
+
+#spiralBackground {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	z-index: -1000;
+}
+
+#userSpaceShipExplotion {
+	position: absolute;
+	z-index: 1200;
+}
+
+#ateroidExplotion{
+	position: absolute;
+	z-index: 1200;
+}
+
+#enemySpaceShipExplotion{
+	position: absolute;
+	z-index: 1200;
+}
+
+#enemySpaceShip {
+	position: absolute;
+	z-index: 1500;
+}
+
+.userShot {
+	width: 7px;
+	height: 25px;
+	position: absolute;
+	z-index: 1000;
+}
+
+.enemyShot {
+	width: 13px;
+	height: 13px;
+	position: absolute;
+	z-index: 1400;
+}
+
+#settings {
+	position: absolute;
+	top: 40px;
+}
+
+#help {
+	position: absolute;
+	top: 40px;
+}
+
+.button {
+	position: absolute;
+	width: 50pt;
+	height: 50pt;
+	cursor: pointer;
+	opacity: 0.5;
+	z-index: 9999999999;
+}
+
+.buttonLeft {
+	left: 40px;
+}
+*/
+.asteroid {
+	position: absolute;
+	z-index: 2000;
+
+	/* The animation part: */
+	animation-name: spin;
+	animation-duration: 4000ms;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes spin {
+	from {transform:rotate(0deg);}
+	to {transform:rotate(360deg);}
+}
