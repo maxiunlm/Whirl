@@ -1,0 +1,58 @@
+<html>
+<body>
+<script>
+
+	screen.lockOrientationUniversal = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
+
+	function screenOrientationLock(selectedOrientation) {
+		document.getElementById('screenOrientation').innerHTML = selectedOrientation;
+		
+		if (!!screen.lockOrientationUniversal && screen.lockOrientationUniversal(selectedOrientation)) {
+			document.getElementById('screenOrientation').innerHTML += " orientation was locked";
+		}
+		else if (!!screen.orientation && !!screen.orientation.lock && screen.orientation.lock(selectedOrientation)) {
+			document.getElementById('screenOrientation').innerHTML += " orientation was locked";
+		}
+		else {
+			document.getElementById('screenOrientation').innerHTML += " orientation lock failed";
+		}
+	}
+
+	function showHandler(evt) {
+		if (!!screen.orientation) {
+			console.log("Orientation type is " + screen.orientation.type);
+			console.log("Orientation angle is " + screen.orientation.angle);
+		
+			document.getElementById('screenOrientation').innerHTML = screen.orientation.type;
+		}
+		else {
+			console.log("Orientation type is " + screen.msOrientation);
+		
+			document.getElementById('screenOrientation').innerHTML = screen.msOrientation;
+		}
+	}
+
+	function addScreenOrientationEventListener() {
+		if (!!screen.orientation) {
+		  screen.orientation.addEventListener("change", showHandler);
+		}
+		else {
+			screen.addEventListener("MSOrientationChange", showHandler, true); // useCapture);
+		}
+	}
+
+	addScreenOrientationEventListener();
+	window.onload = showHandler;
+</script>
+<div id="screenOrientation"></div>
+<button onclick='screen.orientation.unlock()'>
+  Unlock
+</button>
+<button onclick="screenOrientationLock('portrait')">
+  Lock to portrait
+</button>
+<button onclick="screenOrientationLock('landscape')">
+  Lock to landscape
+</button>
+</body>
+</html>
