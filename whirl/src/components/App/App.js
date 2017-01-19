@@ -13,14 +13,13 @@ class App extends Component {
         this.width = screen.width;
         
         window.actions = {};
-        window.actions.moveUserSpaceShipToLeft = () => {};        
-        //UserSpaceShip.contextTypes = { actions: this.actions };
+        window.actions.moveUserSpaceShipToLeft = () => {};
     }
 
     render() {
         return (
                 <div>
-                    <UserSpaceShip gameHeight={this.height} gameWidth={this.width} />
+                    <UserSpaceShip gameHeight={this.height} gameWidth={this.width} actions={window.actions} />
                     <LeftDirection action={() => window.actions.moveUserSpaceShipToLeft() }/>
                             <button onClick={() => window.actions.moveUserSpaceShipToLeft()}>&lt; 2</button>
                 </div>

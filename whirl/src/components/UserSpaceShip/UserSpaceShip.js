@@ -42,7 +42,7 @@ class UserSpaceShip extends Component {
     }
     
     componentDidMount() {        
-        window.actions.moveUserSpaceShipToLeft = this.moveToLeft.bind(this);
+        this.props.actions.moveUserSpaceShipToLeft = this.moveToLeft.bind(this);
     }
 
     render() {
