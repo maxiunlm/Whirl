@@ -1,6 +1,4 @@
-#userSpaceShip {
-	width: 40pt;
-	height: 70pt;
-	position: absolute;
-	z-index: 1300;
+.userSpaceShip {
+    position: absolute;
+    z-index: 1300;
 }
