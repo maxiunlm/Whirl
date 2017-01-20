@@ -7,7 +7,7 @@ class LeftDirection extends Component {
     
     render () {        
         return (
-                <button onClick={this.props.action}>&lt;</button>
+                <button id="leftDirection" onClick={this.props.action}>&lt;</button>
         );
     }
 };
