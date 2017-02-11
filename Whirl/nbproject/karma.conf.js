@@ -6,13 +6,10 @@
 
 module.exports = function (config) {
     config.set({
-        basePath: '../',
+        basePath: '../..',
         
         files: [
-            'src/*.js',
-            'src/components/**/*.js',
-            '__tests__/*.test.js',
-            '__tests__/components/**/*.test.js'
+            '**/*.test.js'
         ],
         
         exclude: [],

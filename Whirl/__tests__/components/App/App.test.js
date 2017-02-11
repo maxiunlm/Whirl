@@ -35,7 +35,7 @@ describe('APP - ', () => {
                     );
 
             var result = app.find('img');
-
+            debugger;
             console.log(result);
             expect(result.is('img')).toBeTruthy();
         });
