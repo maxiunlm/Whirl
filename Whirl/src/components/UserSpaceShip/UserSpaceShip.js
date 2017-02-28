@@ -2,30 +2,20 @@
 
 import React, { Component } from 'react';
 import './UserSpaceShip.css';
+import UserSpaceShipMaths from '../../maths/UserSpaceShip/UserSpaceShipMaths';
 
 class UserSpaceShip extends Component {
     constructor(props) {
         super(props);
 
-        this.height = 70;
-        this.width = 40;
         this.movingShipInterval = undefined;
-        this.ellipseShipPath = {
-            centerX: Math.floor((props.gameWidth - this.width) / 2),
-            deltaA: -100,
-            deltaB: 100,
-            centerY: Math.floor((props.gameHeight - this.height) / 2),
-            radius: props.gameHeight * 0.54,
-            angle: 0
-        };
-        this.top = this.ellipseShipPath.centerY + ((this.ellipseShipPath.radius + this.ellipseShipPath.deltaA) * Math.cos(this.ellipseShipPath.angle));
-        this.left = this.ellipseShipPath.centerX - this.width / 2 + ((this.ellipseShipPath.radius + this.ellipseShipPath.deltaB) * Math.sin(this.ellipseShipPath.angle));
+        this.maths = new UserSpaceShipMaths(props);
         this.state = {
             style: {
-                width: this.width,
-                height: this.height,
-                top: this.top,
-                left: this.left
+                width: this.maths.getWidth(),
+                height: this.maths.getHeight(),
+                top: this.maths.getTop(),
+                left: this.maths.getLeft()
             }
         };
     }
@@ -33,10 +23,10 @@ class UserSpaceShip extends Component {
     moveToLeft() {
         this.setState({
             style: {
-                width: this.width,
-                height: this.height,
-                top: this.top,
-                left: this.state.style.left - 100
+                width: this.maths.geometry.width,
+                height: this.maths.geometry.height,
+                top: this.maths.getTop(),
+                left: this.maths.getLeft() - 100
             }
         });
     }
