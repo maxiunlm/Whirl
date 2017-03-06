@@ -21,12 +21,14 @@ class UserSpaceShip extends Component {
     }
 
     moveToLeft() {
+        let position = this.maths.moveToNextLeftEllipticalPosition();
+        
         this.setState({
             style: {
                 width: this.maths.geometry.width,
                 height: this.maths.geometry.height,
-                top: this.maths.getTop(),
-                left: this.maths.getLeft() - 100
+                top: position.top,
+                left: position.left
             }
         });
     }

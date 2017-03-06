@@ -6,6 +6,7 @@ class EllipsePath {
         this.deltaB = 100;
         this.radius = dimensions.gameHeight * 0.54;
         this.angle = 0;
+        this.deltaAngle = 0.05;
     }
 }
 

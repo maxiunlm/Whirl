@@ -25,7 +25,6 @@ describe('UserSpaceShip - ', () => {
         });
     });
 
-
     describe('CONSTRUCTOR - ', () => {
         it('Initializes the object', () => {
             spyOn(UserSpaceShipMaths.prototype, 'getTop').and.callFake(() => {
@@ -133,5 +132,36 @@ describe('UserSpaceShip - ', () => {
             expect(UserSpaceShipMaths.prototype.getHeight.calls.count()).toEqual(commonFakes.once);
         });
     });
-});
 
+    describe('moveToLeft - ', () => {
+        describe('when user press moveToLeft button then ship is moved to left elliptical direction', () => {
+            it('without any parameter invokes "moveToNextLeftEllipticalPosition" method from "UserSpaceShipMaths" object', () => {
+                spyOn(UserSpaceShipMaths.prototype, 'moveToNextLeftEllipticalPosition').and.callFake(() => {                    
+                    return commonFakes.position;
+                });
+                spyOn(UserSpaceShip.prototype, 'setState').and.callFake(() => {
+                });
+                let sut = new UserSpaceShip(commonFakes);
+                
+                sut.moveToLeft();
+                
+                expect(UserSpaceShipMaths.prototype.moveToNextLeftEllipticalPosition).toHaveBeenCalled();                
+                expect(UserSpaceShipMaths.prototype.moveToNextLeftEllipticalPosition.calls.count()).toEqual(commonFakes.once);
+            });
+            
+            it('without any parameter invokes "setState" method from the SUT object', () => {
+                spyOn(UserSpaceShipMaths.prototype, 'moveToNextLeftEllipticalPosition').and.callFake(() => {
+                    return commonFakes.position;
+                });
+                spyOn(UserSpaceShip.prototype, 'setState').and.callFake(() => {
+                });                
+                let sut = new UserSpaceShip(commonFakes);
+                
+                sut.moveToLeft();
+                
+                expect(UserSpaceShip.prototype.setState).toHaveBeenCalledWith(commonFakes.stateChangedPosition);                
+                expect(UserSpaceShip.prototype.setState.calls.count()).toEqual(commonFakes.once);
+            });
+        });
+    });
+});

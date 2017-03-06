@@ -9,7 +9,8 @@ class CommonFakes {
         this.gameHeight = 768;
         
         this.loadUserSpaceShipFakes();
-        this.loadEllipsePath();
+        this.loadEllipsePathFakes();
+        this.loadPostionFakes();
     }
     
     loadUserSpaceShipFakes() {
@@ -17,12 +18,31 @@ class CommonFakes {
         this.userSpaceShipWidth = 40;
     }
     
-    loadEllipsePath(){
+    loadEllipsePathFakes(){
         this.ellipsePathHalfDivider = 2;
         this.ellipsePathDeltaA = -100;
         this.ellipsePathDeltaB = 100;
         this.ellipsePathRadiusPercentage = 0.54;
-        this.ellipsePathInitialAngle = 0;        
+        this.ellipsePathInitialAngle = 0;
+        this.ellipsePathDelatAngle = 0.05;
+    }
+    
+    loadPostionFakes(){
+        this.positionLeft = 1;
+        this.positionTop = 2;
+        this.position = {top: 0, left: 0};
+        this.stateChangedPosition = {
+            style: {
+                width: this.userSpaceShipWidth,
+                height: this.userSpaceShipHeight,
+                top: this.position.top,
+                left: this.position.left
+            }
+        };
+    }
+    
+    rountToTwoDecimals(value) {
+        return Math.round(value * 100) / 100;
     }
 }
 

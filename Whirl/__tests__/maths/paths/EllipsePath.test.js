@@ -20,6 +20,7 @@ describe('EllipsePath', () => {
             expect(sut.deltaB).toEqual(commonFakes.ellipsePathDeltaB);
             expect(sut.radius).toEqual(commonFakes.gameHeight * commonFakes.ellipsePathRadiusPercentage);
             expect(sut.angle).toEqual(commonFakes.ellipsePathInitialAngle);
+            expect(sut.deltaAngle = 0.05).toEqual(commonFakes.ellipsePathDelatAngle);
         });
     });
 });
