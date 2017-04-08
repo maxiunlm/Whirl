@@ -1,11 +1,14 @@
 import UserSpaceShipGeometric from './UserSpaceShipGeometric';
 import EllipsePath from '../paths/EllipsePath';
 import Position from '../paths/Position';
+import Calculus from '../calculus/Calculus';
 
 class UserSpaceShipMaths {
     constructor(dimensions) {
         this.geometry = new UserSpaceShipGeometric();
         this.path = new EllipsePath(dimensions, this.geometry);
+        this.calculus = new Calculus();
+        
     }
     
     getTop () {
@@ -36,7 +39,11 @@ class UserSpaceShipMaths {
         
         return new Position(left, top);
     }
-    
+
+    getRotation() {
+        return  -1 * this.calculus.toDegrees(this.path.angle) % 360;
+    }
+        
 //    moveToNextRightEllipticalPosition() {
 //        this.path.angle += this.path.deltaAngle;
 //        
@@ -48,10 +55,6 @@ class UserSpaceShipMaths {
 //        var top = this.path.centerY + ((this.path.radius + this.path.deltaA) * Math.cos(this.path.angle));
 //        
 //        return new Position(left, top);
-//    }
-
-//    getRotation() {
-//        return  userSpaceShip.style.transform = 'rotate(' + (-1 * toDegrees(ellipseShipPath.angle) % (360)) + 'deg)';
 //    }
 }
 
