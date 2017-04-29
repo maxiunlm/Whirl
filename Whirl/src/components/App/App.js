@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import UserSpaceShip from '../UserSpaceShip/UserSpaceShip.js';
 import LeftDirection from '../Buttons/LeftDirection.js';
+import RightDirection from '../Buttons/RightDirection.js';
 
 class App extends Component {
     constructor(props) {
@@ -11,6 +12,8 @@ class App extends Component {
 
         this.actions = {
             moveUserSpaceShipToLeft: () => {
+            },
+            moveUserSpaceShipToRight: () => {
             }
         };
     }
@@ -20,6 +23,7 @@ class App extends Component {
                 <div>
                     <UserSpaceShip gameHeight={this.height} gameWidth={this.width} actions={this.actions} />
                     <LeftDirection action={() => this.actions.moveUserSpaceShipToLeft() }/>
+                    <RightDirection action={() => this.actions.moveUserSpaceShipToRight() }/>
                 </div>
                 );
     }

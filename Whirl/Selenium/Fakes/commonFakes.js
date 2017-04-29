@@ -4,6 +4,9 @@ class CommonFakes {
         this.twice = 2;
         this.startIndex = 0;
         this.initialNumberValue = 0;
+
+        this.flatAngleInRadians = Math.PI;
+        this.flatAngleInDegrees = 180;
         
         this.gameWidth = 1024;
         this.gameHeight = 768;
@@ -16,6 +19,7 @@ class CommonFakes {
     loadUserSpaceShipFakes() {
         this.userSpaceShipHeight = 70;
         this.userSpaceShipWidth = 40;
+        this.actions = {};
     }
     
     loadEllipsePathFakes(){
@@ -24,7 +28,7 @@ class CommonFakes {
         this.ellipsePathDeltaB = 100;
         this.ellipsePathRadiusPercentage = 0.54;
         this.ellipsePathInitialAngle = 0;
-        this.ellipsePathDelatAngle = 0.05;
+        this.ellipsePathDeltaAngle = 0.04;
     }
     
     loadPostionFakes(){
@@ -37,6 +41,15 @@ class CommonFakes {
                 height: this.userSpaceShipHeight,
                 top: this.position.top,
                 left: this.position.left
+            }
+        };
+        this.stateInitialPosition = {
+            style: {
+                width: this.userSpaceShipWidth,
+                height: this.userSpaceShipHeight,
+                top: this.position.top,
+                left: this.position.left,
+                transform: 'rotate(0deg)'
             }
         };
     }

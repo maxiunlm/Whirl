@@ -39,23 +39,23 @@ class UserSpaceShipMaths {
         
         return new Position(left, top);
     }
+        
+    moveToNextRightEllipticalPosition() {
+        this.path.angle += this.path.deltaAngle;
+        
+        if (this.path.angle >= 2 * Math.PI) {
+            this.path.angle -= 2 * Math.PI;
+        }
+        
+        var left = this.path.centerX + ((this.path.radius + this.path.deltaB) * Math.sin(this.path.angle));
+        var top = this.path.centerY + ((this.path.radius + this.path.deltaA) * Math.cos(this.path.angle));
+        
+        return new Position(left, top);
+    }
 
     getRotation() {
         return  -1 * this.calculus.toDegrees(this.path.angle) % 360;
     }
-        
-//    moveToNextRightEllipticalPosition() {
-//        this.path.angle += this.path.deltaAngle;
-//        
-//        if (ellipseShipPath.angle >= 2 * Math.PI) {
-//            ellipseShipPath.angle -= 2 * Math.PI;
-//        }
-//        
-//        var left = this.path.centerX + ((this.path.radius + this.path.deltaB) * Math.sin(this.path.angle));
-//        var top = this.path.centerY + ((this.path.radius + this.path.deltaA) * Math.cos(this.path.angle));
-//        
-//        return new Position(left, top);
-//    }
 }
 
 export default UserSpaceShipMaths;

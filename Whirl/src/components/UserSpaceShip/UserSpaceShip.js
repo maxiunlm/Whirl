@@ -22,19 +22,37 @@ class UserSpaceShip extends Component {
 
     moveToLeft() {
         let position = this.maths.moveToNextLeftEllipticalPosition();
+        let rotation = this.maths.getRotation();
         
         this.setState({
             style: {
-                width: this.maths.geometry.width,
-                height: this.maths.geometry.height,
+                width: this.maths.getWidth(),
+                height: this.maths.getHeight(),
                 top: position.top,
-                left: position.left
+                left: position.left,
+                transform: `rotate(${rotation}deg)`
             }
         });
     }
     
-    componentDidMount() {        
+    moveToRight() {
+        let position = this.maths.moveToNextRightEllipticalPosition();
+        let rotation = this.maths.getRotation();
+        
+        this.setState({
+            style: {
+                width: this.maths.getWidth(),
+                height: this.maths.getHeight(),
+                top: position.top,
+                left: position.left,
+                transform: `rotate(${rotation}deg)`
+            }
+        });
+    }
+    
+    componentDidMount() {
         this.props.actions.moveUserSpaceShipToLeft = this.moveToLeft.bind(this);
+        this.props.actions.moveUserSpaceShipToRight = this.moveToRight.bind(this);
     }
 
     render() {
@@ -43,7 +61,6 @@ class UserSpaceShip extends Component {
                 );
     }
 }
-;
 
 export default UserSpaceShip;
 

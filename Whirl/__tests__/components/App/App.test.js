@@ -25,19 +25,21 @@ describe('APP - ', () => {
             expect(app.width).toBe(CommonFakes.width);
             expect(app.actions).toBeDefined();
             expect(app.actions.moveUserSpaceShipToLeft instanceof Function).toBeTruthy();
+            expect(app.actions.moveUserSpaceShipToRight instanceof Function).toBeTruthy();
         });
     });
 
     describe('render - ', () => {
-//        it('Without any parameter renders a "UserSpaceShip" component', () => {
-//            const app = shallow(
-//                    <App height={CommonFakes.height} width={CommonFakes.width} />
-//                    );
-//
-//            var result = app.find('img');
-//            debugger;
-//            console.log(result);
-//            expect(result.is('img')).toBeTruthy();
-//        });
+        xit('Without any parameter renders a "UserSpaceShip" component', () => {
+            const app = shallow(
+                    <App height={CommonFakes.height} width={CommonFakes.width} />
+                    );
+
+            var result = app.find('img');
+            debugger;
+            console.log(result);
+            expect(result.is('img')).toBeTruthy();
+            pending('Under construction');
+        });
     });
 });
