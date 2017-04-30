@@ -1,9 +1,13 @@
 class CommonFakes {
     constructor() {
+        this.anytime = 0;
         this.once = 1;
         this.twice = 2;
+        this.threeTimes = 3;
+        this.fourTimes = 4;
         this.startIndex = 0;
         this.initialNumberValue = 0;
+        this.EmptyObject = {};
 
         this.flatAngleInRadians = Math.PI;
         this.flatAngleInDegrees = 180;
@@ -20,6 +24,7 @@ class CommonFakes {
         this.userSpaceShipHeight = 70;
         this.userSpaceShipWidth = 40;
         this.actions = {};
+        this.movementInterval = 0.04;
     }
     
     loadEllipsePathFakes(){
@@ -28,7 +33,7 @@ class CommonFakes {
         this.ellipsePathDeltaB = 100;
         this.ellipsePathRadiusPercentage = 0.54;
         this.ellipsePathInitialAngle = 0;
-        this.ellipsePathDeltaAngle = 0.04;
+        this.ellipsePathDeltaAngle = 0.01;
     }
     
     loadPostionFakes(){

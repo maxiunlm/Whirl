@@ -1,4 +1,4 @@
-/* global expect, spyOn, Function */
+/* global expect, spyOn, Function, jasmine */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -42,6 +42,7 @@ describe('UserSpaceShip - ', () => {
 
             let sut = new UserSpaceShip(commonFakes);
 
+            expect(sut.movementInterval).toEqual(commonFakes.movementInterval);
             expect(sut.maths).toBeDefined();
             expect(sut.maths instanceof UserSpaceShipMaths).toBeTruthy();
             expect(sut.state instanceof Object).toBeTruthy();
@@ -144,6 +145,40 @@ describe('UserSpaceShip - ', () => {
             expect(sut.props.actions.moveUserSpaceShipToLeft instanceof Function).toBeTruthy();
         });
         
+        it('When the "moveUserSpaceShipToLeft" method is called, then invokes "startMovingToLeft" from teh "sut" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'startMovingToLeft').and.callFake(() => {                
+            });
+            sut.componentDidMount();
+            
+            sut.props.actions.moveUserSpaceShipToLeft();
+            
+            expect(sut.startMovingToLeft).toHaveBeenCalled();
+            expect(sut.startMovingToLeft.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With the "actions" props object, then sets the "stopMovingUserSpaceShipToLeft" method event', () => {            
+            let sut = new UserSpaceShip(commonFakes);
+            
+            sut.componentDidMount();
+            
+            expect(sut.props.actions).toBeDefined();
+            expect(sut.props.actions.stopMovingUserSpaceShipToLeft).toBeDefined();
+            expect(sut.props.actions.stopMovingUserSpaceShipToLeft instanceof Function).toBeTruthy();
+        });
+        
+        it('When the "stopMovingUserSpaceShipToLeft" method is called, then invokes "stopMovingToLeft" from teh "sut" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'stopMovingToLeft').and.callFake(() => {                
+            });
+            sut.componentDidMount();
+            
+            sut.props.actions.stopMovingUserSpaceShipToLeft();
+            
+            expect(sut.stopMovingToLeft).toHaveBeenCalled();
+            expect(sut.stopMovingToLeft.calls.count()).toEqual(commonFakes.once);
+        });
+        
         it('With the "actions" props object, then sets the "moveUserSpaceShipToRight" method event', () => {          
             let sut = new UserSpaceShip(commonFakes);
             
@@ -153,6 +188,64 @@ describe('UserSpaceShip - ', () => {
             expect(sut.props.actions.moveUserSpaceShipToRight).toBeDefined();
             expect(sut.props.actions.moveUserSpaceShipToRight instanceof Function).toBeTruthy();
             
+        });
+        
+        it('Without any parameter invokes "bind" method from "Function" object three times', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut.startMovingToLeft, 'bind').and.callFake(() => {
+            });
+            spyOn(sut.moveToRight, 'bind').and.callFake(() => {
+            });
+            spyOn(sut.stopMovingToLeft, 'bind').and.callFake(() => {
+            });
+            
+            sut.componentDidMount();
+            
+            expect(sut.startMovingToLeft.bind).toHaveBeenCalledWith(jasmine.any(UserSpaceShip));
+            expect(sut.startMovingToLeft.bind.calls.count()).toEqual(commonFakes.once);            
+            expect(sut.moveToRight.bind).toHaveBeenCalledWith(jasmine.any(UserSpaceShip));
+            expect(sut.moveToRight.bind.calls.count()).toEqual(commonFakes.once);            
+            expect(sut.stopMovingToLeft.bind).toHaveBeenCalledWith(jasmine.any(UserSpaceShip));
+            expect(sut.stopMovingToLeft.bind.calls.count()).toEqual(commonFakes.once);
+        });
+    });
+    
+    describe('startMovingToLeft - When the start moving to left event is called - ', () => {
+        it('Without any parameter invokes "setInterval" method from "window" object', () => {
+            spyOn(window, 'setInterval').and.callFake(() => {                
+            });
+            let sut = new UserSpaceShip(commonFakes);
+            
+            sut.startMovingToLeft();
+            
+            expect(window.setInterval).toHaveBeenCalledWith(jasmine.any(Function), commonFakes.movementInterval);
+            expect(window.setInterval.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('Without any parameter invokes "bind" method from "Function" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(window, 'setInterval').and.callFake(() => {                
+            });
+            spyOn(sut.moveToLeft, 'bind').and.callFake(() => {
+            });
+            
+            sut.startMovingToLeft();
+            
+            expect(sut.moveToLeft.bind).toHaveBeenCalledWith(jasmine.any(UserSpaceShip));
+            expect(sut.moveToLeft.bind.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('Without any parameter calls "bind" method from "Function" object, then it sets the "movementToLeftInterval" value', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(window, 'setInterval').and.callFake(() => {
+                return commonFakes.EmptyObject;
+            });
+            spyOn(sut.moveToLeft, 'bind').and.callFake(() => {
+            });
+            
+            sut.startMovingToLeft();
+            
+            expect(sut.movementToLeftInterval).toBeDefined();
         });
     });
 
@@ -325,6 +418,32 @@ describe('UserSpaceShip - ', () => {
                 
                 expect(setStateParameter.style.height).toEqual(commonFakes.userSpaceShipHeight);
             });
+        });
+    });
+    
+    describe('stopMovingToLeft - ', () => {
+        it('With a defined "movementToLeftInterval", then invokes "clearInterval" from "window" object', () => {
+            spyOn(window, 'clearInterval').and.callFake(() => {                
+            });            
+            let sut = new UserSpaceShip(commonFakes);
+            sut.movementToLeftInterval = commonFakes.EmptyObject;
+            
+            sut.stopMovingToLeft();
+            
+            expect(window.clearInterval).toHaveBeenCalledWith(commonFakes.EmptyObject);
+            expect(window.clearInterval.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With an undefined "movementToLeftInterval", then never invokes "clearInterval" from "window" object', () => {
+            spyOn(window, 'clearInterval').and.callFake(() => {                
+            });            
+            let sut = new UserSpaceShip(commonFakes);
+            sut.movementToLeftInterval = undefined;
+            
+            sut.stopMovingToLeft();
+            
+            expect(window.clearInterval).not.toHaveBeenCalled();
+            expect(window.clearInterval.calls.count()).toEqual(commonFakes.anytime);
         });
     });
 

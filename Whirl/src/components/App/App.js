@@ -14,6 +14,10 @@ class App extends Component {
             moveUserSpaceShipToLeft: () => {
             },
             moveUserSpaceShipToRight: () => {
+            },
+            stopMovingUserSpaceShipToLeft: () => {
+            },
+            stopMovingUserSpaceShipToRight: () => {
             }
         };
     }
@@ -22,8 +26,12 @@ class App extends Component {
         return(
                 <div>
                     <UserSpaceShip gameHeight={this.height} gameWidth={this.width} actions={this.actions} />
-                    <LeftDirection action={() => this.actions.moveUserSpaceShipToLeft() }/>
-                    <RightDirection action={() => this.actions.moveUserSpaceShipToRight() }/>
+                    <LeftDirection
+                        actionStart={() => this.actions.moveUserSpaceShipToLeft() }
+                        actionStop={() => this.actions.stopMovingUserSpaceShipToLeft() }/>
+                    <RightDirection
+                        actionStart={() => this.actions.moveUserSpaceShipToRight() }
+                        actionStop={() => this.actions.stopMovingUserSpaceShipToRight() }/>
                 </div>
                 );
     }

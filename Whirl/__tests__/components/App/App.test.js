@@ -26,6 +26,8 @@ describe('APP - ', () => {
             expect(app.actions).toBeDefined();
             expect(app.actions.moveUserSpaceShipToLeft instanceof Function).toBeTruthy();
             expect(app.actions.moveUserSpaceShipToRight instanceof Function).toBeTruthy();
+            expect(app.actions.stopMovingUserSpaceShipToLeft instanceof Function).toBeTruthy();
+            expect(app.actions.stopMovingUserSpaceShipToRight instanceof Function).toBeTruthy();
         });
     });
 

@@ -8,7 +8,7 @@ class UserSpaceShip extends Component {
     constructor(props) {
         super(props);
 
-        this.movingShipInterval = undefined;
+        this.movementInterval = 0.04;
         this.maths = new UserSpaceShipMaths(props);
         this.state = {
             style: {
@@ -20,10 +20,22 @@ class UserSpaceShip extends Component {
         };
     }
 
+    stopMovingToLeft() {
+        if(!!this.movementToLeftInterval) {
+            clearInterval(this.movementToLeftInterval);
+        }
+    }
+
+    startMovingToLeft() {
+        let moveToLeftEvent = this.moveToLeft.bind(this);
+
+        this.movementToLeftInterval = setInterval(moveToLeftEvent, this.movementInterval);
+    }
+
     moveToLeft() {
         let position = this.maths.moveToNextLeftEllipticalPosition();
         let rotation = this.maths.getRotation();
-        
+
         this.setState({
             style: {
                 width: this.maths.getWidth(),
@@ -34,11 +46,11 @@ class UserSpaceShip extends Component {
             }
         });
     }
-    
+
     moveToRight() {
         let position = this.maths.moveToNextRightEllipticalPosition();
         let rotation = this.maths.getRotation();
-        
+
         this.setState({
             style: {
                 width: this.maths.getWidth(),
@@ -49,10 +61,11 @@ class UserSpaceShip extends Component {
             }
         });
     }
-    
+
     componentDidMount() {
-        this.props.actions.moveUserSpaceShipToLeft = this.moveToLeft.bind(this);
+        this.props.actions.moveUserSpaceShipToLeft = this.startMovingToLeft.bind(this);
         this.props.actions.moveUserSpaceShipToRight = this.moveToRight.bind(this);
+        this.props.actions.stopMovingUserSpaceShipToLeft = this.stopMovingToLeft.bind(this);
     }
 
     render() {
