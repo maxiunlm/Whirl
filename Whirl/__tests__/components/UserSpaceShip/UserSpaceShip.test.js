@@ -253,6 +253,22 @@ describe('UserSpaceShip - ', () => {
             
             expect(sut.movementToLeftInterval).toBeDefined();
         });
+        
+        it('Without any parameter invokes "clearAllMovemnetIntervals" from the "sut" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(window, 'setInterval').and.callFake(() => {
+                return commonFakes.EmptyObject;
+            });
+            spyOn(sut.moveToLeft, 'bind').and.callFake(() => {
+            });
+            spyOn(sut, 'clearAllMovemnetIntervals').and.callFake(() => {
+            });
+            
+            sut.startMovingToLeft();
+            
+            expect(sut.clearAllMovemnetIntervals).toHaveBeenCalled();
+            expect(sut.clearAllMovemnetIntervals.calls.count()).toEqual(commonFakes.once);
+        });
     });
 
     describe('moveToLeft - ', () => {
@@ -490,6 +506,22 @@ describe('UserSpaceShip - ', () => {
             
             expect(sut.movementToRightInterval).toBeDefined();
         });
+        
+        it('Without any parameter invokes "clearAllMovemnetIntervals" from the "sut" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(window, 'setInterval').and.callFake(() => {
+                return commonFakes.EmptyObject;
+            });
+            spyOn(sut.moveToRight, 'bind').and.callFake(() => {
+            });
+            spyOn(sut, 'clearAllMovemnetIntervals').and.callFake(() => {
+            });
+            
+            sut.startMovingToRight();
+            
+            expect(sut.clearAllMovemnetIntervals).toHaveBeenCalled();
+            expect(sut.clearAllMovemnetIntervals.calls.count()).toEqual(commonFakes.once);
+        });
     });
 
     describe('moveToRight - ', () => {
@@ -687,6 +719,34 @@ describe('UserSpaceShip - ', () => {
             
             expect(window.clearInterval).not.toHaveBeenCalled();
             expect(window.clearInterval.calls.count()).toEqual(commonFakes.anytime);
+        });
+    });
+    
+    describe('clearAllMovemnetIntervals - ', () => {
+        it('Without any parameter invokes the "stopMovingToLeft" method from the "sut" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'stopMovingToLeft').and.callFake(() => {
+            });
+            spyOn(sut, 'stopMovingToRight').and.callFake(() => {
+            });
+            
+            sut.clearAllMovemnetIntervals();
+            
+            expect(sut.stopMovingToLeft).toHaveBeenCalled();            
+            expect(sut.stopMovingToLeft.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('Without any parameter invokes the "stopMovingToRight" method from the "sut" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'stopMovingToLeft').and.callFake(() => {
+            });
+            spyOn(sut, 'stopMovingToRight').and.callFake(() => {
+            });
+            
+            sut.clearAllMovemnetIntervals();
+            
+            expect(sut.stopMovingToRight).toHaveBeenCalled();            
+            expect(sut.stopMovingToRight.calls.count()).toEqual(commonFakes.once);
         });
     });
 });

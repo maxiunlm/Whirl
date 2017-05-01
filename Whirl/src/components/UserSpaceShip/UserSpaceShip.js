@@ -20,13 +20,9 @@ class UserSpaceShip extends Component {
         };
     }
 
-    stopMovingToLeft() {
-        if(!!this.movementToLeftInterval) {
-            clearInterval(this.movementToLeftInterval);
-        }
-    }
-
     startMovingToLeft() {
+        this.clearAllMovemnetIntervals();
+        
         let moveToLeftEvent = this.moveToLeft.bind(this);
 
         this.movementToLeftInterval = setInterval(moveToLeftEvent, this.movementInterval);
@@ -47,13 +43,9 @@ class UserSpaceShip extends Component {
         });
     }
 
-    stopMovingToRight() {
-        if(!!this.movementToRightInterval) {
-            clearInterval(this.movementToRightInterval);
-        }
-    }
-
     startMovingToRight() {
+        this.clearAllMovemnetIntervals();
+        
         let moveToRightEvent = this.moveToRight.bind(this);
 
         this.movementToRightInterval = setInterval(moveToRightEvent, this.movementInterval);
@@ -72,6 +64,23 @@ class UserSpaceShip extends Component {
                 transform: `rotate(${rotation}deg)`
             }
         });
+    }
+    
+    clearAllMovemnetIntervals() {
+        this.stopMovingToLeft();
+        this.stopMovingToRight();
+    }
+
+    stopMovingToRight() {
+        if(!!this.movementToRightInterval) {
+            clearInterval(this.movementToRightInterval);
+        }
+    }
+
+    stopMovingToLeft() {
+        if(!!this.movementToLeftInterval) {
+            clearInterval(this.movementToLeftInterval);
+        }
     }
 
     componentDidMount() {
