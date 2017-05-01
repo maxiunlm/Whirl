@@ -47,6 +47,18 @@ class UserSpaceShip extends Component {
         });
     }
 
+    stopMovingToRight() {
+        if(!!this.movementToRightInterval) {
+            clearInterval(this.movementToRightInterval);
+        }
+    }
+
+    startMovingToRight() {
+        let moveToRightEvent = this.moveToRight.bind(this);
+
+        this.movementToRightInterval = setInterval(moveToRightEvent, this.movementInterval);
+    }
+
     moveToRight() {
         let position = this.maths.moveToNextRightEllipticalPosition();
         let rotation = this.maths.getRotation();
@@ -64,8 +76,9 @@ class UserSpaceShip extends Component {
 
     componentDidMount() {
         this.props.actions.moveUserSpaceShipToLeft = this.startMovingToLeft.bind(this);
-        this.props.actions.moveUserSpaceShipToRight = this.moveToRight.bind(this);
+        this.props.actions.moveUserSpaceShipToRight = this.startMovingToRight.bind(this);
         this.props.actions.stopMovingUserSpaceShipToLeft = this.stopMovingToLeft.bind(this);
+        this.props.actions.stopMovingUserSpaceShipToRight = this.stopMovingToRight.bind(this);
     }
 
     render() {
