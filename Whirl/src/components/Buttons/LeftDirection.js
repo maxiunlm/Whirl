@@ -8,6 +8,8 @@ class LeftDirection extends Component {
     render() {
         return (
                 <button id="leftDirection"
+                        onKeyDown={this.props.actionStart}
+                        onKeyUp={this.props.actionStop}
                         onMouseDown={this.props.actionStart}
                         onMouseLeave={this.props.actionStop}
                         onMouseOut={this.props.actionStop}
