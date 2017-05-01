@@ -53,6 +53,10 @@ describe('UserSpaceShip - ', () => {
             expect(sut.state.style.height).toEqual(commonFakes.userSpaceShipHeight);
             expect(sut.state.style.top).toEqual(Number.MAX_SAFE_INTEGER);
             expect(sut.state.style.left).toEqual(Number.MAX_SAFE_INTEGER);
+            expect(sut.state.image).toEqual(commonFakes.userSpaceShipImageStopped);
+            expect(sut.state.images.stopped).toEqual(commonFakes.userSpaceShipImageStopped);
+            expect(sut.state.images.toLeft).toEqual(commonFakes.userSpaceShipImageToLeft);
+            expect(sut.state.images.toRight).toEqual(commonFakes.userSpaceShipImageToRight);
         });
 
         it('Invokes the "getTop" methos from "UserSpaceShipMaths" object', () => {
@@ -218,9 +222,12 @@ describe('UserSpaceShip - ', () => {
     
     describe('startMovingToLeft - When the start moving to left event is called - ', () => {
         it('Without any parameter invokes "setInterval" method from "window" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
             spyOn(window, 'setInterval').and.callFake(() => {                
             });
-            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
             
             sut.startMovingToLeft();
             
@@ -234,6 +241,9 @@ describe('UserSpaceShip - ', () => {
             });
             spyOn(sut.moveToLeft, 'bind').and.callFake(() => {
             });
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
             
             sut.startMovingToLeft();
             
@@ -248,6 +258,9 @@ describe('UserSpaceShip - ', () => {
             });
             spyOn(sut.moveToLeft, 'bind').and.callFake(() => {
             });
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
             
             sut.startMovingToLeft();
             
@@ -263,11 +276,37 @@ describe('UserSpaceShip - ', () => {
             });
             spyOn(sut, 'clearAllMovemnetIntervals').and.callFake(() => {
             });
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
             
             sut.startMovingToLeft();
             
             expect(sut.clearAllMovemnetIntervals).toHaveBeenCalled();
             expect(sut.clearAllMovemnetIntervals.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With the image to Left direction, invokes the "setState" from the "sut" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
+            
+            sut.startMovingToLeft();
+            
+            expect(sut.setState).toHaveBeenCalled();
+            expect(sut.setState.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With another image, it changes to the image Left direction', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
+            
+            sut.startMovingToLeft();
+            
+            expect(sut.state.image).toEqual(sut.state.images.toLeft);
         });
     });
 
@@ -467,13 +506,43 @@ describe('UserSpaceShip - ', () => {
             expect(window.clearInterval).not.toHaveBeenCalled();
             expect(window.clearInterval.calls.count()).toEqual(commonFakes.anytime);
         });
+        
+        it('With a defined "movementToRightInterval" amd when the user space ship is stopped from left direction, with the stopped image, invokes the "setState" from the "sut" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            sut.state.image = sut.state.images.toLeft;
+            sut.movementToLeftInterval = commonFakes.EmptyObject;
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.stopped;
+            }.bind(sut));
+            
+            sut.stopMovingToLeft();
+            
+            expect(sut.setState).toHaveBeenCalled();
+            expect(sut.setState.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With a defined "movementToRightInterval" amd when the user space ship is stopped from left direction, it sets the stopped image', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            sut.state.image = sut.state.images.toLeft;
+            sut.movementToLeftInterval = commonFakes.EmptyObject;
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.stopped;
+            }.bind(sut));
+            
+            sut.stopMovingToLeft();
+            
+            expect(sut.state.image).toEqual(sut.state.images.stopped);
+        });
     });
     
     describe('startMovingToRight - When the start moving to left event is called - ', () => {
         it('Without any parameter invokes "setInterval" method from "window" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
             spyOn(window, 'setInterval').and.callFake(() => {                
             });
-            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toRight;
+            }.bind(sut));
             
             sut.startMovingToRight();
             
@@ -483,6 +552,9 @@ describe('UserSpaceShip - ', () => {
         
         it('Without any parameter invokes "bind" method from "Function" object', () => {
             let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toRight;
+            }.bind(sut));
             spyOn(window, 'setInterval').and.callFake(() => {                
             });
             spyOn(sut.moveToRight, 'bind').and.callFake(() => {
@@ -496,6 +568,9 @@ describe('UserSpaceShip - ', () => {
         
         it('Without any parameter calls "bind" method from "Function" object, then it sets the "movementToRightInterval" value', () => {
             let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toRight;
+            }.bind(sut));
             spyOn(window, 'setInterval').and.callFake(() => {
                 return commonFakes.EmptyObject;
             });
@@ -509,6 +584,9 @@ describe('UserSpaceShip - ', () => {
         
         it('Without any parameter invokes "clearAllMovemnetIntervals" from the "sut" object', () => {
             let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toRight;
+            }.bind(sut));
             spyOn(window, 'setInterval').and.callFake(() => {
                 return commonFakes.EmptyObject;
             });
@@ -521,6 +599,29 @@ describe('UserSpaceShip - ', () => {
             
             expect(sut.clearAllMovemnetIntervals).toHaveBeenCalled();
             expect(sut.clearAllMovemnetIntervals.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With the image to Right direction, invokes the "setState" from the "sut" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toRight;
+            }.bind(sut));
+            
+            sut.startMovingToRight();
+            
+            expect(sut.setState).toHaveBeenCalled();
+            expect(sut.setState.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With another image, it changes to the image Right direction', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toRight;
+            }.bind(sut));
+            
+            sut.startMovingToRight();
+            
+            expect(sut.state.image).toEqual(sut.state.images.toRight);
         });
     });
 
@@ -719,6 +820,33 @@ describe('UserSpaceShip - ', () => {
             
             expect(window.clearInterval).not.toHaveBeenCalled();
             expect(window.clearInterval.calls.count()).toEqual(commonFakes.anytime);
+        });
+        
+        it('With a defined "movementToRightInterval" amd when the user space ship is stopped from right direction, with the stopped image, invokes the "setState" from the "sut" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            sut.state.image = sut.state.images.toRight;
+            sut.movementToRightInterval = commonFakes.EmptyObject;
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.stopped;
+            }.bind(sut));
+            
+            sut.stopMovingToRight();
+            
+            expect(sut.setState).toHaveBeenCalled();
+            expect(sut.setState.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With a defined "movementToRightInterval" amd when the user space ship is stopped from right direction, it sets the stopped image', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            sut.state.image = sut.state.images.toRight;
+            sut.movementToRightInterval = commonFakes.EmptyObject;
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.stopped;
+            }.bind(sut));
+            
+            sut.stopMovingToRight();
+            
+            expect(sut.state.image).toEqual(sut.state.images.stopped);
         });
     });
     

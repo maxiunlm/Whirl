@@ -11,6 +11,12 @@ class UserSpaceShip extends Component {
         this.movementInterval = 0.04;
         this.maths = new UserSpaceShipMaths(props);
         this.state = {
+            image: '/images/UserSpaceShipStopped.png',
+            images: {
+                stopped: '/images/UserSpaceShipStopped.png',
+                toLeft: '/images/UserSpaceShipToLeft.png',
+                toRight: '/images/UserSpaceShipToRight.png'
+            },
             style: {
                 width: this.maths.getWidth(),
                 height: this.maths.getHeight(),
@@ -22,6 +28,9 @@ class UserSpaceShip extends Component {
 
     startMovingToLeft() {
         this.clearAllMovemnetIntervals();
+        this.setState({
+            image: this.state.images.toLeft
+        });
         
         let moveToLeftEvent = this.moveToLeft.bind(this);
 
@@ -45,6 +54,9 @@ class UserSpaceShip extends Component {
 
     startMovingToRight() {
         this.clearAllMovemnetIntervals();
+        this.setState({
+            image: this.state.images.toRight
+        });
         
         let moveToRightEvent = this.moveToRight.bind(this);
 
@@ -74,12 +86,18 @@ class UserSpaceShip extends Component {
     stopMovingToRight() {
         if(!!this.movementToRightInterval) {
             clearInterval(this.movementToRightInterval);
+            this.setState({
+                image: this.state.images.stopped
+            });
         }
     }
 
     stopMovingToLeft() {
         if(!!this.movementToLeftInterval) {
             clearInterval(this.movementToLeftInterval);
+            this.setState({
+                image: this.state.images.stopped
+            });
         }
     }
 
@@ -92,8 +110,8 @@ class UserSpaceShip extends Component {
 
     render() {
         return (
-                <img id="userSpaceShip" src="/images/UserSpaceShip.png" alt="A" className="userSpaceShip" style={this.state.style}></img>
-                );
+                <img id="userSpaceShip" src={this.state.image} alt="A" className="userSpaceShip" style={this.state.style}></img>
+            );
     }
 }
 

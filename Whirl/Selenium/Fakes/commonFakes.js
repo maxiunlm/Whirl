@@ -21,6 +21,9 @@ class CommonFakes {
     }
     
     loadUserSpaceShipFakes() {
+        this.userSpaceShipImageStopped = '/images/UserSpaceShipStopped.png';
+        this.userSpaceShipImageToLeft = '/images/UserSpaceShipToLeft.png';
+        this.userSpaceShipImageToRight = '/images/UserSpaceShipToRight.png';
         this.userSpaceShipHeight = 70;
         this.userSpaceShipWidth = 40;
         this.actions = {};
