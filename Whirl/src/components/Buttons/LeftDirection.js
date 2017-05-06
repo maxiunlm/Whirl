@@ -7,14 +7,16 @@ class LeftDirection extends Component {
 
     render() {
         return (
-                <button id="leftDirection"
+                <img id="leftDirection"
+                        src="/images/Cicle-50percent-opacity.png"
+                        alt="&lt;"
                         onKeyDown={this.props.actionStart}
                         onKeyUp={this.props.actionStop}
                         onMouseDown={this.props.actionStart}
                         onMouseLeave={this.props.actionStop}
                         onMouseOut={this.props.actionStop}
                         onMouseUp={this.props.actionStop}
-                        >&lt;</button>
+                        />
                 );
     }
 }
