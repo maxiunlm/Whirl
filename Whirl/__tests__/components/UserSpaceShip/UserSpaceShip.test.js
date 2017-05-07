@@ -196,27 +196,72 @@ describe('UserSpaceShip - ', () => {
             
         });
         
-        it('Without any parameter invokes "bind" method from "Function" object four times', () => {
+        it('When the "moveUserSpaceShipToRight" method is called, then invokes "startMovingToLeft" from teh "sut" object', () => {
             let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'startMovingToRight').and.callFake(() => {                
+            });
+            sut.componentDidMount();
+            
+            sut.props.actions.moveUserSpaceShipToRight();
+            
+            expect(sut.startMovingToRight).toHaveBeenCalled();
+            expect(sut.startMovingToRight.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With the "actions" props object, then sets the "stopMovingUserSpaceShipToRight" method event', () => {            
+            let sut = new UserSpaceShip(commonFakes);
+            
+            sut.componentDidMount();
+            
+            expect(sut.props.actions).toBeDefined();
+            expect(sut.props.actions.stopMovingUserSpaceShipToRight).toBeDefined();
+            expect(sut.props.actions.stopMovingUserSpaceShipToRight instanceof Function).toBeTruthy();
+        });
+        
+        it('When the "stopMovingUserSpaceShipToRight" method is called, then invokes "stopMovingToRight" from teh "sut" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'stopMovingToRight').and.callFake(() => {                
+            });
+            sut.componentDidMount();
+            
+            sut.props.actions.stopMovingUserSpaceShipToRight();
+            
+            expect(sut.stopMovingToRight).toHaveBeenCalled();
+            expect(sut.stopMovingToRight.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('Without any parameter invokes "bind" method from "Function" object five times', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            let calledTimes = 0;
             spyOn(sut.startMovingToLeft, 'bind').and.callFake(() => {
+                calledTimes++;
             });
             spyOn(sut.startMovingToRight, 'bind').and.callFake(() => {
+                calledTimes++;
             });
             spyOn(sut.stopMovingToLeft, 'bind').and.callFake(() => {
+                calledTimes++;
             });
             spyOn(sut.stopMovingToRight, 'bind').and.callFake(() => {
+                calledTimes++;
+            });
+            spyOn(sut.stopMoving, 'bind').and.callFake(() => {
+                calledTimes++;
             });
             
             sut.componentDidMount();
             
             expect(sut.startMovingToLeft.bind).toHaveBeenCalledWith(jasmine.any(UserSpaceShip));
-            expect(sut.startMovingToLeft.bind.calls.count()).toEqual(commonFakes.once);            
+            expect(sut.startMovingToLeft.bind.calls.count()).toEqual(commonFakes.once);
             expect(sut.startMovingToRight.bind).toHaveBeenCalledWith(jasmine.any(UserSpaceShip));
-            expect(sut.startMovingToRight.bind.calls.count()).toEqual(commonFakes.once);            
+            expect(sut.startMovingToRight.bind.calls.count()).toEqual(commonFakes.once);
             expect(sut.stopMovingToLeft.bind).toHaveBeenCalledWith(jasmine.any(UserSpaceShip));
-            expect(sut.stopMovingToLeft.bind.calls.count()).toEqual(commonFakes.once);          
+            expect(sut.stopMovingToLeft.bind.calls.count()).toEqual(commonFakes.once);
             expect(sut.stopMovingToRight.bind).toHaveBeenCalledWith(jasmine.any(UserSpaceShip));
-            expect(sut.stopMovingToRight.bind.calls.count()).toEqual(commonFakes.once);           
+            expect(sut.stopMovingToRight.bind.calls.count()).toEqual(commonFakes.once);
+            expect(sut.stopMoving.bind).toHaveBeenCalledWith(jasmine.any(UserSpaceShip));
+            expect(sut.stopMoving.bind.calls.count()).toEqual(commonFakes.once);
+            expect(calledTimes).toEqual(commonFakes.fiveTimes);
         });
     });
     
@@ -267,14 +312,14 @@ describe('UserSpaceShip - ', () => {
             expect(sut.movementToLeftInterval).toBeDefined();
         });
         
-        it('Without any parameter invokes "clearAllMovemnetIntervals" from the "sut" object', () => {
+        it('Without any parameter invokes "stopMoving" from the "sut" object', () => {
             let sut = new UserSpaceShip(commonFakes);
             spyOn(window, 'setInterval').and.callFake(() => {
                 return commonFakes.EmptyObject;
             });
             spyOn(sut.moveToLeft, 'bind').and.callFake(() => {
             });
-            spyOn(sut, 'clearAllMovemnetIntervals').and.callFake(() => {
+            spyOn(sut, 'stopMoving').and.callFake(() => {
             });
             spyOn(sut, 'setState').and.callFake(function () {
                 this.state.image = this.state.images.toLeft;
@@ -282,8 +327,8 @@ describe('UserSpaceShip - ', () => {
             
             sut.startMovingToLeft();
             
-            expect(sut.clearAllMovemnetIntervals).toHaveBeenCalled();
-            expect(sut.clearAllMovemnetIntervals.calls.count()).toEqual(commonFakes.once);
+            expect(sut.stopMoving).toHaveBeenCalled();
+            expect(sut.stopMoving.calls.count()).toEqual(commonFakes.once);
         });
         
         it('With the image to Left direction, invokes the "setState" from the "sut" object', () => {
@@ -582,7 +627,7 @@ describe('UserSpaceShip - ', () => {
             expect(sut.movementToRightInterval).toBeDefined();
         });
         
-        it('Without any parameter invokes "clearAllMovemnetIntervals" from the "sut" object', () => {
+        it('Without any parameter invokes "stopMoving" from the "sut" object', () => {
             let sut = new UserSpaceShip(commonFakes);
             spyOn(sut, 'setState').and.callFake(function () {
                 this.state.image = this.state.images.toRight;
@@ -592,13 +637,13 @@ describe('UserSpaceShip - ', () => {
             });
             spyOn(sut.moveToRight, 'bind').and.callFake(() => {
             });
-            spyOn(sut, 'clearAllMovemnetIntervals').and.callFake(() => {
+            spyOn(sut, 'stopMoving').and.callFake(() => {
             });
             
             sut.startMovingToRight();
             
-            expect(sut.clearAllMovemnetIntervals).toHaveBeenCalled();
-            expect(sut.clearAllMovemnetIntervals.calls.count()).toEqual(commonFakes.once);
+            expect(sut.stopMoving).toHaveBeenCalled();
+            expect(sut.stopMoving.calls.count()).toEqual(commonFakes.once);
         });
         
         it('With the image to Right direction, invokes the "setState" from the "sut" object', () => {
@@ -850,7 +895,7 @@ describe('UserSpaceShip - ', () => {
         });
     });
     
-    describe('clearAllMovemnetIntervals - ', () => {
+    describe('stopMoving - ', () => {
         it('Without any parameter invokes the "stopMovingToLeft" method from the "sut" object', () => {
             let sut = new UserSpaceShip(commonFakes);
             spyOn(sut, 'stopMovingToLeft').and.callFake(() => {
@@ -858,7 +903,7 @@ describe('UserSpaceShip - ', () => {
             spyOn(sut, 'stopMovingToRight').and.callFake(() => {
             });
             
-            sut.clearAllMovemnetIntervals();
+            sut.stopMoving();
             
             expect(sut.stopMovingToLeft).toHaveBeenCalled();            
             expect(sut.stopMovingToLeft.calls.count()).toEqual(commonFakes.once);
@@ -871,7 +916,7 @@ describe('UserSpaceShip - ', () => {
             spyOn(sut, 'stopMovingToRight').and.callFake(() => {
             });
             
-            sut.clearAllMovemnetIntervals();
+            sut.stopMoving();
             
             expect(sut.stopMovingToRight).toHaveBeenCalled();            
             expect(sut.stopMovingToRight.calls.count()).toEqual(commonFakes.once);

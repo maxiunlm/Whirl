@@ -5,6 +5,7 @@ class CommonFakes {
         this.twice = 2;
         this.threeTimes = 3;
         this.fourTimes = 4;
+        this.fiveTimes = 5;
         this.startIndex = 0;
         this.initialNumberValue = 0;
         this.EmptyObject = {};
@@ -12,12 +13,32 @@ class CommonFakes {
         this.flatAngleInRadians = Math.PI;
         this.flatAngleInDegrees = 180;
         
-        this.gameWidth = 1024;
-        this.gameHeight = 768;
-        
+        this.loadAppFakes();
         this.loadUserSpaceShipFakes();
         this.loadEllipsePathFakes();
         this.loadPostionFakes();
+    }
+    
+    loadAppFakes() {
+        this.gameWidth = 1024;
+        this.gameHeight = 768;
+        this.spaceBarKeyCode = 32;
+        this.leftKeyCode = 37;
+        this.upKeyCode = 38;
+        this.rightKeyCode = 39;
+        this.downKeyCode = 40;   
+        this.props = {
+            height: this.gameHeight,
+            width: this.gameWidth
+        };
+        this.eventLeftKeyCode = {
+            keyCode: this.leftKeyCode
+        };
+        this.eventRightKeyCode = {
+            keyCode: this.rightKeyCode,
+            preventDefault: () => {
+            }
+        };       
     }
     
     loadUserSpaceShipFakes() {

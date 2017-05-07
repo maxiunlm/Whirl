@@ -1,4 +1,4 @@
-/* global expect, Function */
+/* global expect, Function, spyOn */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -7,31 +7,122 @@ import CommonFakes from '../../../Selenium/Fakes/commonFakes';
 import App from '../../../src/components/App/App.js';
 
 describe('APP - ', () => {
-    it('renders without crashing', () => {
-        const div = document.createElement('div');
-        ReactDOM.render(<App />, div);
-    });
-
+    let commonFakes = new CommonFakes();
+    
     describe('CONSTRUCTOR - ', () => {
         it('With "props" parameters initialises the object', () => {
-            var props = {
-                height: CommonFakes.height,
-                width: CommonFakes.width
-            };
 
-            var app = new App(props);
+            var sut = new App(commonFakes.props);
+            
+            expect(sut.height).toEqual(commonFakes.gameHeight);
+            expect(sut.width).toEqual(commonFakes.gameWidth);
+            expect(sut.spaceBarKeyCode).toEqual(commonFakes.spaceBarKeyCode);
+            expect(sut.leftKeyCode).toEqual(commonFakes.leftKeyCode);
+            expect(sut.upKeyCode).toEqual(commonFakes.upKeyCode);
+            expect(sut.rightKeyCode).toEqual(commonFakes.rightKeyCode);
+            expect(sut.downKeyCode).toEqual(commonFakes.downKeyCode);
+            expect(sut.actions).toBeDefined();
+            expect(sut.actions.moveUserSpaceShipToLeft instanceof Function).toBeTruthy();
+            expect(sut.actions.moveUserSpaceShipToRight instanceof Function).toBeTruthy();
+            expect(sut.actions.stopMovingUserSpaceShipToLeft instanceof Function).toBeTruthy();
+            expect(sut.actions.stopMovingUserSpaceShipToRight instanceof Function).toBeTruthy();
+            expect(sut.actions.stopMovingUserSpaceShip instanceof Function).toBeTruthy();
+        });
+        
+        it('With "props" parameters initialises the events', () => {
 
-            expect(app.height).toBe(CommonFakes.height);
-            expect(app.width).toBe(CommonFakes.width);
-            expect(app.actions).toBeDefined();
-            expect(app.actions.moveUserSpaceShipToLeft instanceof Function).toBeTruthy();
-            expect(app.actions.moveUserSpaceShipToRight instanceof Function).toBeTruthy();
-            expect(app.actions.stopMovingUserSpaceShipToLeft instanceof Function).toBeTruthy();
-            expect(app.actions.stopMovingUserSpaceShipToRight instanceof Function).toBeTruthy();
+            var sut = new App(commonFakes.props);
+            
+            expect(document.onkeydown instanceof Function).toBeTruthy();
+            expect(document.onkeyup instanceof Function).toBeTruthy();
+        });
+    });
+    
+    describe('catchKeyEvents - ', () => {
+        it('When the application catches the Left Keyboard Press event, then it invokes the "moveUserSpaceShipToLeft" method from the "actions" object', () => {
+            var sut = new App(commonFakes.props);
+            spyOn(sut.actions, 'moveUserSpaceShipToLeft').and.callFake(() => {
+            });
+            
+            sut.catchKeyEvents(commonFakes.eventLeftKeyCode);
+            
+            expect(sut.actions.moveUserSpaceShipToLeft).toHaveBeenCalled();
+            expect(sut.actions.moveUserSpaceShipToLeft.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('When the application catches the Right Keyboard Press event, then it invokes the "moveUserSpaceShipToRight" method from the "actions" object', () => {
+            var sut = new App(commonFakes.props);
+            spyOn(sut.actions, 'moveUserSpaceShipToRight').and.callFake((event) => {
+            });
+            
+            sut.catchKeyEvents(commonFakes.eventRightKeyCode);
+            
+            expect(sut.actions.moveUserSpaceShipToRight).toHaveBeenCalled();
+            expect(sut.actions.moveUserSpaceShipToRight.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With an "keyboard event" invokes the "preventDefault" method from the "event" object', () => {
+            var sut = new App(commonFakes.props);
+            spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
+            });
+            
+            sut.catchKeyEvents(commonFakes.eventRightKeyCode);
+            
+            expect(commonFakes.eventRightKeyCode.preventDefault).toHaveBeenCalled();
+            expect(commonFakes.eventRightKeyCode.preventDefault.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With an "keyboard event" that doesn\'t have a "preventDefault" method, then it doesn\'t do anything', () => {
+            var sut = new App(commonFakes.props);
+            spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
+            });
+            
+            sut.catchKeyEvents(commonFakes.eventLeftKeyCode);
+            
+            expect(commonFakes.eventRightKeyCode.preventDefault).not.toHaveBeenCalled();
+        });
+    });
+    
+    describe('catchKeyUpEvent - ', () => {
+        it('When the application catches the "Keyboard Press Up" event, then it invokes the "stopMovingUserSpaceShip" method from the "actions" object', () => {
+            var sut = new App(commonFakes.props);
+            spyOn(sut.actions, 'stopMovingUserSpaceShip').and.callFake(() => {
+            });
+            
+            sut.catchKeyUpEvent(commonFakes.eventLeftKeyCode);
+            
+            expect(sut.actions.stopMovingUserSpaceShip).toHaveBeenCalled();
+            expect(sut.actions.stopMovingUserSpaceShip.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With an "keyboard event" invokes the "preventDefault" method from the "event" object', () => {
+            var sut = new App(commonFakes.props);
+            spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
+            });
+            
+            sut.catchKeyUpEvent(commonFakes.eventRightKeyCode);
+            
+            expect(commonFakes.eventRightKeyCode.preventDefault).toHaveBeenCalled();
+            expect(commonFakes.eventRightKeyCode.preventDefault.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With an "keyboard event" that doesn\'t have a "preventDefault" method, then it doesn\'t do anything', () => {
+            var sut = new App(commonFakes.props);
+            spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
+            });
+            
+            sut.catchKeyUpEvent(commonFakes.eventLeftKeyCode);
+            
+            expect(commonFakes.eventRightKeyCode.preventDefault).not.toHaveBeenCalled();
         });
     });
 
     describe('render - ', () => {
+        it('renders without crashing', () => {
+            const div = document.createElement('div');
+            ReactDOM.render(<App />, div);
+        });
+
         xit('Without any parameter renders a "UserSpaceShip" component', () => {
             const app = shallow(
                     <App height={CommonFakes.height} width={CommonFakes.width} />

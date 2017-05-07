@@ -27,7 +27,7 @@ class UserSpaceShip extends Component {
     }
 
     startMovingToLeft() {
-        this.clearAllMovemnetIntervals();
+        this.stopMoving();
         this.setState({
             image: this.state.images.toLeft
         });
@@ -53,7 +53,7 @@ class UserSpaceShip extends Component {
     }
 
     startMovingToRight() {
-        this.clearAllMovemnetIntervals();
+        this.stopMoving();
         this.setState({
             image: this.state.images.toRight
         });
@@ -78,7 +78,7 @@ class UserSpaceShip extends Component {
         });
     }
     
-    clearAllMovemnetIntervals() {
+    stopMoving() {
         this.stopMovingToLeft();
         this.stopMovingToRight();
     }
@@ -106,6 +106,7 @@ class UserSpaceShip extends Component {
         this.props.actions.moveUserSpaceShipToRight = this.startMovingToRight.bind(this);
         this.props.actions.stopMovingUserSpaceShipToLeft = this.stopMovingToLeft.bind(this);
         this.props.actions.stopMovingUserSpaceShipToRight = this.stopMovingToRight.bind(this);
+        this.props.actions.stopMovingUserSpaceShip = this.stopMoving.bind(this);
     }
 
     render() {

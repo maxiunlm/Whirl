@@ -18,71 +18,53 @@ class App extends Component {
             stopMovingUserSpaceShipToLeft: () => {
             },
             stopMovingUserSpaceShipToRight: () => {
+            },
+            stopMovingUserSpaceShip: () => {
             }
         };
         
-//        var spaceBarKeyCode = 32;
-//        var leftKeyCode = 37;
-//        var upKeyCode = 38;
-//        var rightKeyCode = 39;
-//        var downKeyCode = 40;
+        this.spaceBarKeyCode = 32;
+        this.leftKeyCode = 37;
+        this.upKeyCode = 38;
+        this.rightKeyCode = 39;
+        this.downKeyCode = 40;
+        
+        document.onkeydown = this.catchKeyEvents;
+        document.onkeyup = this.catchKeyUpEvent;
     }
 
-//    catchKeyEvents() {
-//        document.onkeydown = function (event) {
-//            event = event || window.event;
-//            var keyCode = event.which || event.keyCode;
-//
-//            moveShip(keyCode);
-//
-//            if (!!event.preventDefault) {
-//                event.preventDefault(); // prevent the default action (scroll / move caret)
-//            }
-//        };
-//    }
-//
-//    moveShip(keyCode) {
-//        if (keyCode != leftKeyCode
-//                && keyCode != rightKeyCode
-//                && keyCode != spaceBarKeyCode) {
-//            return;
-//        }
-//
-//        switch (keyCode) {
-//            case leftKeyCode:
-//                ellipseShipPath.angle -= 0.05;
-//                break;
-//            case rightKeyCode:
-//                ellipseShipPath.angle += 0.05;
-//                break;
-//                /*
+    catchKeyUpEvent(event) {
+        this.actions.stopMovingUserSpaceShip();
+        
+        if (!!event.preventDefault) {
+            event.preventDefault(); // prevent the default action (scroll / move caret)
+        }        
+    }
+
+    catchKeyEvents(event) {
+        event = event || window.event;
+        let keyCode = event.which || event.keyCode;
+        
+        switch (keyCode) {
+            case this.leftKeyCode:
+                this.actions.moveUserSpaceShipToLeft();
+                break;
+            case this.rightKeyCode:
+                this.actions.moveUserSpaceShipToRight();
+                break;
 //                 case upKeyCode:
 //                 break;
 //                 case downKeyCode:
 //                 break;
-//                 default: return; // exit this handler for other keys				
-//                 // */
 //            case spaceBarKeyCode:
 //                doShot();
 //                break;
-//        }
-//
-//        if (ellipseShipPath.angle >= 2 * Math.PI) {
-//            ellipseShipPath.angle -= 2 * Math.PI;
-//        } else if (ellipseShipPath.angle <= -2 * Math.PI) {
-//            ellipseShipPath.angle += 2 * Math.PI;
-//        }
-//
-//        userSpaceShip.style.transform = 'rotate(' + (-1 * toDegrees(ellipseShipPath.angle) % (360)) + 'deg)';
-//
-//        var top = ellipseShipPath.centerY + ((ellipseShipPath.radius + ellipseShipPath.deltaA) * Math.cos(ellipseShipPath.angle));
-//        var left = ellipseShipPath.centerX + ((ellipseShipPath.radius + ellipseShipPath.deltaB) * Math.sin(ellipseShipPath.angle));
-//
-//        userSpaceShip.style.top = (top) + 'px';
-//        userSpaceShip.style.left = (left) + 'px';
-//
-//        showDebugData();
-//    }
+        }
+        
+        if (!!event.preventDefault) {
+            event.preventDefault(); // prevent the default action (scroll / move caret)
+        }
+    }
 
     render() {
         return(
