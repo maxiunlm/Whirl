@@ -29,8 +29,8 @@ class App extends Component {
         this.rightKeyCode = 39;
         this.downKeyCode = 40;
         
-        document.onkeydown = this.catchKeyEvents;
-        document.onkeyup = this.catchKeyUpEvent;
+        document.onkeydown = this.catchKeyEvents.bind(this);
+        document.onkeyup = this.catchKeyUpEvent.bind(this);
     }
 
     catchKeyUpEvent(event) {

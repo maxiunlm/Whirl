@@ -1,4 +1,4 @@
-/* global expect, Function, spyOn */
+/* global expect, Function, spyOn, jasmine */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -12,7 +12,7 @@ describe('APP - ', () => {
     describe('CONSTRUCTOR - ', () => {
         it('With "props" parameters initialises the object', () => {
 
-            var sut = new App(commonFakes.props);
+            let sut = new App(commonFakes.props);
             
             expect(sut.height).toEqual(commonFakes.gameHeight);
             expect(sut.width).toEqual(commonFakes.gameWidth);
@@ -31,16 +31,35 @@ describe('APP - ', () => {
         
         it('With "props" parameters initialises the events', () => {
 
-            var sut = new App(commonFakes.props);
+            let sut = new App(commonFakes.props);
             
             expect(document.onkeydown instanceof Function).toBeTruthy();
             expect(document.onkeyup instanceof Function).toBeTruthy();
+        });
+        
+        it('With "props" parameters invokes "bind" method from "Function" object twice', () => {
+            let calledTimes = 0;
+            spyOn(App.prototype.catchKeyEvents, 'bind').and.callFake(() => {
+                calledTimes++;
+            });
+            spyOn(App.prototype.catchKeyUpEvent, 'bind').and.callFake(() => {
+                calledTimes++;
+            });
+            
+            
+            let sut = new App(commonFakes);
+            
+            expect(App.prototype.catchKeyEvents.bind).toHaveBeenCalledWith(jasmine.any(App));
+            expect(App.prototype.catchKeyEvents.bind.calls.count()).toEqual(commonFakes.once);
+            expect(App.prototype.catchKeyUpEvent.bind).toHaveBeenCalledWith(jasmine.any(App));
+            expect(App.prototype.catchKeyUpEvent.bind.calls.count()).toEqual(commonFakes.once);
+            expect(calledTimes).toEqual(commonFakes.twice);
         });
     });
     
     describe('catchKeyEvents - ', () => {
         it('When the application catches the Left Keyboard Press event, then it invokes the "moveUserSpaceShipToLeft" method from the "actions" object', () => {
-            var sut = new App(commonFakes.props);
+            let sut = new App(commonFakes.props);
             spyOn(sut.actions, 'moveUserSpaceShipToLeft').and.callFake(() => {
             });
             
@@ -51,7 +70,7 @@ describe('APP - ', () => {
         });
         
         it('When the application catches the Right Keyboard Press event, then it invokes the "moveUserSpaceShipToRight" method from the "actions" object', () => {
-            var sut = new App(commonFakes.props);
+            let sut = new App(commonFakes.props);
             spyOn(sut.actions, 'moveUserSpaceShipToRight').and.callFake((event) => {
             });
             
@@ -62,7 +81,7 @@ describe('APP - ', () => {
         });
         
         it('With an "keyboard event" invokes the "preventDefault" method from the "event" object', () => {
-            var sut = new App(commonFakes.props);
+            let sut = new App(commonFakes.props);
             spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
             });
             
@@ -73,7 +92,7 @@ describe('APP - ', () => {
         });
         
         it('With an "keyboard event" that doesn\'t have a "preventDefault" method, then it doesn\'t do anything', () => {
-            var sut = new App(commonFakes.props);
+            let sut = new App(commonFakes.props);
             spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
             });
             
@@ -85,7 +104,7 @@ describe('APP - ', () => {
     
     describe('catchKeyUpEvent - ', () => {
         it('When the application catches the "Keyboard Press Up" event, then it invokes the "stopMovingUserSpaceShip" method from the "actions" object', () => {
-            var sut = new App(commonFakes.props);
+            let sut = new App(commonFakes.props);
             spyOn(sut.actions, 'stopMovingUserSpaceShip').and.callFake(() => {
             });
             
@@ -96,7 +115,7 @@ describe('APP - ', () => {
         });
         
         it('With an "keyboard event" invokes the "preventDefault" method from the "event" object', () => {
-            var sut = new App(commonFakes.props);
+            let sut = new App(commonFakes.props);
             spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
             });
             
@@ -107,7 +126,7 @@ describe('APP - ', () => {
         });
         
         it('With an "keyboard event" that doesn\'t have a "preventDefault" method, then it doesn\'t do anything', () => {
-            var sut = new App(commonFakes.props);
+            let sut = new App(commonFakes.props);
             spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
             });
             

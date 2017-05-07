@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './FlatCircleButtons.css';
 
 class LeftDirection extends Component {
     /*constructor(props) {
@@ -7,16 +8,19 @@ class LeftDirection extends Component {
 
     render() {
         return (
-                <img id="leftDirection"
-                        src="/images/Cicle-50percent-opacity.png"
-                        alt="&lt;"
+                <button class="flatCircleButton"
                         onKeyDown={this.props.actionStart}
                         onKeyUp={this.props.actionStop}
                         onMouseDown={this.props.actionStart}
                         onMouseLeave={this.props.actionStop}
                         onMouseOut={this.props.actionStop}
                         onMouseUp={this.props.actionStop}
-                        />
+                        >
+                    <img id="leftDirection"
+                        class="flatCircleButton"
+                        src="/images/Cicle-50percent-opacity.png"
+                        alt="&lt;"/>
+                </button>
                 );
     }
 }
