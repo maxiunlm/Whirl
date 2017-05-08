@@ -22,29 +22,29 @@ class App extends Component {
             stopMovingUserSpaceShip: () => {
             }
         };
-        
+
         this.spaceBarKeyCode = 32;
         this.leftKeyCode = 37;
         this.upKeyCode = 38;
         this.rightKeyCode = 39;
         this.downKeyCode = 40;
-        
+
         document.onkeydown = this.catchKeyEvents.bind(this);
         document.onkeyup = this.catchKeyUpEvent.bind(this);
     }
 
     catchKeyUpEvent(event) {
         this.actions.stopMovingUserSpaceShip();
-        
+
         if (!!event.preventDefault) {
             event.preventDefault(); // prevent the default action (scroll / move caret)
-        }        
+        }
     }
 
     catchKeyEvents(event) {
         event = event || window.event;
         let keyCode = event.which || event.keyCode;
-        
+
         switch (keyCode) {
             case this.leftKeyCode:
                 this.actions.moveUserSpaceShipToLeft();
@@ -59,8 +59,10 @@ class App extends Component {
 //            case spaceBarKeyCode:
 //                doShot();
 //                break;
+            default:
+                break;
         }
-        
+
         if (!!event.preventDefault) {
             event.preventDefault(); // prevent the default action (scroll / move caret)
         }
