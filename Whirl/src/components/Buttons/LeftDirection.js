@@ -8,7 +8,7 @@ class LeftDirection extends Component {
 
     render() {
         return (
-                <button class="flatCircleButton"
+                <button className="flatCircleButton"
                         onKeyDown={this.props.actionStart}
                         onKeyUp={this.props.actionStop}
                         onMouseDown={this.props.actionStart}
@@ -17,7 +17,7 @@ class LeftDirection extends Component {
                         onMouseUp={this.props.actionStop}
                         >
                     <img id="leftDirection"
-                        class="flatCircleButton"
+                        className="flatCircleButton"
                         src="/images/Cicle-50percent-opacity.png"
                         alt="&lt;"/>
                 </button>

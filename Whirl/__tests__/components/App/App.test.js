@@ -80,25 +80,25 @@ describe('APP - ', () => {
             expect(sut.actions.moveUserSpaceShipToRight.calls.count()).toEqual(commonFakes.once);
         });
         
-        it('With an "keyboard event" invokes the "preventDefault" method from the "event" object', () => {
+        it('With a "keyboard event" invokes the "preventDefault" method from the "event" object', () => {
             let sut = new App(commonFakes.props);
-            spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
+            spyOn(commonFakes.eventRightKeyCodeWithPreventDefault, 'preventDefault').and.callFake((event) => {
+            });
+            
+            sut.catchKeyEvents(commonFakes.eventRightKeyCodeWithPreventDefault);
+            
+            expect(commonFakes.eventRightKeyCodeWithPreventDefault.preventDefault).toHaveBeenCalled();
+            expect(commonFakes.eventRightKeyCodeWithPreventDefault.preventDefault.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With a "keyboard event" that doesn\'t have a "preventDefault" method, then it doesn\'t calls the "preventDefault" method', () => {
+            let sut = new App(commonFakes.props);
+            spyOn(commonFakes.eventRightKeyCodeWithPreventDefault, 'preventDefault').and.callFake((event) => {
             });
             
             sut.catchKeyEvents(commonFakes.eventRightKeyCode);
             
-            expect(commonFakes.eventRightKeyCode.preventDefault).toHaveBeenCalled();
-            expect(commonFakes.eventRightKeyCode.preventDefault.calls.count()).toEqual(commonFakes.once);
-        });
-        
-        it('With an "keyboard event" that doesn\'t have a "preventDefault" method, then it doesn\'t do anything', () => {
-            let sut = new App(commonFakes.props);
-            spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
-            });
-            
-            sut.catchKeyEvents(commonFakes.eventLeftKeyCode);
-            
-            expect(commonFakes.eventRightKeyCode.preventDefault).not.toHaveBeenCalled();
+            expect(commonFakes.eventRightKeyCodeWithPreventDefault.preventDefault).not.toHaveBeenCalled();
         });
     });
     
@@ -114,25 +114,25 @@ describe('APP - ', () => {
             expect(sut.actions.stopMovingUserSpaceShip.calls.count()).toEqual(commonFakes.once);
         });
         
-        it('With an "keyboard event" invokes the "preventDefault" method from the "event" object', () => {
+        it('With a "keyboard event" invokes the "preventDefault" method from the "event" object', () => {
             let sut = new App(commonFakes.props);
-            spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
+            spyOn(commonFakes.eventRightKeyCodeWithPreventDefault, 'preventDefault').and.callFake((event) => {
+            });
+            
+            sut.catchKeyUpEvent(commonFakes.eventRightKeyCodeWithPreventDefault);
+            
+            expect(commonFakes.eventRightKeyCodeWithPreventDefault.preventDefault).toHaveBeenCalled();
+            expect(commonFakes.eventRightKeyCodeWithPreventDefault.preventDefault.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With a "keyboard event" that doesn\'t have a "preventDefault" method, then it doesn\'t the "preventDefault" method', () => {
+            let sut = new App(commonFakes.props);
+            spyOn(commonFakes.eventRightKeyCodeWithPreventDefault, 'preventDefault').and.callFake((event) => {
             });
             
             sut.catchKeyUpEvent(commonFakes.eventRightKeyCode);
             
-            expect(commonFakes.eventRightKeyCode.preventDefault).toHaveBeenCalled();
-            expect(commonFakes.eventRightKeyCode.preventDefault.calls.count()).toEqual(commonFakes.once);
-        });
-        
-        it('With an "keyboard event" that doesn\'t have a "preventDefault" method, then it doesn\'t do anything', () => {
-            let sut = new App(commonFakes.props);
-            spyOn(commonFakes.eventRightKeyCode, 'preventDefault').and.callFake((event) => {
-            });
-            
-            sut.catchKeyUpEvent(commonFakes.eventLeftKeyCode);
-            
-            expect(commonFakes.eventRightKeyCode.preventDefault).not.toHaveBeenCalled();
+            expect(commonFakes.eventRightKeyCodeWithPreventDefault.preventDefault).not.toHaveBeenCalled();
         });
     });
 

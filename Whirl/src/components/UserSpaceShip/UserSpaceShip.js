@@ -26,7 +26,7 @@ class UserSpaceShip extends Component {
         };
     }
 
-    startMovingToLeft() {
+    startMovingToLeft(event) {
         this.stopMoving();
         this.setState({
             image: this.state.images.toLeft
@@ -35,6 +35,10 @@ class UserSpaceShip extends Component {
         let moveToLeftEvent = this.moveToLeft.bind(this);
 
         this.movementToLeftInterval = setInterval(moveToLeftEvent, this.movementInterval);
+
+        if (!!event && !!event.preventDefault) {
+            event.preventDefault(); // prevent the default action (scroll / move caret)
+        }
     }
 
     moveToLeft() {
@@ -52,7 +56,7 @@ class UserSpaceShip extends Component {
         });
     }
 
-    startMovingToRight() {
+    startMovingToRight(event) {
         this.stopMoving();
         this.setState({
             image: this.state.images.toRight
@@ -61,6 +65,10 @@ class UserSpaceShip extends Component {
         let moveToRightEvent = this.moveToRight.bind(this);
 
         this.movementToRightInterval = setInterval(moveToRightEvent, this.movementInterval);
+
+        if (!!event && !!event.preventDefault) {
+            event.preventDefault(); // prevent the default action (scroll / move caret)
+        }
     }
 
     moveToRight() {

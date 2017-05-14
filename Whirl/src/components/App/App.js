@@ -73,11 +73,11 @@ class App extends Component {
                 <div>
                     <UserSpaceShip gameHeight={this.height} gameWidth={this.width} actions={this.actions} />
                     <LeftDirection
-                        actionStart={() => this.actions.moveUserSpaceShipToLeft() }
-                        actionStop={() => this.actions.stopMovingUserSpaceShipToLeft() }/>
+                        actionStart={(event) => this.actions.moveUserSpaceShipToLeft(event) }
+                        actionStop={(event) => this.actions.stopMovingUserSpaceShipToLeft(event) }/>
                     <RightDirection
-                        actionStart={() => this.actions.moveUserSpaceShipToRight() }
-                        actionStop={() => this.actions.stopMovingUserSpaceShipToRight() }/>
+                        actionStart={(event) => this.actions.moveUserSpaceShipToRight(event) }
+                        actionStop={(event) => this.actions.stopMovingUserSpaceShipToRight(event) }/>
                 </div>
                 );
     }

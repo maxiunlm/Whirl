@@ -353,6 +353,46 @@ describe('UserSpaceShip - ', () => {
             
             expect(sut.state.image).toEqual(sut.state.images.toLeft);
         });
+        
+        it('With an "keyboard event" invokes the "preventDefault" method from the "event" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
+            spyOn(commonFakes.eventLeftKeyCodeWithPreventDefault, 'preventDefault').and.callFake((event) => {
+            });
+            
+            sut.startMovingToLeft(commonFakes.eventLeftKeyCodeWithPreventDefault);
+            
+            expect(commonFakes.eventLeftKeyCodeWithPreventDefault.preventDefault).toHaveBeenCalled();
+            expect(commonFakes.eventLeftKeyCodeWithPreventDefault.preventDefault.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With an "keyboard event" that doesn\'t have a "preventDefault" method, then it doesn\'t do anything', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
+            spyOn(commonFakes.eventLeftKeyCodeWithPreventDefault, 'preventDefault').and.callFake((event) => {
+            });
+            
+            sut.startMovingToLeft(commonFakes.eventLeftKeyCode);
+            
+            expect(commonFakes.eventLeftKeyCodeWithPreventDefault.preventDefault).not.toHaveBeenCalled();
+        });
+        
+        it('Without a "keyboard event", then it doesn\'t throw any Exception', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
+            spyOn(commonFakes.eventRightKeyCodeWithPreventDefault, 'preventDefault').and.callFake((event) => {
+            });
+            
+            expect(() => {
+                sut.startMovingToLeft();
+            }).not.toThrow();
+        });
     });
 
     describe('moveToLeft - ', () => {
@@ -667,6 +707,46 @@ describe('UserSpaceShip - ', () => {
             sut.startMovingToRight();
             
             expect(sut.state.image).toEqual(sut.state.images.toRight);
+        });
+        
+        it('With an "keyboard event" invokes the "preventDefault" method from the "event" object', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
+            spyOn(commonFakes.eventRightKeyCodeWithPreventDefault, 'preventDefault').and.callFake((event) => {
+            });
+            
+            sut.startMovingToRight(commonFakes.eventRightKeyCodeWithPreventDefault);
+            
+            expect(commonFakes.eventRightKeyCodeWithPreventDefault.preventDefault).toHaveBeenCalled();
+            expect(commonFakes.eventRightKeyCodeWithPreventDefault.preventDefault.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With an "keyboard event" that doesn\'t have a "preventDefault" method, then it doesn\'t do anything', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
+            spyOn(commonFakes.eventRightKeyCodeWithPreventDefault, 'preventDefault').and.callFake((event) => {
+            });
+            
+            sut.startMovingToRight(commonFakes.eventLeftKeyCode);
+            
+            expect(commonFakes.eventRightKeyCodeWithPreventDefault.preventDefault).not.toHaveBeenCalled();
+        });
+        
+        it('Without a "keyboard event", then it doesn\'t throw any Exception', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(function () {
+                this.state.image = this.state.images.toLeft;
+            }.bind(sut));
+            spyOn(commonFakes.eventRightKeyCodeWithPreventDefault, 'preventDefault').and.callFake((event) => {
+            });
+            
+            expect(() => {
+                sut.startMovingToRight();
+            }).not.toThrow();
         });
     });
 
