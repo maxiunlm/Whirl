@@ -1,5 +1,10 @@
+import IoC4Javascript from '../../src/apis/ioc4javascript';
+import Dimensions from '../../src/maths/paths/Dimensions';
+import UserSpaceShipMaths from '../../src/maths/UserSpaceShip/UserSpaceShipMaths';
+
 class CommonFakes {
     constructor() {
+        this.defaultInteger = 0;
         this.anytime = 0;
         this.once = 1;
         this.twice = 2;
@@ -13,23 +18,45 @@ class CommonFakes {
         this.flatAngleInRadians = Math.PI;
         this.flatAngleInDegrees = 180;
         
+        this.loadObjectManagerConfigFakes();
         this.loadAppFakes();
         this.loadUserSpaceShipFakes();
         this.loadEllipsePathFakes();
         this.loadPostionFakes();
     }
     
+    loadObjectManagerConfigFakes() {        
+        this.dimensionsKey = 'dimensionsKey';
+        this.userSpaceShipMathsKey = 'userSpaceShipMathsKey';
+        this.ioc = new IoC4Javascript();
+        
+        try {
+            this.ioc.registerType.call(this.ioc, Dimensions, this.dimensionsKey)
+                    .registerConstructor(this.dimensionsKey, function () {
+                        return new Dimensions(this.gameWidth, this.gameHeight);
+                    }.bind(this));
+            this.ioc.registerType.call(this.ioc, UserSpaceShipMaths, this.userSpaceShipMathsKey)
+                    .registerConstructor(this.userSpaceShipMathsKey, function () {
+                        return new UserSpaceShipMaths(new Dimensions(this.gameWidth, this.gameHeight));
+                    }.bind(this));
+            this.ioc.getInstanceOf.bind(this.ioc);
+        }
+        catch (e) {
+            console.log('WARNING [CommonFakes::loadObjectManagerConfigFakes]: trying to config the IoC.', e);
+        }
+    }
+    
     loadAppFakes() {
         this.gameWidth = 1024;
         this.gameHeight = 768;
+        this.dimensions = new Dimensions(this.gameWidth, this.gameHeight);
         this.spaceBarKeyCode = 32;
         this.leftKeyCode = 37;
         this.upKeyCode = 38;
         this.rightKeyCode = 39;
         this.downKeyCode = 40;   
         this.props = {
-            height: this.gameHeight,
-            width: this.gameWidth
+            ioc: this.ioc
         };
         this.eventLeftKeyCode = {
             keyCode: this.leftKeyCode

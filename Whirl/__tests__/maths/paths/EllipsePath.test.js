@@ -9,7 +9,7 @@ describe('EllipsePath', () => {
     describe('CONSTRUCTOR', () => {
         it('Initializes the Object', () => {
 
-            let sut = new EllipsePath(commonFakes, {
+            let sut = new EllipsePath(commonFakes.dimensions, {
                 "width": commonFakes.userSpaceShipWidth,
                 "height": commonFakes.userSpaceShipHeight
             });

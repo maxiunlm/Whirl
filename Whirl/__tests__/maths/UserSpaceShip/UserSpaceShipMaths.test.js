@@ -13,7 +13,7 @@ describe('UserSpaceShipMaths - ', () => {
     describe('CONSTRUCTOR - ', () => {
         it('Initialices the Object', () => {
             
-            let sut = new UserSpaceShipMaths(commonFakes);
+            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
             
             expect(sut.geometry).toBeDefined();
             expect(sut.geometry instanceof UserSpaceShipGeometric).toBeTruthy();
@@ -27,7 +27,7 @@ describe('UserSpaceShipMaths - ', () => {
         it('Returns the "top" position value', () => {      
             let centerY = Math.floor((commonFakes.gameHeight - commonFakes.userSpaceShipHeight) / commonFakes.ellipsePathHalfDivider);            
             let radius = commonFakes.gameHeight * commonFakes.ellipsePathRadiusPercentage;
-            let sut = new UserSpaceShipMaths(commonFakes);
+            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
             
             let result = sut.getTop();
             
@@ -39,7 +39,7 @@ describe('UserSpaceShipMaths - ', () => {
         it('Returns the "left" position value', () => {
             let centerX = Math.floor((commonFakes.gameWidth - commonFakes.userSpaceShipWidth) / commonFakes.ellipsePathHalfDivider);         
             let radius = commonFakes.gameHeight * commonFakes.ellipsePathRadiusPercentage;
-            let sut = new UserSpaceShipMaths(commonFakes);
+            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
             
             let result = sut.getLeft();
             
@@ -49,7 +49,7 @@ describe('UserSpaceShipMaths - ', () => {
     
     describe('getWidth - ', () => {        
         it('Without any parameter returns the "width" value of the Space Ship', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes);
+            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
             
             let result = sut.getWidth();
             
@@ -59,7 +59,7 @@ describe('UserSpaceShipMaths - ', () => {
     
     describe('getHeight - ', () => {        
         it('Without any parameter returns the "height" value of the Space Ship', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes);
+            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
             
             let result = sut.getHeight();
             
@@ -69,7 +69,7 @@ describe('UserSpaceShipMaths - ', () => {
     
     describe('getRotation - ', () => {        
         it('With a "Radian Angle" parameter invokes the "toDegrees" method from "Calculus" object', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes);
+            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
             spyOn(Calculus.prototype, 'toDegrees').and.callFake(() => {});
             
             let result = sut.getRotation();
@@ -79,7 +79,7 @@ describe('UserSpaceShipMaths - ', () => {
         });
         
         it('Without any parameter returns the "rotation angle" value of the Space Ship', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes);
+            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
             let calculus = new Calculus();
             
             let result = sut.getRotation();
@@ -90,7 +90,7 @@ describe('UserSpaceShipMaths - ', () => {
     
     describe('moveToNextLeftEllipticalPosition - ', () => {
         it('Without any parameter moves to the next left elliptical position', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes);
+            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
             let actualAngle = sut.path.angle;
             
             let result = sut.moveToNextLeftEllipticalPosition();
@@ -101,7 +101,7 @@ describe('UserSpaceShipMaths - ', () => {
         });
         
         it('With a big angle correct its value', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes);
+            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
             sut.path.angle = -2 * Math.PI;
             
             sut.moveToNextLeftEllipticalPosition();
@@ -112,7 +112,7 @@ describe('UserSpaceShipMaths - ', () => {
     
     describe('moveToNextRightEllipticalPosition - ', () => {
         it('Without any parameter moves to the next left elliptical position', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes);
+            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
             let actualAngle = sut.path.angle;
             
             let result = sut.moveToNextRightEllipticalPosition();
@@ -123,7 +123,7 @@ describe('UserSpaceShipMaths - ', () => {
         });
         
         it('With a big angle correct its value', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes);
+            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
             sut.path.angle = 2 * Math.PI;
             
             sut.moveToNextRightEllipticalPosition();

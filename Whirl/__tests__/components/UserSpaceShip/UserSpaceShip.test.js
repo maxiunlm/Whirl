@@ -4,7 +4,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import CommonFakes from '../../../Selenium/Fakes/commonFakes';
 import UserSpaceShipMaths from '../../../src/maths/UserSpaceShip/UserSpaceShipMaths';
+import Dimensions from '../../../src/maths/paths/Dimensions';
 import UserSpaceShip from '../../../src/components/UserSpaceShip/UserSpaceShip';
+import IoC4Javascript from '../../../src/apis/ioc4javascript';
 
 describe('UserSpaceShip - ', () => {
     let commonFakes = new CommonFakes();
@@ -12,10 +14,6 @@ describe('UserSpaceShip - ', () => {
     describe('COMPONENT - ', () => {
         it('without any parameter, when is loaded, then renders without crashing', () => {
             const div = document.createElement('div');
-            var props = {
-                height: CommonFakes.height,
-                width: CommonFakes.width
-            };
             var actions = {
                 moveUserSpaceShipToLeft: () => {
                 },
@@ -23,7 +21,7 @@ describe('UserSpaceShip - ', () => {
                 }
             };
 
-            ReactDOM.render(<UserSpaceShip gameHeight={props.height} gameWidth={props.width} actions={actions} />, div);
+            ReactDOM.render(<UserSpaceShip ioc={commonFakes.ioc} actions={actions} />, div);
         });
     });
 
@@ -44,6 +42,7 @@ describe('UserSpaceShip - ', () => {
 
             let sut = new UserSpaceShip(commonFakes);
 
+            expect(sut.ioc).toEqual(commonFakes.ioc);
             expect(sut.movementInterval).toEqual(commonFakes.movementInterval);
             expect(sut.maths).toBeDefined();
             expect(sut.maths instanceof UserSpaceShipMaths).toBeTruthy();
@@ -137,6 +136,17 @@ describe('UserSpaceShip - ', () => {
 
             expect(UserSpaceShipMaths.prototype.getHeight).toHaveBeenCalled();
             expect(UserSpaceShipMaths.prototype.getHeight.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With "userSpaceShipMathsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
+            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callFake(() => {
+                return new UserSpaceShipMaths(new Dimensions());
+            });
+            
+            let sut = new UserSpaceShip(commonFakes);
+            
+            expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.userSpaceShipMathsKey);
+            expect(IoC4Javascript.prototype.getInstanceOf.calls.count()).toEqual(commonFakes.once);
         });
     });
 

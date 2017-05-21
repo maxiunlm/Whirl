@@ -7,8 +7,6 @@ import RightDirection from '../Buttons/RightDirection.js';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.height = props.height;
-        this.width = props.width;
 
         this.actions = {
             moveUserSpaceShipToLeft: () => {
@@ -71,7 +69,7 @@ class App extends Component {
     render() {
         return(
                 <div>
-                    <UserSpaceShip gameHeight={this.height} gameWidth={this.width} actions={this.actions} />
+                    <UserSpaceShip actions={this.actions} />
                     <LeftDirection
                         actionStart={(event) => this.actions.moveUserSpaceShipToLeft(event) }
                         actionStop={(event) => this.actions.stopMovingUserSpaceShipToLeft(event) }/>

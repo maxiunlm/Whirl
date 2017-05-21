@@ -14,8 +14,6 @@ describe('APP - ', () => {
 
             let sut = new App(commonFakes.props);
             
-            expect(sut.height).toEqual(commonFakes.gameHeight);
-            expect(sut.width).toEqual(commonFakes.gameWidth);
             expect(sut.spaceBarKeyCode).toEqual(commonFakes.spaceBarKeyCode);
             expect(sut.leftKeyCode).toEqual(commonFakes.leftKeyCode);
             expect(sut.upKeyCode).toEqual(commonFakes.upKeyCode);
@@ -139,12 +137,12 @@ describe('APP - ', () => {
     describe('render - ', () => {
         it('renders without crashing', () => {
             const div = document.createElement('div');
-            ReactDOM.render(<App />, div);
+            ReactDOM.render(<App ioc={commonFakes.ioc} />, div);
         });
 
         xit('Without any parameter renders a "UserSpaceShip" component', () => {
             const app = shallow(
-                    <App height={CommonFakes.height} width={CommonFakes.width} />
+                    <App ioc={commonFakes.ioc} />
                     );
 
             var result = app.find('img');

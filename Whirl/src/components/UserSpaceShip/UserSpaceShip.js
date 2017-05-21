@@ -1,15 +1,16 @@
 /* global actions */
 
 import React, { Component } from 'react';
+import IoC4Javascript from '../../apis/ioc4javascript';
 import './UserSpaceShip.css';
-import UserSpaceShipMaths from '../../maths/UserSpaceShip/UserSpaceShipMaths';
 
 class UserSpaceShip extends Component {
     constructor(props) {
         super(props);
-
+        
+        this.ioc = new IoC4Javascript();
         this.movementInterval = 0.04;
-        this.maths = new UserSpaceShipMaths(props);
+        this.maths = this.ioc.getInstanceOf('userSpaceShipMathsKey');//new UserSpaceShipMaths(props);//
         this.state = {
             image: '/images/UserSpaceShipStopped.png',
             images: {
