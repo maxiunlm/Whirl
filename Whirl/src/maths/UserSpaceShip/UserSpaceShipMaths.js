@@ -1,14 +1,29 @@
-import UserSpaceShipGeometric from './UserSpaceShipGeometric';
-import EllipsePath from '../paths/EllipsePath';
 import Position from '../paths/Position';
-import Calculus from '../calculus/Calculus';
+import IoC4Javascript from '../../apis/ioc4javascript';
 
 class UserSpaceShipMaths {
-    constructor(dimensions) {
-        this.geometry = new UserSpaceShipGeometric();
-        this.path = new EllipsePath(dimensions, this.geometry);
-        this.calculus = new Calculus();
-        
+    constructor() {
+        this.ioc = new IoC4Javascript();
+        this.dimensions = this.getDimensions();
+        this.geometry = this.getUserSpaceShipGeometric();
+        this.path = this.getNewEllipsePath();;
+        this.calculus = this.getNewCalculus();
+    }
+    
+    getUserSpaceShipGeometric() {
+        return this.ioc.getInstanceOf('userSpaceShipGeometricKey');
+    }
+    
+    getDimensions() {
+        return this.ioc.getInstanceOf('dimensionsKey');
+    }
+    
+    getNewEllipsePath() {
+        return this.ioc.getInstanceOf('ellipsePathKey');
+    }
+    
+    getNewCalculus() {
+        return this.ioc.getInstanceOf('calculusKey');
     }
     
     getTop () {

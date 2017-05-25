@@ -5,8 +5,12 @@ import ReactDOM from 'react-dom';
 import MainApp from '../src/index.js';
 import CommonFakes from '../Selenium/Fakes/commonFakes';
 import IoC4Javascript from '../src/apis/ioc4javascript';
+import Calculus from '../src/maths/calculus/Calculus';
 import Dimensions from '../src/maths/paths/Dimensions';
+import EllipsePath from '../src/maths/paths/EllipsePath';
+import Position from '../src/maths/paths/Position';
 import UserSpaceShipMaths from '../src/maths/UserSpaceShip/UserSpaceShipMaths';
+import UserSpaceShipGeometric from '../src/maths/UserSpaceShip/UserSpaceShipGeometric';
 
 
 describe('Index - ', () => {
@@ -75,8 +79,11 @@ describe('Index - ', () => {
     });
     
     describe('registerObjectsConfigurations - ', () => {
+        
         it('With the "Dimensions" type and the "dimensionsKey" string key invokes the "registerType" method from the "IoC4Javascript" object', () => {
             spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
             });
             spyOn(IoC4Javascript.prototype, 'registerConstructor').and.callFake(() => {
             });
@@ -84,11 +91,13 @@ describe('Index - ', () => {
             
             sut.registerObjectsConfigurations();
             
-            expect(IoC4Javascript.prototype.registerType).toHaveBeenCalledWith(Dimensions, commonFakes.dimensionsKey);
+            expect(IoC4Javascript.prototype.registerSingletonType).toHaveBeenCalledWith(Dimensions, commonFakes.dimensionsKey);
         });
         
         it('With the "UserSpaceShipMaths" type and the "userSpaceShipMathsKey" string key invokes the "registerType" method from the "IoC4Javascript" object', () => {
             spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
             });
             spyOn(IoC4Javascript.prototype, 'registerConstructor').and.callFake(() => {
             });
@@ -99,8 +108,10 @@ describe('Index - ', () => {
             expect(IoC4Javascript.prototype.registerType).toHaveBeenCalledWith(UserSpaceShipMaths, commonFakes.userSpaceShipMathsKey);
         });
         
-        it('With a "constructorCallback" method and the "userSpaceShipMathsKey" string key invokes the "registerConstructor" method from the "IoC4Javascript" object', () => {
+        it('With the "UserSpaceShipGeometric" type and the "userSpaceShipGeometricKey" string key invokes the "registerType" method from the "IoC4Javascript" object', () => {
             spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
             });
             spyOn(IoC4Javascript.prototype, 'registerConstructor').and.callFake(() => {
             });
@@ -108,11 +119,55 @@ describe('Index - ', () => {
             
             sut.registerObjectsConfigurations();
             
-            expect(IoC4Javascript.prototype.registerConstructor).toHaveBeenCalledWith(commonFakes.userSpaceShipMathsKey, jasmine.any(Function));
+            expect(IoC4Javascript.prototype.registerSingletonType).toHaveBeenCalledWith(UserSpaceShipGeometric, commonFakes.userSpaceShipGeometricKey);
+        });
+        
+        it('With the "EllipsePath" type and the "ellipsePathKey" string key invokes the "registerType" method from the "IoC4Javascript" object', () => {
+            spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerConstructor').and.callFake(() => {
+            });
+            let sut = new MainApp();
+            
+            sut.registerObjectsConfigurations();
+            
+            expect(IoC4Javascript.prototype.registerType).toHaveBeenCalledWith(EllipsePath, commonFakes.ellipsePathKey);
+        });
+        
+        it('With the "Calculus" type and the "calculusKey" string key invokes the "registerType" method from the "IoC4Javascript" object', () => {
+            spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerConstructor').and.callFake(() => {
+            });
+            let sut = new MainApp();
+            
+            sut.registerObjectsConfigurations();
+            
+            expect(IoC4Javascript.prototype.registerSingletonType).toHaveBeenCalledWith(Calculus, commonFakes.calculusKey);
+        });
+        
+        it('With the "Position" type and the "positionKey" string key invokes the "registerType" method from the "IoC4Javascript" object', () => {
+            spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerConstructor').and.callFake(() => {
+            });
+            let sut = new MainApp();
+            
+            sut.registerObjectsConfigurations();
+            
+            expect(IoC4Javascript.prototype.registerType).toHaveBeenCalledWith(Position, commonFakes.positionKey);
         });
         
         it('With a "constructorCallback" method and the "dimensionsKey" string key invokes the "registerConstructor" method from the "IoC4Javascript" object', () => {
             spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
             });
             spyOn(IoC4Javascript.prototype, 'registerConstructor').and.callFake(() => {
             });
@@ -123,7 +178,7 @@ describe('Index - ', () => {
             expect(IoC4Javascript.prototype.registerConstructor).toHaveBeenCalledWith(commonFakes.dimensionsKey, jasmine.any(Function));
         });
         
-        /* TODO: REVISAR !!! Lo llama el 2 veces por cada TEST, como es un Singleton vuelve a computar !!!
+        /* TODO: REVISAR !!! Lo llama el 2 veces por cada TEST, como es un Singleton vuelve a computar (LOS TESTS NO SON INDEPENDEINTES) !!!
         it('Calls the "registerConstructor" method from the "IoC4Javascript" object twice', () => {
             spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
             });
@@ -133,6 +188,7 @@ describe('Index - ', () => {
             
             sut.registerObjectsConfigurations();
             expect(IoC4Javascript.prototype.registerConstructor.calls.count()).toEqual(commonFakes.twice);
+            //// NO FUNCIONA !!! -> IoC4Javascript.prototype.registerConstructor.calls.rest();
         });
         
         it('Calls the "registerType" method from the "IoC4Javascript" object twice', () => {
@@ -144,12 +200,14 @@ describe('Index - ', () => {
             
             sut.registerObjectsConfigurations();
             
-            expect(IoC4Javascript.prototype.registerType.calls.count()).toEqual(commonFakes.twice);
-        });
-        */
+            expect(IoC4Javascript.prototype.registerType.calls.count()).toEqual(commonFakes.twice);            
+            //// NO FUNCIONA !!! -> IoC4Javascript.prototype.registerType.calls.rest();
+        });*/
        
         it('With "IoC4Javascript" prototype invokes "bind" method from "Function" object once', () => {
             spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
             });
             spyOn(IoC4Javascript.prototype, 'registerConstructor').and.callFake(() => {
             });
@@ -174,31 +232,6 @@ describe('Index - ', () => {
             expect(result instanceof Dimensions).toBeTruthy();
             expect(result.width).toEqual(commonFakes.gameWidth);
             expect(result.height).toEqual(commonFakes.gameHeight);
-        });
-    });
-    
-    describe('constructUserSpaceShipMaths - ', () => {
-        it('With "dimensionsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
-            let sut = new MainApp();
-            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callFake(() => {
-                return new Dimensions();
-            });
-            
-            sut.constructUserSpaceShipMaths(sut.ioc);
-            
-            expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.dimensionsKey);
-            expect(IoC4Javascript.prototype.getInstanceOf.calls.count()).toEqual(commonFakes.once);
-        });
-        
-        it('With the screen dimensions returns an "UserSpaceShipMaths" object', () => {
-            let sut = new MainApp();
-            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callFake(() => {
-                return new Dimensions();
-            });
-            
-            let result = sut.constructUserSpaceShipMaths(sut.ioc);
-            
-            expect(result instanceof UserSpaceShipMaths).toBeTruthy();
         });
     });
 });

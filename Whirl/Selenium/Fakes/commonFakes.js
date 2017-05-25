@@ -1,6 +1,10 @@
 import IoC4Javascript from '../../src/apis/ioc4javascript';
+import Calculus from '../../src/maths/calculus/Calculus';
 import Dimensions from '../../src/maths/paths/Dimensions';
+import EllipsePath from '../../src/maths/paths/EllipsePath';
+import Position from '../../src/maths/paths/Position';
 import UserSpaceShipMaths from '../../src/maths/UserSpaceShip/UserSpaceShipMaths';
+import UserSpaceShipGeometric from '../../src/maths/UserSpaceShip/UserSpaceShipGeometric';
 
 class CommonFakes {
     constructor() {
@@ -18,27 +22,41 @@ class CommonFakes {
         this.flatAngleInRadians = Math.PI;
         this.flatAngleInDegrees = 180;
         
-        this.loadObjectManagerConfigFakes();
         this.loadAppFakes();
         this.loadUserSpaceShipFakes();
         this.loadEllipsePathFakes();
         this.loadPostionFakes();
+        this.loadObjectManagerConfigFakes();
     }
     
     loadObjectManagerConfigFakes() {        
         this.dimensionsKey = 'dimensionsKey';
         this.userSpaceShipMathsKey = 'userSpaceShipMathsKey';
-        this.ioc = new IoC4Javascript();
+        this.userSpaceShipGeometricKey = 'userSpaceShipGeometricKey';
+        this.ellipsePathKey = 'ellipsePathKey';
+        this.calculusKey = 'calculusKey';
+        this.positionKey = 'positionKey';
+        this.ioc = new IoC4Javascript(false);
         
         try {
-            this.ioc.registerType.call(this.ioc, Dimensions, this.dimensionsKey)
-                    .registerConstructor(this.dimensionsKey, function () {
-                        return new Dimensions(this.gameWidth, this.gameHeight);
-                    }.bind(this));
-            this.ioc.registerType.call(this.ioc, UserSpaceShipMaths, this.userSpaceShipMathsKey)
-                    .registerConstructor(this.userSpaceShipMathsKey, function () {
-                        return new UserSpaceShipMaths(new Dimensions(this.gameWidth, this.gameHeight));
-                    }.bind(this));
+            this.ioc.registerConstructor(this.dimensionsKey, function () {
+                return new Dimensions(this.gameWidth, this.gameHeight);
+            }.bind(this));
+            this.ioc.registerConstructor(this.ellipsePathKey, function () {
+                let dimensions = this.ioc.getInstanceOf('dimensionsKey');
+                let geometry = this.ioc.getInstanceOf('userSpaceShipGeometricKey');
+
+                return new EllipsePath(dimensions, geometry);
+            }.bind(this));
+            
+            this.ioc.registerSingletonType.call(this.ioc, UserSpaceShipGeometric, this.userSpaceShipGeometricKey);            
+            this.ioc.registerSingletonType.call(this.ioc, Dimensions, this.dimensionsKey);
+            this.ioc.registerSingletonType.call(this.ioc, Calculus, this.calculusKey);
+            
+            this.ioc.registerType.call(this.ioc, EllipsePath, this.ellipsePathKey);
+            this.ioc.registerType.call(this.ioc, Position, this.positionKey);
+            this.ioc.registerType.call(this.ioc, UserSpaceShipMaths, this.userSpaceShipMathsKey);
+            
             this.ioc.getInstanceOf.bind(this.ioc);
         }
         catch (e) {

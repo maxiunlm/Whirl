@@ -6,14 +6,15 @@ import Mapper4Javascript from './mapper4javascript';
 let ioc4JavascriptInstance = null;
 
 class IoC4Javascript extends UtilsBase4Javascript {   
-    constructor() {
+    constructor(forceNewInstance) {
         super();
-        
-        if(!!ioc4JavascriptInstance){
+
+        if(!forceNewInstance && !!ioc4JavascriptInstance){
             return ioc4JavascriptInstance;
         }
-        
-        ioc4JavascriptInstance = this;
+        else if(!forceNewInstance) {
+            ioc4JavascriptInstance = this;
+        }
         
         this.types = {};
         this.constructors = {};
@@ -65,12 +66,12 @@ class IoC4Javascript extends UtilsBase4Javascript {
 
     tryConstructorCallback(key) {
         return (!!this.constructors[key] &&
-        this.constructors[key].constructorCallback(
-                this,
-                this.aop,
-                this.mapper
-            )
-        );
+            this.constructors[key].constructorCallback(
+                    this,
+                    this.aop,
+                    this.mapper
+                )
+            );
     }
 
     registerType(type, key, instanceDefinitionCallback) {

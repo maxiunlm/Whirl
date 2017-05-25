@@ -9,8 +9,8 @@ class UserSpaceShip extends Component {
         super(props);
         
         this.ioc = new IoC4Javascript();
+        this.maths = this.getNewUserSpaceShipMaths();
         this.movementInterval = 0.04;
-        this.maths = this.ioc.getInstanceOf('userSpaceShipMathsKey');//new UserSpaceShipMaths(props);//
         this.state = {
             image: '/images/UserSpaceShipStopped.png',
             images: {
@@ -25,6 +25,10 @@ class UserSpaceShip extends Component {
                 left: this.maths.getLeft()
             }
         };
+    }
+    
+    getNewUserSpaceShipMaths() {
+        return this.ioc.getInstanceOf('userSpaceShipMathsKey');
     }
 
     startMovingToLeft(event) {

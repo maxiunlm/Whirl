@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App/App.js';
+import Calculus from '../src/maths/calculus/Calculus';
 import Dimensions from '../src/maths/paths/Dimensions';
+import EllipsePath from '../src/maths/paths/EllipsePath';
+import Position from '../src/maths/paths/Position';
 import UserSpaceShipMaths from './maths/UserSpaceShip/UserSpaceShipMaths';
+import UserSpaceShipGeometric from './maths/UserSpaceShip/UserSpaceShipGeometric';
 import IoC4Javascript from './apis/ioc4javascript';
 import './index.css';
 
@@ -16,28 +20,20 @@ class MainApp {
 
     registerObjectsConfigurations() {
         this.ioc.getInstanceOf.bind(this.ioc);
-        this.ioc.registerType(Dimensions, 'dimensionsKey');
-        this.ioc.registerType(UserSpaceShipMaths, 'userSpaceShipMathsKey');
-        // TODO: Registrar tipos: [UserSpaceShipGeometric, EllipsePath, Calculus, Position] con TDD !!!!!!!
-        /*         
-        this.ioc.registerType(UserSpaceShipGeometric, 'userSpaceShipGeometricKey');        
-        this.ioc.registerType(EllipsePath, 'ellipsePathKey');
-        this.ioc.registerType(Calculus, 'calculusKey');
-        this.ioc.registerType(Position, 'positionKey');
-         */
-
+        
         this.ioc.registerConstructor('dimensionsKey', this.constructDimensions.bind(this));
-        this.ioc.registerConstructor('userSpaceShipMathsKey', this.constructUserSpaceShipMaths.bind(this));
+        
+        this.ioc.registerSingletonType(Dimensions, 'dimensionsKey');
+        this.ioc.registerSingletonType(UserSpaceShipGeometric, 'userSpaceShipGeometricKey');
+        this.ioc.registerSingletonType(Calculus, 'calculusKey');
+        
+        this.ioc.registerType(UserSpaceShipMaths, 'userSpaceShipMathsKey');
+        this.ioc.registerType(EllipsePath, 'ellipsePathKey');
+        this.ioc.registerType(Position, 'positionKey');
     }
 
     constructDimensions(ioc, aop, mapper) {
         return new Dimensions(this.width, this.height);
-    }
-
-    constructUserSpaceShipMaths(ioc, aop, mapper) {
-        let dimensions = ioc.getInstanceOf('dimensionsKey');
-
-        return new UserSpaceShipMaths(dimensions);
     }
 
     startApplication() {
