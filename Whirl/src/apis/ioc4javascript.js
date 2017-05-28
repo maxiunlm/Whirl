@@ -36,14 +36,21 @@ class IoC4Javascript extends UtilsBase4Javascript {
         }
     }
 
+    validateTypeHasBeenRegistered(key) {
+        if (!!key && !this.types[key]) {
+            throw('EXCEPTION [validateTypeHasBeenRegistered]: the key "' + key + '" has not been registered yet.\n' + this.getCallStack());
+        }
+    }
+
     createInstanceOf(key) {
         let instance = this.tryConstructorCallback(key);
 
         if (!instance) {
-            if (!!this.types[key].type.prototype) {
-                instance = new this.types[key].type();
-            } else if (!!this.types[key].type) {
-                instance = this.types[key].type;
+            if (!!this.getType(key).prototype) {
+                let objectType = this.getType(key);
+                instance = new objectType();
+            } else if (!!this.getType(key)) {
+                instance = this.getType(key);
             } else {
                 throw ('You must register an Object Type for the key "' + key + '" before to use it.');
             }
@@ -54,6 +61,13 @@ class IoC4Javascript extends UtilsBase4Javascript {
         }
 
         return instance;
+    }
+
+    getType(key) {
+        this.validateKeyType(key);
+        this.validateTypeHasBeenRegistered(key);
+        
+        return this.types[key].type;
     }
 
     getInstanceOf(key, instanceDefinitionCallback) {

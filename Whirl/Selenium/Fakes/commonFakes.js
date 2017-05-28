@@ -24,6 +24,7 @@ class CommonFakes {
         
         this.loadAppFakes();
         this.loadUserSpaceShipFakes();
+        this.loadUserShotFakes();
         this.loadEllipsePathFakes();
         this.loadPostionFakes();
         this.loadObjectManagerConfigFakes();
@@ -58,6 +59,11 @@ class CommonFakes {
         catch (e) {
             console.log('WARNING [CommonFakes::loadObjectManagerConfigFakes]: trying to config the IoC.', e);
         }
+    }
+    
+    loadUserShotFakes() {
+        this.minimumRadius = 10;
+        this.deltaRadius = 2;
     }
     
     loadInstances() {
@@ -112,7 +118,7 @@ class CommonFakes {
         this.ellipsePathRadiusPercentage = 0.54;
         this.ellipsePathInitialAngle = 0;
         this.ellipsePathDeltaAngle = 0.01;
-        this.ellipsePathDeltaRadius = 2;
+        this.ellipsePathRadiusDelta = 2;
     }
     
     loadPostionFakes(){

@@ -1,4 +1,3 @@
-import Position from '../paths/Position';
 import IoC4Javascript from '../../apis/ioc4javascript';
 
 class UserSpaceShipMaths {
