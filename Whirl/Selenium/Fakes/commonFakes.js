@@ -27,6 +27,7 @@ class CommonFakes {
         this.loadEllipsePathFakes();
         this.loadPostionFakes();
         this.loadObjectManagerConfigFakes();
+        this.loadInstances();
     }
     
     loadObjectManagerConfigFakes() {        
@@ -36,17 +37,12 @@ class CommonFakes {
         this.ellipsePathKey = 'ellipsePathKey';
         this.calculusKey = 'calculusKey';
         this.positionKey = 'positionKey';
+        this.shotMathsKey = 'shotMathsKey';
         this.ioc = new IoC4Javascript(false);
         
         try {
             this.ioc.registerConstructor(this.dimensionsKey, function () {
                 return new Dimensions(this.gameWidth, this.gameHeight);
-            }.bind(this));
-            this.ioc.registerConstructor(this.ellipsePathKey, function () {
-                let dimensions = this.ioc.getInstanceOf('dimensionsKey');
-                let geometry = this.ioc.getInstanceOf('userSpaceShipGeometricKey');
-
-                return new EllipsePath(dimensions, geometry);
             }.bind(this));
             
             this.ioc.registerSingletonType.call(this.ioc, UserSpaceShipGeometric, this.userSpaceShipGeometricKey);            
@@ -64,10 +60,15 @@ class CommonFakes {
         }
     }
     
+    loadInstances() {
+        this.dimensions = new Dimensions(this.gameWidth, this.gameHeight);
+        this.userSpaceShipGeometric = new UserSpaceShipGeometric();
+        this.ellipsePath = new EllipsePath();
+    }
+    
     loadAppFakes() {
         this.gameWidth = 1024;
         this.gameHeight = 768;
-        this.dimensions = new Dimensions(this.gameWidth, this.gameHeight);
         this.spaceBarKeyCode = 32;
         this.leftKeyCode = 37;
         this.upKeyCode = 38;
@@ -111,6 +112,7 @@ class CommonFakes {
         this.ellipsePathRadiusPercentage = 0.54;
         this.ellipsePathInitialAngle = 0;
         this.ellipsePathDeltaAngle = 0.01;
+        this.ellipsePathDeltaRadius = 2;
     }
     
     loadPostionFakes(){

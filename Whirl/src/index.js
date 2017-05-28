@@ -6,6 +6,7 @@ import Dimensions from '../src/maths/paths/Dimensions';
 import EllipsePath from '../src/maths/paths/EllipsePath';
 import Position from '../src/maths/paths/Position';
 import UserSpaceShipMaths from './maths/UserSpaceShip/UserSpaceShipMaths';
+import ShotMaths from './maths/Shots/ShotMaths';
 import UserSpaceShipGeometric from './maths/UserSpaceShip/UserSpaceShipGeometric';
 import IoC4Javascript from './apis/ioc4javascript';
 import './index.css';
@@ -26,6 +27,7 @@ class MainApp {
         this.ioc.registerSingletonType(Dimensions, 'dimensionsKey');
         this.ioc.registerSingletonType(UserSpaceShipGeometric, 'userSpaceShipGeometricKey');
         this.ioc.registerSingletonType(Calculus, 'calculusKey');
+        this.ioc.registerSingletonType(ShotMaths, 'shotMathsKey');
         
         this.ioc.registerType(UserSpaceShipMaths, 'userSpaceShipMathsKey');
         this.ioc.registerType(EllipsePath, 'ellipsePathKey');

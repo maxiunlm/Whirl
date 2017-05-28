@@ -1,4 +1,4 @@
-/* global expect */
+/* global expect, spyOn */
 
 import CommonFakes from '../../../Selenium/Fakes/commonFakes';
 import Position from '../../../src/maths/paths/Position';
@@ -37,6 +37,35 @@ describe('Position - ', () => {
             
             expect(sut.left).toEqual(commonFakes.positionLeft);
             expect(sut.top).toEqual(commonFakes.positionTop);
+        });
+        
+        it('With "left" and "top" parameters invokes the "setPosition" from the "sut" object', () => {
+            spyOn(Position.prototype, 'setPosition').and.callFake(() => {});
+            
+            let sut = new Position(commonFakes.positionLeft, commonFakes.positionTop);
+            
+            expect(Position.prototype.setPosition).toHaveBeenCalledWith(commonFakes.positionLeft, commonFakes.positionTop);
+            expect(Position.prototype.setPosition.calls.count()).toEqual(commonFakes.once);
+        });
+    });
+    
+    describe('setPosition - ',() => {
+        it('With "left" and "top" parameters sets the position values', () => {
+            let sut = new Position();
+            
+            sut.setPosition(commonFakes.positionLeft, commonFakes.positionTop);
+            
+            expect(sut.left).toEqual(commonFakes.positionLeft);
+            expect(sut.top).toEqual(commonFakes.positionTop);
+        });
+        
+        it('Without any parameter sets the position values to default Integer value', () => {
+            let sut = new Position();
+            
+            sut.setPosition();
+            
+            expect(sut.left).toEqual(commonFakes.defaultInteger);
+            expect(sut.top).toEqual(commonFakes.defaultInteger);
         });
     });
 });

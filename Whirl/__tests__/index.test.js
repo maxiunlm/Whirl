@@ -10,6 +10,7 @@ import Dimensions from '../src/maths/paths/Dimensions';
 import EllipsePath from '../src/maths/paths/EllipsePath';
 import Position from '../src/maths/paths/Position';
 import UserSpaceShipMaths from '../src/maths/UserSpaceShip/UserSpaceShipMaths';
+import ShotMaths from '../src/maths/Shots/ShotMaths';
 import UserSpaceShipGeometric from '../src/maths/UserSpaceShip/UserSpaceShipGeometric';
 
 
@@ -80,7 +81,7 @@ describe('Index - ', () => {
     
     describe('registerObjectsConfigurations - ', () => {
         
-        it('With the "Dimensions" type and the "dimensionsKey" string key invokes the "registerType" method from the "IoC4Javascript" object', () => {
+        it('With the "Dimensions" type and the "dimensionsKey" string key invokes the "registerSingletonType" method from the "IoC4Javascript" object', () => {
             spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
             });
             spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
@@ -108,7 +109,7 @@ describe('Index - ', () => {
             expect(IoC4Javascript.prototype.registerType).toHaveBeenCalledWith(UserSpaceShipMaths, commonFakes.userSpaceShipMathsKey);
         });
         
-        it('With the "UserSpaceShipGeometric" type and the "userSpaceShipGeometricKey" string key invokes the "registerType" method from the "IoC4Javascript" object', () => {
+        it('With the "UserSpaceShipGeometric" type and the "userSpaceShipGeometricKey" string key invokes the "registerSingletonType" method from the "IoC4Javascript" object', () => {
             spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
             });
             spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
@@ -176,6 +177,20 @@ describe('Index - ', () => {
             sut.registerObjectsConfigurations();
             
             expect(IoC4Javascript.prototype.registerConstructor).toHaveBeenCalledWith(commonFakes.dimensionsKey, jasmine.any(Function));
+        });
+        
+        it('With the "ShotMaths" type and the "shotMathsKey" string key invokes the "registerSingletonType" method from the "IoC4Javascript" object', () => {
+            spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerConstructor').and.callFake(() => {
+            });
+            let sut = new MainApp();
+            
+            sut.registerObjectsConfigurations();
+            
+            expect(IoC4Javascript.prototype.registerSingletonType).toHaveBeenCalledWith(ShotMaths, commonFakes.shotMathsKey);
         });
         
         /* TODO: REVISAR !!! Lo llama el 2 veces por cada TEST, como es un Singleton vuelve a computar (LOS TESTS NO SON INDEPENDEINTES) !!!

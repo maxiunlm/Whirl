@@ -1,4 +1,4 @@
-/* global expect */
+/* global expect, spyOn */
 
 import CommonFakes from '../../../Selenium/Fakes/commonFakes';
 import UserSpaceShipGeometric from '../../../src/maths/UserSpaceShip/UserSpaceShipGeometric';
@@ -93,5 +93,25 @@ describe('EllipsePath', () => {
             
             expect(result instanceof Dimensions).toBeTruthy();
         });
+    });
+    
+    describe('getNextLeftEllipticalPosition - ', () => {
+        it('Without any parameter returns the next left elliptical position', () => {            
+            let sut = new EllipsePath(commonFakes.dimensions);
+            
+            let result = sut.getNextLeftEllipticalPosition(commonFakes.ellipsePath);
+            
+            expect(result).toEqual(sut.centerX + ((sut.radius + sut.deltaB) * Math.sin(sut.angle)));
+        });        
+    });
+    
+    describe('getNextTopEllipticalPosition - ', () => {
+        it('Without any parameter returns the next top elliptical position', () => {            
+            let sut = new EllipsePath(commonFakes.dimensions);
+            
+            let result = sut.getNextTopEllipticalPosition(commonFakes.ellipsePath);
+            
+            expect(result).toEqual(sut.centerY + ((sut.radius + sut.deltaA) * Math.cos(sut.angle)));
+        });        
     });
 });

@@ -15,7 +15,7 @@ describe('UserSpaceShipMaths - ', () => {
     describe('CONSTRUCTOR - ', () => {
         it('Initialices the Object', () => {
             
-            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
+            let sut = new UserSpaceShipMaths();
             
             expect(sut.ioc instanceof IoC4Javascript).toBeTruthy();
             expect(sut.geometry).toBeDefined();
@@ -170,7 +170,7 @@ describe('UserSpaceShipMaths - ', () => {
         it('Returns the "top" position value', () => {      
             let centerY = Math.floor((commonFakes.gameHeight - commonFakes.userSpaceShipHeight) / commonFakes.ellipsePathHalfDivider);            
             let radius = commonFakes.gameHeight * commonFakes.ellipsePathRadiusPercentage;
-            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
+            let sut = new UserSpaceShipMaths();
             
             let result = sut.getTop();
             
@@ -182,7 +182,7 @@ describe('UserSpaceShipMaths - ', () => {
         it('Returns the "left" position value', () => {
             let centerX = Math.floor((commonFakes.gameWidth - commonFakes.userSpaceShipWidth) / commonFakes.ellipsePathHalfDivider);         
             let radius = commonFakes.gameHeight * commonFakes.ellipsePathRadiusPercentage;
-            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
+            let sut = new UserSpaceShipMaths();
             
             let result = sut.getLeft();
             
@@ -192,7 +192,7 @@ describe('UserSpaceShipMaths - ', () => {
     
     describe('getWidth - ', () => {        
         it('Without any parameter returns the "width" value of the Space Ship', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
+            let sut = new UserSpaceShipMaths();
             
             let result = sut.getWidth();
             
@@ -202,7 +202,7 @@ describe('UserSpaceShipMaths - ', () => {
     
     describe('getHeight - ', () => {        
         it('Without any parameter returns the "height" value of the Space Ship', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
+            let sut = new UserSpaceShipMaths();
             
             let result = sut.getHeight();
             
@@ -212,7 +212,7 @@ describe('UserSpaceShipMaths - ', () => {
     
     describe('getRotation - ', () => {        
         it('With a "Radian Angle" parameter invokes the "toDegrees" method from "Calculus" object', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
+            let sut = new UserSpaceShipMaths();
             spyOn(Calculus.prototype, 'toDegrees').and.callFake(() => {});
             
             let result = sut.getRotation();
@@ -222,7 +222,7 @@ describe('UserSpaceShipMaths - ', () => {
         });
         
         it('Without any parameter returns the "rotation angle" value of the Space Ship', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
+            let sut = new UserSpaceShipMaths();
             let calculus = new Calculus();
             
             let result = sut.getRotation();
@@ -233,7 +233,7 @@ describe('UserSpaceShipMaths - ', () => {
     
     describe('moveToNextLeftEllipticalPosition - ', () => {
         it('Without any parameter moves to the next left elliptical position', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
+            let sut = new UserSpaceShipMaths();
             let actualAngle = sut.path.angle;
             
             let result = sut.moveToNextLeftEllipticalPosition();
@@ -244,18 +244,59 @@ describe('UserSpaceShipMaths - ', () => {
         });
         
         it('With a big angle correct its value', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
+            let sut = new UserSpaceShipMaths();
             sut.path.angle = -2 * Math.PI;
             
             sut.moveToNextLeftEllipticalPosition();
             
             expect(commonFakes.rountToTwoDecimals(sut.path.angle)).toEqual(-sut.path.deltaAngle);
         });
+    
+        it('Without any parameter invokes the "getNextLeftEllipticalPosition" from "EllipsePath" object', () => {
+            spyOn(EllipsePath.prototype, 'getNextLeftEllipticalPosition').and.callFake(() => {                
+            });
+            let sut = new UserSpaceShipMaths();
+            
+            sut.moveToNextLeftEllipticalPosition();
+            
+            expect(EllipsePath.prototype.getNextLeftEllipticalPosition).toHaveBeenCalled();
+            expect(EllipsePath.prototype.getNextLeftEllipticalPosition.calls.count()).toEqual(commonFakes.once);
+        });
+    
+        it('Without any parameter invokes the "getNextTopEllipticalPosition" from "EllipsePath" object', () => {
+            spyOn(EllipsePath.prototype, 'getNextTopEllipticalPosition').and.callFake(() => {                
+            });
+            let sut = new UserSpaceShipMaths();
+            
+            sut.moveToNextLeftEllipticalPosition();
+            
+            expect(EllipsePath.prototype.getNextTopEllipticalPosition).toHaveBeenCalled();
+            expect(EllipsePath.prototype.getNextTopEllipticalPosition.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With the "positionKey" string key invokes the "getInstanceOf" method from the "IoC4Javascript" object', () => {
+            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
+            let sut = new UserSpaceShipMaths();
+            
+            sut.moveToNextLeftEllipticalPosition();
+            
+            expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.positionKey);
+        });
+        
+        it('With "left" and "top" parameters invokes the "setPosition" from the "sut" object', () => {
+            spyOn(Position.prototype, 'setPosition').and.callFake(() => {
+            });
+            let sut = new UserSpaceShipMaths();
+            
+            sut.moveToNextLeftEllipticalPosition();
+            
+            expect(Position.prototype.setPosition).toHaveBeenCalledWith(sut.path.getNextLeftEllipticalPosition(), sut.path.getNextTopEllipticalPosition());
+        });
     });
     
     describe('moveToNextRightEllipticalPosition - ', () => {
         it('Without any parameter moves to the next left elliptical position', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
+            let sut = new UserSpaceShipMaths();
             let actualAngle = sut.path.angle;
             
             let result = sut.moveToNextRightEllipticalPosition();
@@ -266,12 +307,55 @@ describe('UserSpaceShipMaths - ', () => {
         });
         
         it('With a big angle correct its value', () => {            
-            let sut = new UserSpaceShipMaths(commonFakes.dimensions);
+            let sut = new UserSpaceShipMaths();
             sut.path.angle = 2 * Math.PI;
             
             sut.moveToNextRightEllipticalPosition();
             
             expect(commonFakes.rountToTwoDecimals(sut.path.angle)).toEqual(sut.path.deltaAngle);
+        });
+    
+        it('Without any parameter invokes the "getNextLeftEllipticalPosition" from "EllipsePath" object', () => {
+            spyOn(EllipsePath.prototype, 'getNextLeftEllipticalPosition').and.callFake(() => {                
+            });
+            let sut = new UserSpaceShipMaths();
+            
+            sut.moveToNextRightEllipticalPosition();
+            
+            expect(EllipsePath.prototype.getNextLeftEllipticalPosition).toHaveBeenCalled();
+            expect(EllipsePath.prototype.getNextLeftEllipticalPosition.calls.count()).toEqual(commonFakes.once);
+        });
+    
+        it('Without any parameter invokes the "getNextTopEllipticalPosition" from "EllipsePath" object', () => {
+            spyOn(EllipsePath.prototype, 'getNextTopEllipticalPosition').and.callFake(() => {                
+            });
+            let sut = new UserSpaceShipMaths();
+            
+            sut.moveToNextRightEllipticalPosition();
+            
+            expect(EllipsePath.prototype.getNextTopEllipticalPosition).toHaveBeenCalled();
+            expect(EllipsePath.prototype.getNextTopEllipticalPosition.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With the "positionKey" string key invokes the "getInstanceOf" method from the "IoC4Javascript" object', () => {
+            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
+            let sut = new UserSpaceShipMaths();
+            
+            sut.moveToNextRightEllipticalPosition();
+            
+            expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.positionKey);
+        });
+        
+        it('With "left" and "top" parameters invokes the "setPosition" from the "sut" object', () => {
+            let setPositionCalledCounter = -1; // The constructors do the first call
+            spyOn(Position.prototype, 'setPosition').and.callFake(() => {                
+                setPositionCalledCounter++;
+            });
+            let sut = new UserSpaceShipMaths();
+            
+            sut.moveToNextRightEllipticalPosition();
+    
+            expect(setPositionCalledCounter).toEqual(commonFakes.once);
         });
     });
 });

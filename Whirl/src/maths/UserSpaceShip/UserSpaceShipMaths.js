@@ -49,10 +49,13 @@ class UserSpaceShipMaths {
             this.path.angle += 2 * Math.PI;
         }
 
-        var left = this.path.centerX + ((this.path.radius + this.path.deltaB) * Math.sin(this.path.angle));
-        var top = this.path.centerY + ((this.path.radius + this.path.deltaA) * Math.cos(this.path.angle));
+        let left = this.path.getNextLeftEllipticalPosition();
+        let top = this.path.getNextTopEllipticalPosition();
         
-        return new Position(left, top);
+        let position = this.ioc.getInstanceOf('positionKey');
+        position.setPosition(left, top);
+        
+        return position; 
     }
         
     moveToNextRightEllipticalPosition() {
@@ -62,10 +65,13 @@ class UserSpaceShipMaths {
             this.path.angle -= 2 * Math.PI;
         }
         
-        var left = this.path.centerX + ((this.path.radius + this.path.deltaB) * Math.sin(this.path.angle));
-        var top = this.path.centerY + ((this.path.radius + this.path.deltaA) * Math.cos(this.path.angle));
+        let left = this.path.getNextLeftEllipticalPosition();
+        let top = this.path.getNextTopEllipticalPosition();
         
-        return new Position(left, top);
+        let position = this.ioc.getInstanceOf('positionKey');
+        position.setPosition(left, top);
+        
+        return position;
     }
 
     getRotation() {

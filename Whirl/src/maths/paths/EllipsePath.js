@@ -21,6 +21,14 @@ class EllipsePath {
     getUserSpaceShipGeometric() {
         return this.ioc.getInstanceOf('userSpaceShipGeometricKey');
     }
+    
+    getNextLeftEllipticalPosition() {
+        return this.centerX + ((this.radius + this.deltaB) * Math.sin(this.angle));
+    }
+    
+    getNextTopEllipticalPosition() {
+        return this.centerY + ((this.radius + this.deltaA) * Math.cos(this.angle));
+    }
 }
 
 export default EllipsePath;

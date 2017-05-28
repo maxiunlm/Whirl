@@ -50,17 +50,21 @@ class IoC4Javascript extends UtilsBase4Javascript {
         }
 
         if (!!this.types[key].instanceDefinitionCallback) {
-            this.types[key].instanceDefinitionCallback(instance, this, this.aop, this.mapper);
+            instance = this.types[key].instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
         }
 
         return instance;
     }
 
-    getInstanceOf(key) {
+    getInstanceOf(key, instanceDefinitionCallback) {
         let instance = this.singletons[key]
                 || this.tryConstructorCallback(key)
                 || this.createInstanceOf(key);
 
+        if (!!instanceDefinitionCallback) {
+            instance = instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
+        }
+        
         return instance;
     }
 

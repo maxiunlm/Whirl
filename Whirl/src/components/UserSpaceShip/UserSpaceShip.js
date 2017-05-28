@@ -130,5 +130,3 @@ class UserSpaceShip extends Component {
 }
 
 export default UserSpaceShip;
-
-
