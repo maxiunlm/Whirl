@@ -54,7 +54,7 @@ class App extends Component {
 //                 break;
 //                 case downKeyCode:
 //                 break;
-//            case spaceBarKeyCode:
+//            case spaceBarKeyCode: // TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //                doShot();
 //                break;
             default:

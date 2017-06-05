@@ -4,6 +4,7 @@ import Dimensions from '../../src/maths/paths/Dimensions';
 import EllipsePath from '../../src/maths/paths/EllipsePath';
 import Position from '../../src/maths/paths/Position';
 import UserSpaceShipMaths from '../../src/maths/UserSpaceShip/UserSpaceShipMaths';
+import ShotMaths from '../../src/maths/Shots/ShotMaths';
 import UserSpaceShipGeometric from '../../src/maths/UserSpaceShip/UserSpaceShipGeometric';
 
 class CommonFakes {
@@ -39,6 +40,7 @@ class CommonFakes {
         this.calculusKey = 'calculusKey';
         this.positionKey = 'positionKey';
         this.shotMathsKey = 'shotMathsKey';
+        this.userShotKey = 'userShotKey';
         this.ioc = new IoC4Javascript(false);
         
         try {
@@ -46,13 +48,14 @@ class CommonFakes {
                 return new Dimensions(this.gameWidth, this.gameHeight);
             }.bind(this));
             
-            this.ioc.registerSingletonType.call(this.ioc, UserSpaceShipGeometric, this.userSpaceShipGeometricKey);            
-            this.ioc.registerSingletonType.call(this.ioc, Dimensions, this.dimensionsKey);
-            this.ioc.registerSingletonType.call(this.ioc, Calculus, this.calculusKey);
-            
             this.ioc.registerType.call(this.ioc, EllipsePath, this.ellipsePathKey);
             this.ioc.registerType.call(this.ioc, Position, this.positionKey);
             this.ioc.registerType.call(this.ioc, UserSpaceShipMaths, this.userSpaceShipMathsKey);
+            
+            this.ioc.registerSingletonType.call(this.ioc, UserSpaceShipGeometric, this.userSpaceShipGeometricKey);            
+            this.ioc.registerSingletonType.call(this.ioc, Dimensions, this.dimensionsKey);
+            this.ioc.registerSingletonType.call(this.ioc, Calculus, this.calculusKey);
+            this.ioc.registerType.call(this.ioc, ShotMaths, this.shotMathsKey);
             
             this.ioc.getInstanceOf.bind(this.ioc);
         }
@@ -105,6 +108,7 @@ class CommonFakes {
         this.userSpaceShipImageStopped = '/images/UserSpaceShipStopped.png';
         this.userSpaceShipImageToLeft = '/images/UserSpaceShipToLeft.png';
         this.userSpaceShipImageToRight = '/images/UserSpaceShipToRight.png';
+        this.userShotImage = '/images/userShot.png';
         this.userSpaceShipHeight = 70;
         this.userSpaceShipWidth = 40;
         this.actions = {};
@@ -124,7 +128,7 @@ class CommonFakes {
     loadPostionFakes(){
         this.positionLeft = 1;
         this.positionTop = 2;
-        this.position = {top: 0, left: 0};
+        this.position = {top: this.positionTop, left: this.positionLeft};
         this.stateChangedPosition = {
             style: {
                 width: this.userSpaceShipWidth,

@@ -1,20 +1,16 @@
 import IoC4Javascript from '../../../src/apis/ioc4javascript';
 
 class ShotMaths {
-    constructor(path, deltaRadius) {
+    constructor(deltaRadius) {
         this.ioc = new IoC4Javascript();
-
-        if (!!path) {
-            this.initialize(path, deltaRadius);
+        this.path = this.ioc.getInstanceOf('ellipsePathKey');
+        
+        if (!!deltaRadius) {
+            this.initialize(deltaRadius);
         }
     }
 
-    initialize(path, deltaRadius) {
-        if (!path || !(path instanceof this.ioc.getType('ellipsePathKey'))) {
-            throw new TypeError('EXCEPTION [initialize]: The "path" parameter is required.');
-        }
-
-        this.path = path;
+    initialize(deltaRadius) {
         this.deltaRadius = deltaRadius || 2;
     }
 

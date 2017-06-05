@@ -1,3 +1,6 @@
+import RetryManagerConfiguration from './retryManagerConfiguration';
+import RetryManager4Javascript from './retryManager4Javascript';
+
 class AopConfigParameters {
     constructor(
             objectReference,
@@ -6,7 +9,8 @@ class AopConfigParameters {
             afterCallback,
             exceptionCallback,
             finallyCallback,
-            wrapperCallback
+            wrapperCallback,
+            mustUseRetryManager
             ) {
         this.objectReference = objectReference || window;
         this.methodName = methodName || '<unknown>';
@@ -15,6 +19,16 @@ class AopConfigParameters {
         this.exceptionCallback = exceptionCallback || false;
         this.finallyCallback = finallyCallback || false;
         this.wrapperCallback = wrapperCallback || false;
+        this.mustUseRetryManager = mustUseRetryManager || false;
+
+        if (this.mustUseRetryManager) {
+            this.setRetryManager();
+        }
+    }
+
+    setRetryManager(configuration) {
+        configuration = configuration || new RetryManagerConfiguration();
+        this.retryManager = new RetryManager4Javascript(configuration);
     }
 
     copy(aopConfigParameters) {
@@ -25,7 +39,11 @@ class AopConfigParameters {
         this.exceptionCallback = aopConfigParameters.exceptionCallback;
         this.finallyCallback = aopConfigParameters.finallyCallback;
         this.wrapperCallback = aopConfigParameters.wrapperCallback;
+        this.mustUseRetryManager = aopConfigParameters.mustUseRetryManager;
+        this.retryManager = aopConfigParameters.retryManager;
+        this.wrapper = aopConfigParameters.wrapper;
     }
 }
+
 
 export default AopConfigParameters;

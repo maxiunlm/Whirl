@@ -12,6 +12,7 @@ import Position from '../src/maths/paths/Position';
 import UserSpaceShipMaths from '../src/maths/UserSpaceShip/UserSpaceShipMaths';
 import ShotMaths from '../src/maths/Shots/ShotMaths';
 import UserSpaceShipGeometric from '../src/maths/UserSpaceShip/UserSpaceShipGeometric';
+import UserShot from '../src/components/Shots/UserShot';
 
 
 describe('Index - ', () => {
@@ -163,6 +164,20 @@ describe('Index - ', () => {
             sut.registerObjectsConfigurations();
             
             expect(IoC4Javascript.prototype.registerType).toHaveBeenCalledWith(Position, commonFakes.positionKey);
+        });
+        
+        it('With the "UserShot" type and the "userShotKey" string key invokes the "registerType" method from the "IoC4Javascript" object', () => {
+            spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
+            });
+            spyOn(IoC4Javascript.prototype, 'registerConstructor').and.callFake(() => {
+            });
+            let sut = new MainApp();
+            
+            sut.registerObjectsConfigurations();
+            
+            expect(IoC4Javascript.prototype.registerType).toHaveBeenCalledWith(UserShot, commonFakes.userShotKey);
         });
         
         it('With a "constructorCallback" method and the "dimensionsKey" string key invokes the "registerConstructor" method from the "IoC4Javascript" object', () => {

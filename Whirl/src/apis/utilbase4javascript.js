@@ -1,5 +1,5 @@
 class UtilsBase4Javascript {
-    getCallStack(hasToPrintOnException) {
+    getCallStack() {
         try {
             let callStack = '';
             let caller = arguments.callee.caller;
@@ -14,12 +14,10 @@ class UtilsBase4Javascript {
             } while (!!caller);
 
             return callStack;
-        } catch (e) {
-            if(!!hasToPrintOnException) {
-                console.log('EXCEPTION [getCallStack]: ', e);
-            }
-            
-            return '';
+        }
+        catch (e) {
+            //console.log('EXCEPTION [getCallStack]: ', e);
+            return 'EXCEPTION [getCallStack]: ' + e.message;
         }
     }
 
@@ -41,7 +39,7 @@ class UtilsBase4Javascript {
         keyName = keyName || 'key';
 
         if (!!key && !this.isString(key)) {
-            throw('EXCEPTION [validateKeyType]: the "' + keyName + '" must be a "String".\n' + this.getCallStack())
+            throw new Error('EXCEPTION [validateKeyType]: the "' + keyName + '" must be a "String".\n' + this.getCallStack());
         }
     }
 
@@ -49,7 +47,19 @@ class UtilsBase4Javascript {
         typeName = typeName || 'type';
 
         if (!type || (!this.isString(type) && !this.isObject(type) && !this.isFunction(type))) {
-            throw('EXCEPTION [validateType]: the "' + typeName + '" must be a valid javascript "Type".\n' + this.getCallStack())
+            throw new TypeError('EXCEPTION [validateType]: the "' + typeName + '" must be a valid javascript "Type".\n' + this.getCallStack());
+        }
+    }
+
+    validateInstance(instance, typeName, type) {
+        typeName = typeName || 'Object';
+
+        if (!!instance && !!type && !(instance instanceof type)) {
+            throw new TypeError('EXCEPTION [validateType]: the "' + typeName + '" must be a valid instance of "' + typeName + '".\n' + this.getCallStack());
+        }
+
+        if (!instance || (!this.isString(instance) && !this.isObject(instance) && !this.isFunction(instance))) {
+            throw new TypeError('EXCEPTION [validateType]: the "' + typeName + '" must be a valid instance object.\n' + this.getCallStack());
         }
     }
 
@@ -58,7 +68,7 @@ class UtilsBase4Javascript {
         dictionaryName = dictionaryName || 'types';
 
         if (!!key && !!dictionary[key]) {
-            console.log('WARNING [validateAlreadyRegistered](' + dictionaryName + ', ' + keyName + '): the key "' + key + '" has been already registered.\n' + this.getCallStack())
+            console.log('WARNING [validateAlreadyRegistered](' + dictionaryName + ', ' + keyName + '): the key "' + key + '" has been already registered.\n' + this.getCallStack());
         }
     }
 

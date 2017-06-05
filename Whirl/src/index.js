@@ -8,6 +8,7 @@ import Position from '../src/maths/paths/Position';
 import UserSpaceShipMaths from './maths/UserSpaceShip/UserSpaceShipMaths';
 import ShotMaths from './maths/Shots/ShotMaths';
 import UserSpaceShipGeometric from './maths/UserSpaceShip/UserSpaceShipGeometric';
+import UserShot from './components/Shots/UserShot';
 import IoC4Javascript from './apis/ioc4javascript';
 import './index.css';
 
@@ -24,14 +25,15 @@ class MainApp {
         
         this.ioc.registerConstructor('dimensionsKey', this.constructDimensions.bind(this));
         
+        this.ioc.registerType(UserSpaceShipMaths, 'userSpaceShipMathsKey');
+        this.ioc.registerType(EllipsePath, 'ellipsePathKey');
+        this.ioc.registerType(Position, 'positionKey');
+        this.ioc.registerType(UserShot, 'userShotKey');
+        
         this.ioc.registerSingletonType(Dimensions, 'dimensionsKey');
         this.ioc.registerSingletonType(UserSpaceShipGeometric, 'userSpaceShipGeometricKey');
         this.ioc.registerSingletonType(Calculus, 'calculusKey');
         this.ioc.registerSingletonType(ShotMaths, 'shotMathsKey');
-        
-        this.ioc.registerType(UserSpaceShipMaths, 'userSpaceShipMathsKey');
-        this.ioc.registerType(EllipsePath, 'ellipsePathKey');
-        this.ioc.registerType(Position, 'positionKey');
     }
 
     constructDimensions(ioc, aop, mapper) {
