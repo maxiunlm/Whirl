@@ -86,6 +86,9 @@ class CommonFakes {
         this.props = {
             ioc: this.ioc
         };
+        this.eventSpaceBarKeyCode = {
+            keyCode: this.spaceBarKeyCode
+        };
         this.eventLeftKeyCode = {
             keyCode: this.leftKeyCode
         };

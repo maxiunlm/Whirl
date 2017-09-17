@@ -1,3 +1,13 @@
 .userSpaceShip {
     text-align: center;
 }
+
+div.leftCircleButtons {
+    width: 50px;
+    float: left;
+}
+
+div.rightCircleButtons {
+    width: 50px;
+    float: right;
+}

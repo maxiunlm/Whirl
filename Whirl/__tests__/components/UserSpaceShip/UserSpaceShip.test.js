@@ -152,7 +152,7 @@ describe('UserSpaceShip - ', () => {
     
     describe('getNewUserSpaceShipMaths - ', () => {
         
-        it('With "userSpaceShipMathsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
+        it('With a "userSpaceShipMathsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
             spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
             let sut = new UserSpaceShip(commonFakes);
             
@@ -164,7 +164,7 @@ describe('UserSpaceShip - ', () => {
             //// NO FUNCIONA !!! -> IoC4Javascript.prototype.getInstanceOf.calls.rest();
         });
         
-        it('With "userSpaceShipMathsKey" string key calls the "getInstanceOf" method from "IoC4Javascript" object wich returns an "UserSpaceShipMaths" instance', () => {
+        it('With a "userSpaceShipMathsKey" string key calls the "getInstanceOf" method from "IoC4Javascript" object wich returns an "UserSpaceShipMaths" instance', () => {
             spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
             let sut = new UserSpaceShip(commonFakes);
             
