@@ -16,6 +16,8 @@ class CommonFakes {
         this.threeTimes = 3;
         this.fourTimes = 4;
         this.fiveTimes = 5;
+        this.sixTimes = 6;
+        this.sevenTimes = 7;
         this.startIndex = 0;
         this.initialNumberValue = 0;
         this.EmptyObject = {};
@@ -85,6 +87,9 @@ class CommonFakes {
         this.downKeyCode = 40;   
         this.props = {
             ioc: this.ioc
+        };
+        this.eventSpaceBarKeyCode = {
+            keyCode: this.spaceBarKeyCode
         };
         this.eventLeftKeyCode = {
             keyCode: this.leftKeyCode

@@ -114,12 +114,22 @@ class UserSpaceShip extends Component {
         }
     }
 
+    startShotting() {
+        // TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    }
+
+    stopShotting() {
+        // TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    }
+
     componentDidMount() {
         this.props.actions.moveUserSpaceShipToLeft = this.startMovingToLeft.bind(this);
         this.props.actions.moveUserSpaceShipToRight = this.startMovingToRight.bind(this);
         this.props.actions.stopMovingUserSpaceShipToLeft = this.stopMovingToLeft.bind(this);
         this.props.actions.stopMovingUserSpaceShipToRight = this.stopMovingToRight.bind(this);
         this.props.actions.stopMovingUserSpaceShip = this.stopMoving.bind(this);
+        this.props.actions.startShotting = this.startShotting.bind(this);
+        this.props.actions.stopShotting = this.stopShotting.bind(this);
     }
 
     render() {

@@ -3,6 +3,7 @@ import './App.css';
 import UserSpaceShip from '../UserSpaceShip/UserSpaceShip.js';
 import LeftDirection from '../Buttons/LeftDirection.js';
 import RightDirection from '../Buttons/RightDirection.js';
+import ShotButton from '../Buttons/ShotButton.js';
 
 class App extends Component {
     constructor(props) {
@@ -18,6 +19,10 @@ class App extends Component {
             stopMovingUserSpaceShipToRight: () => {
             },
             stopMovingUserSpaceShip: () => {
+            },
+            startShotting: () => {
+            },
+            stopShotting: () => {
             }
         };
 
@@ -32,7 +37,24 @@ class App extends Component {
     }
 
     catchKeyUpEvent(event) {
-        this.actions.stopMovingUserSpaceShip();
+        event = event || window.event;
+        let keyCode = event.which || event.keyCode;
+        
+        switch (keyCode) {
+            case this.leftKeyCode:
+            case this.rightKeyCode:
+                this.actions.stopMovingUserSpaceShip();
+                break;
+//                 case upKeyCode: // TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//                 break;
+//                 case downKeyCode:
+//                 break;
+            case this.spaceBarKeyCode:
+                this.actions.stopShotting();
+                break;
+            default:
+                break;
+        }
 
         if (!!event.preventDefault) {
             event.preventDefault(); // prevent the default action (scroll / move caret)
@@ -50,13 +72,13 @@ class App extends Component {
             case this.rightKeyCode:
                 this.actions.moveUserSpaceShipToRight();
                 break;
-//                 case upKeyCode:
+//                 case upKeyCode: // TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //                 break;
 //                 case downKeyCode:
 //                 break;
-//            case spaceBarKeyCode: // TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//                doShot();
-//                break;
+            case this.spaceBarKeyCode:
+                this.actions.startShotting();
+                break;
             default:
                 break;
         }
@@ -70,12 +92,29 @@ class App extends Component {
         return(
                 <div>
                     <UserSpaceShip actions={this.actions} />
-                    <LeftDirection
-                        actionStart={(event) => this.actions.moveUserSpaceShipToLeft(event) }
-                        actionStop={(event) => this.actions.stopMovingUserSpaceShipToLeft(event) }/>
-                    <RightDirection
-                        actionStart={(event) => this.actions.moveUserSpaceShipToRight(event) }
-                        actionStop={(event) => this.actions.stopMovingUserSpaceShipToRight(event) }/>
+                    <div className="leftCircleButtons">
+                        <LeftDirection
+                            actionStart={(event) => this.actions.moveUserSpaceShipToLeft(event) }
+                            actionStop={(event) => this.actions.stopMovingUserSpaceShipToLeft(event) }/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <ShotButton
+                            actionStart={(event) => this.actions.startShotting(event) }
+                            actionStop={(event) => this.actions.stopShotting(event) }/>
+                    </div>
+                    
+                    <div className="rightCircleButtons">
+                        <RightDirection
+                            actionStart={(event) => this.actions.moveUserSpaceShipToRight(event) }
+                            actionStop={(event) => this.actions.stopMovingUserSpaceShipToRight(event) }/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <ShotButton
+                            actionStart={(event) => this.actions.startShotting(event) }
+                            actionStop={(event) => this.actions.stopShotting(event) }/>
+                    </div>
                 </div>
                 );
     }

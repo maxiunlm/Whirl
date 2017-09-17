@@ -152,7 +152,7 @@ describe('UserSpaceShip - ', () => {
     
     describe('getNewUserSpaceShipMaths - ', () => {
         
-        it('With "userSpaceShipMathsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
+        it('With a "userSpaceShipMathsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
             spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
             let sut = new UserSpaceShip(commonFakes);
             
@@ -164,7 +164,7 @@ describe('UserSpaceShip - ', () => {
             //// NO FUNCIONA !!! -> IoC4Javascript.prototype.getInstanceOf.calls.rest();
         });
         
-        it('With "userSpaceShipMathsKey" string key calls the "getInstanceOf" method from "IoC4Javascript" object wich returns an "UserSpaceShipMaths" instance', () => {
+        it('With a "userSpaceShipMathsKey" string key calls the "getInstanceOf" method from "IoC4Javascript" object wich returns an "UserSpaceShipMaths" instance', () => {
             spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
             let sut = new UserSpaceShip(commonFakes);
             
@@ -264,7 +264,7 @@ describe('UserSpaceShip - ', () => {
             expect(sut.stopMovingToRight.calls.count()).toEqual(commonFakes.once);
         });
         
-        it('Without any parameter invokes "bind" method from "Function" object five times', () => {
+        it('Without any parameter invokes "bind" method from "Function" object seven times', () => {
             let sut = new UserSpaceShip(commonFakes);
             let calledTimes = 0;
             spyOn(sut.startMovingToLeft, 'bind').and.callFake(() => {
@@ -282,6 +282,12 @@ describe('UserSpaceShip - ', () => {
             spyOn(sut.stopMoving, 'bind').and.callFake(() => {
                 calledTimes++;
             });
+            spyOn(sut.startShotting, 'bind').and.callFake(() => {
+                calledTimes++;
+            });
+            spyOn(sut.stopShotting, 'bind').and.callFake(() => {
+                calledTimes++;
+            });
             
             sut.componentDidMount();
             
@@ -295,7 +301,11 @@ describe('UserSpaceShip - ', () => {
             expect(sut.stopMovingToRight.bind.calls.count()).toEqual(commonFakes.once);
             expect(sut.stopMoving.bind).toHaveBeenCalledWith(jasmine.any(UserSpaceShip));
             expect(sut.stopMoving.bind.calls.count()).toEqual(commonFakes.once);
-            expect(calledTimes).toEqual(commonFakes.fiveTimes);
+            expect(sut.startShotting.bind).toHaveBeenCalled();
+            expect(sut.startShotting.bind.calls.count()).toEqual(commonFakes.once);
+            expect(sut.stopShotting.bind).toHaveBeenCalled();
+            expect(sut.stopShotting.bind.calls.count()).toEqual(commonFakes.once);
+            expect(calledTimes).toEqual(commonFakes.sevenTimes);
         });
     });
     
@@ -1035,6 +1045,18 @@ describe('UserSpaceShip - ', () => {
             
             expect(sut.stopMovingToRight).toHaveBeenCalled();            
             expect(sut.stopMovingToRight.calls.count()).toEqual(commonFakes.once);
+        });
+    });
+    
+    describe('startShotting - ', () => {
+        it(' - ', () => {
+            
+        });
+    });
+    
+    describe('stopShotting - ', () => {
+        it(' - ', () => {
+            
         });
     });
 });

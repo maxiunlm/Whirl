@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import './FlatCircleButtons.css';
 
 class LeftDirection extends Component {
-    /*constructor(props) {
-     super(props);
-     }*/
+    constructor(props) {
+        super(props);
+    }
 
     render() {
         return (
@@ -23,6 +23,6 @@ class LeftDirection extends Component {
                 </button>
                 );
     }
-}
+};
 
 export default LeftDirection;
