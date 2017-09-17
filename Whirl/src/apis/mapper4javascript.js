@@ -188,13 +188,13 @@ class Mapper4Javascript extends UtilsBase4Javascript {
     }
 
     mustMapAttribute(getterMapperConfiguration, attributeName) {
-        let ignoredAttributes = getterMapperConfiguration.ignoredAttributes;
-        let ignoreAllAttributes = getterMapperConfiguration.ignoreAllAttributes;
-        let exceptedAttributes = getterMapperConfiguration.exceptedAttributes;
+        let ignoreAllAttributes = !!getterMapperConfiguration.ignoreAllAttributes;
+        let ignoredAttributes = getterMapperConfiguration.ignoredAttributes || '';
+        let exceptedAttributes = getterMapperConfiguration.exceptedAttributes || '';
 
-        if ((getterMapperConfiguration.ignoreAllAttributes
-                && getterMapperConfiguration.exceptedAttributes.indexOf(attributeName) < 0)
-                || getterMapperConfiguration.ignoredAttributes.indexOf(attributeName) >= 0) {
+        if ((ignoreAllAttributes
+                && exceptedAttributes.indexOf(attributeName) < 0)
+                || ignoredAttributes.indexOf(attributeName) >= 0) {
             return false;
         }
 
@@ -205,7 +205,7 @@ class Mapper4Javascript extends UtilsBase4Javascript {
         let originObjectKeys = Object.keys(originObject);
 
         originObjectKeys.forEach(function (key, index, allKeys) {
-            if (mustMapAttribute(getterMapperConfiguration, key)) {
+            if (this.mustMapAttribute(getterMapperConfiguration, key)) {
                 getterMapperConfiguration.destinationObject[key] = originObject[key];
             }
         });
@@ -218,7 +218,7 @@ class Mapper4Javascript extends UtilsBase4Javascript {
 
         originObjectKeys.forEach(function (key, index, allKeys) {
             if (!this.isFunction(originObject[key])
-                    && mustMapAttribute(getterMapperConfiguration, key)) {
+                    && this.mustMapAttribute(getterMapperConfiguration, key)) {
                 getterMapperConfiguration.destinationObject[key] = originObject[key];
             }
         });
@@ -231,7 +231,7 @@ class Mapper4Javascript extends UtilsBase4Javascript {
 
         originObjectKeys.forEach(function (key, index, allKeys) {
             if (this.isFunction(originObject[key])
-                    && mustMapAttribute(getterMapperConfiguration, key)) {
+                    && this.mustMapAttribute(getterMapperConfiguration, key)) {
                 getterMapperConfiguration.destinationObject[key] = originObject[key];
             }
         });
@@ -244,7 +244,7 @@ class Mapper4Javascript extends UtilsBase4Javascript {
 
         destinationObjectKeys.forEach(function (key, index, allKeys) {
             if (!!originObject[key]
-                    && mustMapAttribute(getterMapperConfiguration, key)) {
+                    && this.mustMapAttribute(getterMapperConfiguration, key)) {
                 getterMapperConfiguration.destinationObject[key] = originObject[key];
             }
         });
@@ -257,7 +257,7 @@ class Mapper4Javascript extends UtilsBase4Javascript {
 
         destinationObjectKeys.forEach(function (key, index, allKeys) {
             if (!!originObject[key] && this.isFunction(originObject[key])
-                    && mustMapAttribute(getterMapperConfiguration, key)) {
+                    && this.mustMapAttribute(getterMapperConfiguration, key)) {
                 getterMapperConfiguration.destinationObject[key] = originObject[key];
             }
         });
