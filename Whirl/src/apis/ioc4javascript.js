@@ -5,40 +5,44 @@ import Mapper4Javascript from './mapper4javascript';
 
 let ioc4JavascriptInstance = null;
 
-class IoC4Javascript extends UtilsBase4Javascript {   
+class IoC4Javascript extends UtilsBase4Javascript {
     constructor(forceNewInstance) {
         super();
 
-        if(!forceNewInstance && !!ioc4JavascriptInstance){
+        if (!forceNewInstance && !!ioc4JavascriptInstance) {
             return ioc4JavascriptInstance;
-        }
-        else if(!forceNewInstance) {
+        } else if (!forceNewInstance) {
             ioc4JavascriptInstance = this;
         }
-        
+
         this.types = {};
         this.constructors = {};
         this.singletons = {};
-        this.aop = new Aop4Javascript(new AopConfigParameters(), this.types);
-        this.mapper = new Mapper4Javascript(this.types);
 
-        this.registerSingletonType(Aop4Javascript, 'AOP', null, this.aop);
-        this.registerSingletonType(Mapper4Javascript, 'Mapper', null, this.mapper);
+        if (typeof Aop4Javascript !== typeof undefined) {
+            this.aop = new Aop4Javascript(new AopConfigParameters(), this.types);
+            this.registerSingletonType(Aop4Javascript, 'AOP', null, this.aop);
+        }
+
+        if (typeof Mapper4Javascript !== typeof undefined) {
+            this.mapper = new Mapper4Javascript(this.types);
+            this.registerSingletonType(Mapper4Javascript, 'Mapper', null, this.mapper);
+        }
     }
-    
+
     deleteInstance() {
         ioc4JavascriptInstance = null;
     }
 
     validateConstructorCallbackType(constructorCallback) {
         if (!this.isFunction(constructorCallback)) {
-            throw('EXCEPTION [registerConstructor]: the "constructorCallback" must be a valid "Function" wich returns an instance object.\n' + this.getCallStack());
+            throw ('EXCEPTION [registerConstructor]: the "constructorCallback" must be a valid "Function" wich returns an instance object.\n' + this.getCallStack());
         }
     }
 
     validateTypeHasBeenRegistered(key) {
         if (!!key && !this.types[key]) {
-            throw('EXCEPTION [validateTypeHasBeenRegistered]: the key "' + key + '" has not been registered yet.\n' + this.getCallStack());
+            throw ('EXCEPTION [validateTypeHasBeenRegistered]: the key "' + key + '" has not been registered yet.\n' + this.getCallStack());
         }
     }
 
@@ -57,7 +61,7 @@ class IoC4Javascript extends UtilsBase4Javascript {
         }
 
         if (!!this.types[key].instanceDefinitionCallback) {
-            instance = this.types[key].instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
+            instance = this.types[key].instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
         }
 
         return instance;
@@ -66,30 +70,30 @@ class IoC4Javascript extends UtilsBase4Javascript {
     getType(key) {
         this.validateKeyType(key);
         this.validateTypeHasBeenRegistered(key);
-        
+
         return this.types[key].type;
     }
 
     getInstanceOf(key, instanceDefinitionCallback) {
-        let instance = this.singletons[key]
-                || this.tryConstructorCallback(key)
-                || this.createInstanceOf(key);
+        let instance = this.singletons[key] ||
+            this.tryConstructorCallback(key) ||
+            this.createInstanceOf(key);
 
         if (!!instanceDefinitionCallback) {
-            instance = instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
+            instance = instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
         }
-        
+
         return instance;
     }
 
     tryConstructorCallback(key) {
         return (!!this.constructors[key] &&
             this.constructors[key].constructorCallback(
-                    this,
-                    this.aop,
-                    this.mapper
-                )
-            );
+                this,
+                this.aop,
+                this.mapper
+            )
+        );
     }
 
     registerType(type, key, instanceDefinitionCallback) {
@@ -97,7 +101,7 @@ class IoC4Javascript extends UtilsBase4Javascript {
         this.validateKeyType(key);
         this.validateType(type);
 
-        this.types[key] = {key: key, typeName: type.name, type: type, instanceDefinitionCallback: instanceDefinitionCallback};
+        this.types[key] = { key: key, typeName: type.name, type: type, instanceDefinitionCallback: instanceDefinitionCallback };
 
         return this;
     }
@@ -107,7 +111,7 @@ class IoC4Javascript extends UtilsBase4Javascript {
         this.validateKeyType(key);
         this.validateConstructorCallbackType(constructorCallback);
 
-        this.constructors[key] = {constructorCallback: constructorCallback};
+        this.constructors[key] = { constructorCallback: constructorCallback };
     }
 
     registerSingletonType(type, key, instanceDefinitionCallback, instance) {
