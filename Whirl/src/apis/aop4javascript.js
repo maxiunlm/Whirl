@@ -193,16 +193,16 @@ class Aop4Javascript extends UtilsBase4Javascript {
             throw new Error('EXCEPTION [wrap]: the "aopConfigParameters" is obligatory.');
         }
 
-        aopConfigParameters.objectReference || this.aopConfigParameters.objectReference;
-        aopConfigParameters.methodName || this.aopConfigParameters.methodName;
-        aopConfigParameters.beforeCallback || this.aopConfigParameters.beforeCallback;
-        aopConfigParameters.afterCallback || this.aopConfigParameters.afterCallback;
-        aopConfigParameters.exceptionCallback || this.aopConfigParameters.exceptionCallback;
-        aopConfigParameters.finallyCallback || this.aopConfigParameters.finallyCallback;
-        aopConfigParameters.wrapperCallback || this.aopConfigParameters.wrapperCallback;
-        aopConfigParameters.mustUseRetryManager || this.aopConfigParameters.mustUseRetryManager;
-        aopConfigParameters.retryManager || this.aopConfigParameters.retryManager;
-        aopConfigParameters.wrapper || this.aopConfigParameters.wrapper;
+        this.aopConfigParameters = aopConfigParameters.objectReference || this.aopConfigParameters.objectReference;
+        this.aopConfigParameters = aopConfigParameters.methodName || this.aopConfigParameters.methodName;
+        this.aopConfigParameters = aopConfigParameters.beforeCallback || this.aopConfigParameters.beforeCallback;
+        this.aopConfigParameters = aopConfigParameters.afterCallback || this.aopConfigParameters.afterCallback;
+        this.aopConfigParameters = aopConfigParameters.exceptionCallback || this.aopConfigParameters.exceptionCallback;
+        this.aopConfigParameters = aopConfigParameters.finallyCallback || this.aopConfigParameters.finallyCallback;
+        this.aopConfigParameters = aopConfigParameters.wrapperCallback || this.aopConfigParameters.wrapperCallback;
+        this.aopConfigParameters = aopConfigParameters.mustUseRetryManager || this.aopConfigParameters.mustUseRetryManager;
+        this.aopConfigParameters = aopConfigParameters.retryManager || this.aopConfigParameters.retryManager;
+        this.aopConfigParameters = aopConfigParameters.wrapper || this.aopConfigParameters.wrapper;
     }
 
     getAopEvent() {

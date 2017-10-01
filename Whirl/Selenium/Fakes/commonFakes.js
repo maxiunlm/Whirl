@@ -4,6 +4,7 @@ import Dimensions from '../../src/maths/paths/Dimensions';
 import EllipsePath from '../../src/maths/paths/EllipsePath';
 import Position from '../../src/maths/paths/Position';
 import UserSpaceShipMaths from '../../src/maths/UserSpaceShip/UserSpaceShipMaths';
+import UserShot from '../../src/components/Shots/UserShot';
 import ShotMaths from '../../src/maths/Shots/ShotMaths';
 import UserSpaceShipGeometric from '../../src/maths/UserSpaceShip/UserSpaceShipGeometric';
 
@@ -53,6 +54,9 @@ class CommonFakes {
             this.ioc.registerType.call(this.ioc, EllipsePath, this.ellipsePathKey);
             this.ioc.registerType.call(this.ioc, Position, this.positionKey);
             this.ioc.registerType.call(this.ioc, UserSpaceShipMaths, this.userSpaceShipMathsKey);
+            this.ioc.registerConstructor.call(this.ioc,'userShotKey', () => {
+                return new UserShot(new Object());
+            });
             
             this.ioc.registerSingletonType.call(this.ioc, UserSpaceShipGeometric, this.userSpaceShipGeometricKey);            
             this.ioc.registerSingletonType.call(this.ioc, Dimensions, this.dimensionsKey);

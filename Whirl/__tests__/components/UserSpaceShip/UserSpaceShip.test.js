@@ -7,6 +7,7 @@ import UserSpaceShipMaths from '../../../src/maths/UserSpaceShip/UserSpaceShipMa
 import UserSpaceShipGeometric from '../../../src/maths/UserSpaceShip/UserSpaceShipGeometric';
 import Dimensions from '../../../src/maths/paths/Dimensions';
 import UserSpaceShip from '../../../src/components/UserSpaceShip/UserSpaceShip';
+import UserShot from '../../../src/components/Shots/UserShot';
 import IoC4Javascript from '../../../src/apis/ioc4javascript';
 
 describe('UserSpaceShip - ', () => {
@@ -47,6 +48,7 @@ describe('UserSpaceShip - ', () => {
             expect(sut.movementInterval).toEqual(commonFakes.movementInterval);
             expect(sut.maths instanceof UserSpaceShipMaths).toBeTruthy();
             expect(sut.state instanceof Object).toBeTruthy();
+            expect(sut.state.shots instanceof Array).toBeTruthy();
             expect(sut.state.style instanceof Object).toBeTruthy();
             expect(sut.state.style.width).toEqual(commonFakes.userSpaceShipWidth);
             expect(sut.state.style.height).toEqual(commonFakes.userSpaceShipHeight);
@@ -151,7 +153,6 @@ describe('UserSpaceShip - ', () => {
     });
     
     describe('getNewUserSpaceShipMaths - ', () => {
-        
         it('With a "userSpaceShipMathsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
             spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
             let sut = new UserSpaceShip(commonFakes);
@@ -1049,8 +1050,42 @@ describe('UserSpaceShip - ', () => {
     });
     
     describe('startShotting - ', () => {
-        it(' - ', () => {
+        it('With a "userShotKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
+            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
+            let sut = new UserSpaceShip(commonFakes);
             
+            sut.startShotting();
+            
+            expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.userShotKey);
+            //TODO: REVISAR !!! Lo llama el 4 veces en lugar de una porque es un Singleton vuelve a computar (LOS TESTS NO SON INDEPENDEINTES) !!!
+            //expect(IoC4Javascript.prototype.getInstanceOf.calls.count()).toEqual(commonFakes.once);            
+            //// NO FUNCIONA !!! -> IoC4Javascript.prototype.getInstanceOf.calls.rest();
+        });
+        
+        it('With a "position" invokes the "setPosition" method from "UserShot" object', () => {
+            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
+            spyOn(UserShot.prototype, 'setPosition').and.callFake(() => {
+            });
+            spyOn(UserShot.prototype, 'startShotting').and.callFake(() => {
+            });
+            let sut = new UserSpaceShip(commonFakes);
+            
+            sut.startShotting();
+            
+            expect(UserShot.prototype.setPosition).toHaveBeenCalledWith(sut.position);
+        });
+        
+        it('Without any parameter invokes the "startShotting" method from "UserShot" object', () => {
+            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
+            spyOn(UserShot.prototype, 'setPosition').and.callFake(() => {
+            });
+            spyOn(UserShot.prototype, 'startShotting').and.callFake(() => {
+            });
+            let sut = new UserSpaceShip(commonFakes);
+            
+            sut.startShotting();
+            
+            expect(UserShot.prototype.startShotting).toHaveBeenCalled();
         });
     });
     

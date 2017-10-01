@@ -8,15 +8,21 @@ class UserShot extends Component {
         
         this.ioc = new IoC4Javascript();
         this.maths = this.getNewShotMaths();
-        this.movementInterval = 0.04;
-        
+        this.movementInterval = 0.04;        
         this.state = {
-            image: '/images/userShot.png',
-            style: {
-                top: props.position.top,
-                left: props.position.left
-            }
+            image: '/images/userShot.png'
         };
+                
+        if(!!props.position) {
+            this.state.style = {
+                top: props.position.top,//??? Exception ???!!!
+                left: props.position.left
+            };
+        }
+    }
+    
+    setPosition(position){
+        this.position = position;
     }
     
     getNewShotMaths () {
@@ -35,6 +41,10 @@ class UserShot extends Component {
                 left: position.left
             }
         });
+    }
+    
+    componentDidMount(){ // TODO: TDD !!!!!!!!!!!!!!!
+        this.startShotting();
     }
 
     render() {

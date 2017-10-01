@@ -31,6 +31,17 @@ describe('UserShot - ', () => {
             expect(sut.state.style.left).toEqual(commonFakes.positionLeft);
             expect(sut.state.style.top).toEqual(commonFakes.positionTop);
         });
+        
+        it('initialices the object without an initial position', ()=> {
+            
+            let sut = new UserShot(new Object());
+            
+            expect(sut.maths instanceof ShotMaths).toBeTruthy();
+            expect(sut.ioc instanceof IoC4Javascript).toBeTruthy();
+            expect(sut.movementInterval).toEqual(commonFakes.movementInterval);
+            expect(sut.state.image).toEqual(commonFakes.userShotImage);
+            expect(sut.state.style).toEqual(undefined);
+        });
     });
     
     describe('getNewShotMaths - ', () => {
@@ -106,34 +117,46 @@ describe('UserShot - ', () => {
     });
     
     describe('doShot - ', () => {
-            it('without any parameter invokes "moveToNextEllipticalPosition" method from "UserSpaceShipMaths" object', () => {
-                let sut = new UserShot(commonFakes);
-                spyOn(ShotMaths.prototype, 'moveToNextEllipticalPosition').and.callFake(() => {                    
-                    return commonFakes.position;
-                });
-                spyOn(UserShot.prototype, 'setState').and.callFake(() => {
-                });
-                
-                sut.doShot();
-                
-                expect(ShotMaths.prototype.moveToNextEllipticalPosition).toHaveBeenCalled();                
-                expect(ShotMaths.prototype.moveToNextEllipticalPosition.calls.count()).toEqual(commonFakes.once);
+        it('without any parameter invokes "moveToNextEllipticalPosition" method from "UserSpaceShipMaths" object', () => {
+            let sut = new UserShot(commonFakes);
+            spyOn(ShotMaths.prototype, 'moveToNextEllipticalPosition').and.callFake(() => {                    
+                return commonFakes.position;
             });
+            spyOn(UserShot.prototype, 'setState').and.callFake(() => {
+            });
+
+            sut.doShot();
+
+            expect(ShotMaths.prototype.moveToNextEllipticalPosition).toHaveBeenCalled();                
+            expect(ShotMaths.prototype.moveToNextEllipticalPosition.calls.count()).toEqual(commonFakes.once);
+        });
+
+        it('without any parameter invokes "moveToNextEllipticalPosition" which returns the new Position', () => {
+            let setStateParameter;
+            let sut = new UserShot(commonFakes);
+            spyOn(ShotMaths.prototype, 'moveToNextEllipticalPosition').and.callFake(() => {                    
+                return commonFakes.position;
+            });
+            spyOn(UserShot.prototype, 'setState').and.callFake((state) => {
+                setStateParameter = state;
+            });
+
+            sut.doShot();
+
+            expect(setStateParameter.style.top).toEqual(commonFakes.position.top);
+            expect(setStateParameter.style.left).toEqual(commonFakes.position.left);
+        });
+    });
+    
+    describe('setPosition - ', () => {
+        it('with a "Position object" sets the position attribute of the object', () => {
+            let sut = new UserShot(commonFakes);
+            let position = new Position();
+           
+            sut.setPosition(position);
             
-            it('without any parameter invokes "moveToNextEllipticalPosition" which returns the new Position', () => {
-                let setStateParameter;
-                let sut = new UserShot(commonFakes);
-                spyOn(ShotMaths.prototype, 'moveToNextEllipticalPosition').and.callFake(() => {                    
-                    return commonFakes.position;
-                });
-                spyOn(UserShot.prototype, 'setState').and.callFake((state) => {
-                    setStateParameter = state;
-                });
-                
-                sut.doShot();
-                
-                expect(setStateParameter.style.top).toEqual(commonFakes.position.top);
-                expect(setStateParameter.style.left).toEqual(commonFakes.position.left);
-            });
+            expect(sut.position).toEqual(position)
+            ;            
+        });
     });
 });

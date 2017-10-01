@@ -5,9 +5,9 @@ class ShotMaths {
         this.ioc = new IoC4Javascript();
         this.path = this.ioc.getInstanceOf('ellipsePathKey');
         
-        if (!!deltaRadius) {
+        //if (!!deltaRadius) {
             this.initialize(deltaRadius);
-        }
+        //}
     }
 
     initialize(deltaRadius) {

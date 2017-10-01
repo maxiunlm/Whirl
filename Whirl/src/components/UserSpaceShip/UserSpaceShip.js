@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import IoC4Javascript from '../../apis/ioc4javascript';
+import UserShot from '../Shots/UserShot';
 import './UserSpaceShip.css';
 
 class UserSpaceShip extends Component {
@@ -13,6 +14,7 @@ class UserSpaceShip extends Component {
         this.movementInterval = 0.04;
         this.state = {
             image: '/images/UserSpaceShipStopped.png',
+            shots: false,
             images: {
                 stopped: '/images/UserSpaceShipStopped.png',
                 toLeft: '/images/UserSpaceShipToLeft.png',
@@ -115,7 +117,14 @@ class UserSpaceShip extends Component {
     }
 
     startShotting() {
-        // TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //let userShot = this.ioc.getInstanceOf('userShotKey');
+        //userShot.setPosition(this.position);
+        //userShot.startShotting();
+        
+         // TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        this.setState({
+            shots: {left: this.state.left, top: this.state.top}
+        });
     }
 
     stopShotting() {
@@ -133,8 +142,17 @@ class UserSpaceShip extends Component {
     }
 
     render() {
+        let shot = '';
+        
+        if(!!this.state.shots) {// TODO: TDD !!!!!!!!!!!!!!!
+            shot = <UserShot position={this.position} />;
+        }
+    
         return (
-                <img id="userSpaceShip" src={this.state.image} alt="A" className="userSpaceShip" style={this.state.style}></img>
+                <div id="userSpaceShipContainer">
+                    {shot}
+                    <img id="userSpaceShip" src={this.state.image} alt="A" className="userSpaceShip" style={this.state.style}></img>
+                </div>
             );
     }
 }

@@ -166,7 +166,7 @@ describe('Index - ', () => {
             expect(IoC4Javascript.prototype.registerType).toHaveBeenCalledWith(Position, commonFakes.positionKey);
         });
         
-        it('With the "UserShot" type and the "userShotKey" string key invokes the "registerType" method from the "IoC4Javascript" object', () => {
+        it('With the "UserShot" type and the "userShotKey" string key invokes the "registerConstructor" method from the "IoC4Javascript" object', () => {
             spyOn(IoC4Javascript.prototype, 'registerType').and.callFake(() => {
             });
             spyOn(IoC4Javascript.prototype, 'registerSingletonType').and.callFake(() => {
@@ -177,7 +177,7 @@ describe('Index - ', () => {
             
             sut.registerObjectsConfigurations();
             
-            expect(IoC4Javascript.prototype.registerType).toHaveBeenCalledWith(UserShot, commonFakes.userShotKey);
+            expect(IoC4Javascript.prototype.registerConstructor).toHaveBeenCalledWith(commonFakes.userShotKey, jasmine.any(Function));
         });
         
         it('With a "constructorCallback" method and the "dimensionsKey" string key invokes the "registerConstructor" method from the "IoC4Javascript" object', () => {
