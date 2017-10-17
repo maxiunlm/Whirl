@@ -13,17 +13,19 @@ class UserShot extends Component {
             image: '/images/userShot.png'
         };
                 
-        if(!!props.position) {
+        if(!!props.shot) {
             this.state.style = {
-                top: props.position.top,//??? Exception ???!!!
-                left: props.position.left
+                top: props.shot.top,//??? Exception ???!!!
+                left: props.shot.left
             };
+            
+            this.maths.setAngle(props.shot.angle);
         }
     }
     
-    setPosition(position){
-        this.position = position;
-    }
+//    setPosition(position){
+//        this.position = position;
+//    }
     
     getNewShotMaths () {
         return this.ioc.getInstanceOf('shotMathsKey');
@@ -31,6 +33,10 @@ class UserShot extends Component {
 
     startShotting() {
         this.shotInterval = setInterval(this.doShot.bind(this), this.movementInterval);
+    }
+
+    stopShotting() {
+        clearInterval(this.shotInterval); // TODO: TDD !!!
     }
     
     doShot() {

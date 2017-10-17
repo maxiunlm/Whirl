@@ -14,6 +14,10 @@ class EllipsePath {
         this.deltaAngle = 0.01;
     }
     
+    setAngle(angle) { // TODO: TDD !!!
+        this.angle = angle;
+    }
+    
     getDimensions() {
         return this.ioc.getInstanceOf('dimensionsKey');
     }

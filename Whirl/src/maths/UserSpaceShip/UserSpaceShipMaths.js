@@ -25,7 +25,7 @@ class UserSpaceShipMaths {
         return this.ioc.getInstanceOf('calculusKey');
     }
     
-    getTop () {
+    getTop() {
         return this.path.centerY + ((this.path.radius + this.path.deltaA) * Math.cos(this.path.angle));
     }
     
@@ -39,6 +39,10 @@ class UserSpaceShipMaths {
     
     getHeight() {
         return this.geometry.height;
+    }
+    
+    getAngle() { // TODO: TDD !!!
+        return this.path.angle;
     }
     
     moveToNextLeftEllipticalPosition() {

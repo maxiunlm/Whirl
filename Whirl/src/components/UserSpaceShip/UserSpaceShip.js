@@ -119,11 +119,14 @@ class UserSpaceShip extends Component {
     startShotting() {
         //let userShot = this.ioc.getInstanceOf('userShotKey');
         //userShot.setPosition(this.position);
-        //userShot.startShotting();
-        
-         // TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        this.setState({
-            shots: {left: this.state.left, top: this.state.top}
+        //userShot.startShotting();         
+        this.setState({// TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            shot: {
+                left: this.state.style.left,
+                top: this.state.style.top,
+                angle: this.maths.getAngle(),
+                rotation: this.maths.getRotation()
+            }
         });
     }
 
@@ -144,8 +147,8 @@ class UserSpaceShip extends Component {
     render() {
         let shot = '';
         
-        if(!!this.state.shots) {// TODO: TDD !!!!!!!!!!!!!!!
-            shot = <UserShot position={this.position} />;
+        if(!!this.state.shot) {// TODO: TDD !!!!!!!!!!!!!!!
+            shot = <UserShot shot={this.state.shot} />;
         }
     
         return (

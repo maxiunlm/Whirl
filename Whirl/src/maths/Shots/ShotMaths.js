@@ -5,13 +5,17 @@ class ShotMaths {
         this.ioc = new IoC4Javascript();
         this.path = this.ioc.getInstanceOf('ellipsePathKey');
         
-        //if (!!deltaRadius) {
-            this.initialize(deltaRadius);
+        //if (!!deltaRadius) { TODO: Revisar si va + TDD !!!
+        this.initialize(deltaRadius);
         //}
     }
 
     initialize(deltaRadius) {
         this.deltaRadius = deltaRadius || 2;
+    }
+    
+    setAngle(angle) { // TODO: TDD !!!
+        this.path.setAngle(angle);
     }
 
     moveToNextEllipticalPosition() {
