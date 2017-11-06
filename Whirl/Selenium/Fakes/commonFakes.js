@@ -21,7 +21,7 @@ class CommonFakes {
         this.sevenTimes = 7;
         this.startIndex = 0;
         this.initialNumberValue = 0;
-        this.EmptyObject = {};
+        this.emptyObject = {};
 
         this.flatAngleInRadians = Math.PI;
         this.flatAngleInDegrees = 180;
@@ -90,7 +90,8 @@ class CommonFakes {
         this.rightKeyCode = 39;
         this.downKeyCode = 40;   
         this.props = {
-            ioc: this.ioc
+            ioc: this.ioc,
+            angle: this.initialNumberValue
         };
         this.eventSpaceBarKeyCode = {
             keyCode: this.spaceBarKeyCode
@@ -138,6 +139,7 @@ class CommonFakes {
         this.positionLeft = 1;
         this.positionTop = 2;
         this.position = {top: this.positionTop, left: this.positionLeft};
+        this.props.shot = this.position;
         this.stateChangedPosition = {
             style: {
                 width: this.userSpaceShipWidth,

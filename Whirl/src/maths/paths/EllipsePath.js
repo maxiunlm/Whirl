@@ -14,8 +14,8 @@ class EllipsePath {
         this.deltaAngle = 0.01;
     }
     
-    setAngle(angle) { // TODO: TDD !!!
-        this.angle = angle;
+    setAngle(angle) {
+        this.angle = angle || 0;
     }
     
     getDimensions() {

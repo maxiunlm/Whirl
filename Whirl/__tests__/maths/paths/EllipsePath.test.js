@@ -106,12 +106,30 @@ describe('EllipsePath', () => {
     });
     
     describe('getNextTopEllipticalPosition - ', () => {
-        it('Without any parameter returns the next top elliptical position', () => {            
+        it('Without any parameter returns the next top elliptical position', () => {
             let sut = new EllipsePath(commonFakes.dimensions);
             
             let result = sut.getNextTopEllipticalPosition(commonFakes.ellipsePath);
             
             expect(result).toEqual(sut.centerY + ((sut.radius + sut.deltaA) * Math.cos(sut.angle)));
         });        
+    });
+    
+    describe('setAngle - ', () => {
+        it('Without parameters sets the "zero angle value" of the "sut" object', () => {
+            let sut = new EllipsePath(commonFakes.dimensions);
+            
+            sut.setAngle();
+            
+            expect(sut.angle).toEqual(commonFakes.initialNumberValue);
+        });
+        
+        it('With an angle sets the "angle value" of the "sut" object', () => {
+            let sut = new EllipsePath(commonFakes.dimensions);
+            
+            sut.setAngle(commonFakes.flatAngleInRadians);
+            
+            expect(sut.angle).toEqual(commonFakes.flatAngleInRadians);
+        });
     });
 });

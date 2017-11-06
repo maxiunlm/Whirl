@@ -40,8 +40,12 @@ class UserSpaceShipMaths {
     getHeight() {
         return this.geometry.height;
     }
+
+    getRotation() {
+        return  -1 * this.calculus.toDegrees(this.path.angle) % 360;
+    }
     
-    getAngle() { // TODO: TDD !!!
+    getAngle() {
         return this.path.angle;
     }
     
@@ -75,10 +79,6 @@ class UserSpaceShipMaths {
         position.setPosition(left, top);
         
         return position;
-    }
-
-    getRotation() {
-        return  -1 * this.calculus.toDegrees(this.path.angle) % 360;
     }
 }
 

@@ -48,7 +48,7 @@ describe('UserSpaceShip - ', () => {
             expect(sut.movementInterval).toEqual(commonFakes.movementInterval);
             expect(sut.maths instanceof UserSpaceShipMaths).toBeTruthy();
             expect(sut.state instanceof Object).toBeTruthy();
-            expect(sut.state.shots instanceof Array).toBeTruthy();
+            expect(sut.state.shots).toBeFalsy();
             expect(sut.state.style instanceof Object).toBeTruthy();
             expect(sut.state.style.width).toEqual(commonFakes.userSpaceShipWidth);
             expect(sut.state.style.height).toEqual(commonFakes.userSpaceShipHeight);
@@ -344,7 +344,7 @@ describe('UserSpaceShip - ', () => {
         it('Without any parameter calls "bind" method from "Function" object, then it sets the "movementToLeftInterval" value', () => {
             let sut = new UserSpaceShip(commonFakes);
             spyOn(window, 'setInterval').and.callFake(() => {
-                return commonFakes.EmptyObject;
+                return commonFakes.emptyObject;
             });
             spyOn(sut.moveToLeft, 'bind').and.callFake(() => {
             });
@@ -360,7 +360,7 @@ describe('UserSpaceShip - ', () => {
         it('Without any parameter invokes "stopMoving" from the "sut" object', () => {
             let sut = new UserSpaceShip(commonFakes);
             spyOn(window, 'setInterval').and.callFake(() => {
-                return commonFakes.EmptyObject;
+                return commonFakes.emptyObject;
             });
             spyOn(sut.moveToLeft, 'bind').and.callFake(() => {
             });
@@ -617,11 +617,11 @@ describe('UserSpaceShip - ', () => {
             spyOn(window, 'clearInterval').and.callFake(() => {                
             });            
             let sut = new UserSpaceShip(commonFakes);
-            sut.movementToLeftInterval = commonFakes.EmptyObject;
+            sut.movementToLeftInterval = commonFakes.emptyObject;
             
             sut.stopMovingToLeft();
             
-            expect(window.clearInterval).toHaveBeenCalledWith(commonFakes.EmptyObject);
+            expect(window.clearInterval).toHaveBeenCalledWith(commonFakes.emptyObject);
             expect(window.clearInterval.calls.count()).toEqual(commonFakes.once);
         });
         
@@ -640,7 +640,7 @@ describe('UserSpaceShip - ', () => {
         it('With a defined "movementToRightInterval" amd when the user space ship is stopped from left direction, with the stopped image, invokes the "setState" from the "sut" object', () => {
             let sut = new UserSpaceShip(commonFakes);
             sut.state.image = sut.state.images.toLeft;
-            sut.movementToLeftInterval = commonFakes.EmptyObject;
+            sut.movementToLeftInterval = commonFakes.emptyObject;
             spyOn(sut, 'setState').and.callFake(function () {
                 this.state.image = this.state.images.stopped;
             }.bind(sut));
@@ -654,7 +654,7 @@ describe('UserSpaceShip - ', () => {
         it('With a defined "movementToRightInterval" amd when the user space ship is stopped from left direction, it sets the stopped image', () => {
             let sut = new UserSpaceShip(commonFakes);
             sut.state.image = sut.state.images.toLeft;
-            sut.movementToLeftInterval = commonFakes.EmptyObject;
+            sut.movementToLeftInterval = commonFakes.emptyObject;
             spyOn(sut, 'setState').and.callFake(function () {
                 this.state.image = this.state.images.stopped;
             }.bind(sut));
@@ -702,7 +702,7 @@ describe('UserSpaceShip - ', () => {
                 this.state.image = this.state.images.toRight;
             }.bind(sut));
             spyOn(window, 'setInterval').and.callFake(() => {
-                return commonFakes.EmptyObject;
+                return commonFakes.emptyObject;
             });
             spyOn(sut.moveToRight, 'bind').and.callFake(() => {
             });
@@ -718,7 +718,7 @@ describe('UserSpaceShip - ', () => {
                 this.state.image = this.state.images.toRight;
             }.bind(sut));
             spyOn(window, 'setInterval').and.callFake(() => {
-                return commonFakes.EmptyObject;
+                return commonFakes.emptyObject;
             });
             spyOn(sut.moveToRight, 'bind').and.callFake(() => {
             });
@@ -972,11 +972,11 @@ describe('UserSpaceShip - ', () => {
             spyOn(window, 'clearInterval').and.callFake(() => {                
             });            
             let sut = new UserSpaceShip(commonFakes);
-            sut.movementToRightInterval = commonFakes.EmptyObject;
+            sut.movementToRightInterval = commonFakes.emptyObject;
             
             sut.stopMovingToRight();
             
-            expect(window.clearInterval).toHaveBeenCalledWith(commonFakes.EmptyObject);
+            expect(window.clearInterval).toHaveBeenCalledWith(commonFakes.emptyObject);
             expect(window.clearInterval.calls.count()).toEqual(commonFakes.once);
         });
         
@@ -995,7 +995,7 @@ describe('UserSpaceShip - ', () => {
         it('With a defined "movementToRightInterval" amd when the user space ship is stopped from right direction, with the stopped image, invokes the "setState" from the "sut" object', () => {
             let sut = new UserSpaceShip(commonFakes);
             sut.state.image = sut.state.images.toRight;
-            sut.movementToRightInterval = commonFakes.EmptyObject;
+            sut.movementToRightInterval = commonFakes.emptyObject;
             spyOn(sut, 'setState').and.callFake(function () {
                 this.state.image = this.state.images.stopped;
             }.bind(sut));
@@ -1009,7 +1009,7 @@ describe('UserSpaceShip - ', () => {
         it('With a defined "movementToRightInterval" amd when the user space ship is stopped from right direction, it sets the stopped image', () => {
             let sut = new UserSpaceShip(commonFakes);
             sut.state.image = sut.state.images.toRight;
-            sut.movementToRightInterval = commonFakes.EmptyObject;
+            sut.movementToRightInterval = commonFakes.emptyObject;
             spyOn(sut, 'setState').and.callFake(function () {
                 this.state.image = this.state.images.stopped;
             }.bind(sut));
@@ -1050,42 +1050,67 @@ describe('UserSpaceShip - ', () => {
     });
     
     describe('startShotting - ', () => {
-        it('With a "userShotKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
-            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
+        it('With the "shot configuration" string key invokes the "setState" method from "sut" object', () => {
             let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callThrough();
             
             sut.startShotting();
             
-            expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.userShotKey);
-            //TODO: REVISAR !!! Lo llama el 4 veces en lugar de una porque es un Singleton vuelve a computar (LOS TESTS NO SON INDEPENDEINTES) !!!
-            //expect(IoC4Javascript.prototype.getInstanceOf.calls.count()).toEqual(commonFakes.once);            
-            //// NO FUNCIONA !!! -> IoC4Javascript.prototype.getInstanceOf.calls.rest();
+            expect(sut.setState).toHaveBeenCalledWith(jasmine.any(Object));
+            expect(sut.setState.calls.count()).toEqual(commonFakes.once);
         });
         
-        it('With a "position" invokes the "setPosition" method from "UserShot" object', () => {
-            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
-            spyOn(UserShot.prototype, 'setPosition').and.callFake(() => {
-            });
-            spyOn(UserShot.prototype, 'startShotting').and.callFake(() => {
-            });
+        it('With the "state data" invokes the "getAngle" method from "UserSpaceShipMaths" object', () => {
             let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(() => {
+            });
+            spyOn(UserSpaceShipMaths.prototype, 'getAngle').and.callFake(() => {
+            });
+            spyOn(UserSpaceShipMaths.prototype, 'getRotation').and.callFake(() => {
+            });
             
             sut.startShotting();
             
-            expect(UserShot.prototype.setPosition).toHaveBeenCalledWith(sut.position);
+            expect(UserSpaceShipMaths.prototype.getAngle).toHaveBeenCalled();
+            expect(UserSpaceShipMaths.prototype.getAngle.calls.count()).toEqual(commonFakes.once);
         });
         
-        it('Without any parameter invokes the "startShotting" method from "UserShot" object', () => {
-            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
-            spyOn(UserShot.prototype, 'setPosition').and.callFake(() => {
-            });
-            spyOn(UserShot.prototype, 'startShotting').and.callFake(() => {
-            });
+        it('With the "state data" sets the "getRotation" method from "UserSpaceShipMaths" object', () => {
             let sut = new UserSpaceShip(commonFakes);
+            spyOn(sut, 'setState').and.callFake(() => {
+            });
+            spyOn(UserSpaceShipMaths.prototype, 'getAngle').and.callFake(() => {
+            });
+            spyOn(UserSpaceShipMaths.prototype, 'getRotation').and.callFake(() => {
+            });
             
             sut.startShotting();
             
-            expect(UserShot.prototype.startShotting).toHaveBeenCalled();
+            expect(UserSpaceShipMaths.prototype.getRotation).toHaveBeenCalled();
+            expect(UserSpaceShipMaths.prototype.getRotation.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With the "state data" sets the "state.shot" values', () => {
+            let sut = new UserSpaceShip(commonFakes);
+            sut.state = {
+                style: commonFakes.position
+            };
+            spyOn(sut, 'setState').and.callFake((state) => {
+                sut.state = state;
+            });
+            spyOn(UserSpaceShipMaths.prototype, 'getAngle').and.callFake(() => {
+                return commonFakes.flatAngleInRadians;
+            });
+            spyOn(UserSpaceShipMaths.prototype, 'getRotation').and.callFake(() => {
+                return commonFakes.flatAngleInDegrees;
+            });
+            
+            sut.startShotting();
+            
+            expect(sut.state.shot.left).toEqual(commonFakes.position.left);
+            expect(sut.state.shot.top).toEqual(commonFakes.position.top);
+            expect(sut.state.shot.angle).toEqual(commonFakes.flatAngleInRadians);
+            expect(sut.state.shot.rotation).toEqual(commonFakes.flatAngleInDegrees);
         });
     });
     

@@ -221,13 +221,23 @@ describe('UserSpaceShipMaths - ', () => {
             expect(Calculus.prototype.toDegrees.calls.count()).toEqual(commonFakes.once);
         });
         
-        it('Without any parameter returns the "rotation angle" value of the Space Ship', () => {            
+        it('Without parameters returns the "rotation angle" value of the Space Ship', () => {
             let sut = new UserSpaceShipMaths();
             let calculus = new Calculus();
             
             let result = sut.getRotation();
             
             expect(result).toEqual((-1 * calculus.toDegrees(commonFakes.ellipsePathInitialAngle) % (360)));
+        });
+    });
+    
+    describe('getAngle - ', () => {
+        it('Without parameters returns the "angle" value of the Space Ship', () => {
+            let sut = new UserSpaceShipMaths();
+            
+            let result = sut.getAngle();
+            
+            expect(result).toEqual(commonFakes.ellipsePathInitialAngle);            
         });
     });
     

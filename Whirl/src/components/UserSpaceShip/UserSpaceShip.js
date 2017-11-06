@@ -117,10 +117,7 @@ class UserSpaceShip extends Component {
     }
 
     startShotting() {
-        //let userShot = this.ioc.getInstanceOf('userShotKey');
-        //userShot.setPosition(this.position);
-        //userShot.startShotting();         
-        this.setState({// TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        this.setState({
             shot: {
                 left: this.state.style.left,
                 top: this.state.style.top,

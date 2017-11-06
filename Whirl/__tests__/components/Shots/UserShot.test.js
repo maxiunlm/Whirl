@@ -102,7 +102,7 @@ describe('UserShot - ', () => {
         it('Without any parameter calls "bind" method from "Function" object, then it sets the "shotInterval" value', () => {
             let sut = new UserShot(commonFakes);
             spyOn(window, 'setInterval').and.callFake(() => {
-                return commonFakes.EmptyObject;
+                return commonFakes.emptyObject;
             });
             spyOn(sut.doShot, 'bind').and.callFake(() => {
             });
@@ -127,7 +127,7 @@ describe('UserShot - ', () => {
 
             sut.doShot();
 
-            expect(ShotMaths.prototype.moveToNextEllipticalPosition).toHaveBeenCalled();                
+            expect(ShotMaths.prototype.moveToNextEllipticalPosition).toHaveBeenCalled();
             expect(ShotMaths.prototype.moveToNextEllipticalPosition.calls.count()).toEqual(commonFakes.once);
         });
 
@@ -148,15 +148,55 @@ describe('UserShot - ', () => {
         });
     });
     
-    describe('setPosition - ', () => {
-        it('with a "Position object" sets the position attribute of the object', () => {
+    describe('componentDidMount - ', () => {
+        it('Without parameters invokes "startShotting" from the "sut" object', () => {
             let sut = new UserShot(commonFakes);
-            let position = new Position();
-           
-            sut.setPosition(position);
+            spyOn(sut, 'startShotting').and.callFake(() => {
+            });
             
-            expect(sut.position).toEqual(position)
-            ;            
+            sut.componentDidMount();
+            
+            expect(sut.startShotting).toHaveBeenCalled();
+            expect(sut.startShotting.calls.count()).toEqual(commonFakes.once);
+        });
+    });
+    
+    
+    describe('componentWillUnmount - ', () => {
+        it('Without parameters invokes "stopShotting" from the "sut" object', () => {
+            let sut = new UserShot(commonFakes);
+            spyOn(sut, 'stopShotting').and.callFake(() => {
+            });
+            
+            sut.componentWillUnmount();
+            
+            expect(sut.stopShotting).toHaveBeenCalled();
+            expect(sut.stopShotting.calls.count()).toEqual(commonFakes.once);
+        });
+    });
+    
+    describe('stopShotting - ', () => {
+        it('With an "interval value" invokes the "clearInterval" from the "window" object', () => {
+            spyOn(window, 'clearInterval').and.callFake((interval) => {
+            });
+            let sut = new UserShot(commonFakes);
+            sut.shotInterval = commonFakes.emptyObjetc;
+            
+            sut.stopShotting();
+            
+            expect(window.clearInterval).toHaveBeenCalledWith(commonFakes.emptyObjetc);
+            expect(window.clearInterval.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('With an "interval value" calls the "clearInterval" from the "window" object, then clen the "shotInterval" value', () => {
+            spyOn(window, 'clearInterval').and.callFake((interval) => {
+            });
+            let sut = new UserShot(commonFakes);
+            sut.shotInterval = commonFakes.emptyObjetc;
+            
+            sut.stopShotting();
+            
+            expect(sut.shotInterval).toBeFalsy();
         });
     });
 });
