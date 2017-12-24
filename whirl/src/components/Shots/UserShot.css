@@ -1,0 +1,5 @@
+.userShot {
+    position: absolute;
+    z-index: 1200;
+    width: 6px;
+}
