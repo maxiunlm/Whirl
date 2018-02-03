@@ -330,34 +330,6 @@ describe('Aop4Javascript - ', () => {
             });
         });
     });
+    
+    // TODO: Retry Manager !!!
 });
-
-/* 
- 
- /////////////////////////////////////////////////////
- console.log(' P R U  E B A    A O P   F U N  C T I O N  ! ! ! ');
- 
- function hello() {
- throw 'lalalala';
- console.log('World!!!');
- }
- 
- aop.wrap(aop.getAopConfigParameters(
- null,
- hello,
- function() {
- console.log('before!!!');
- },
- null,
- function (e) {
- console.log('MyClass Exception: ', e);
- },
- null,
- null,
- true
- ));
- 
- hello();
- */
-
-
