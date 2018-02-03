@@ -26,7 +26,7 @@ describe('APP - ', () => {
             expect(sut.actions.stopMovingUserSpaceShipToRight instanceof Function).toBeTruthy();
             expect(sut.actions.stopMovingUserSpaceShip instanceof Function).toBeTruthy();
             expect(sut.actions.startShotting instanceof Function).toBeTruthy();
-            expect(sut.actions.stopShotting instanceof Function).toBeTruthy();
+//            expect(sut.actions.stopShotting instanceof Function).toBeTruthy();
         });
         
         it('With "props" parameters initialises the events', () => {
@@ -136,16 +136,16 @@ describe('APP - ', () => {
             expect(sut.actions.stopMovingUserSpaceShip.calls.count()).toEqual(commonFakes.once);
         });
         
-        it('When the application catches the "Space Bar Keyboard Press Up" event, then it invokes the "stopShotting" method from the "actions" object', () => {
-            let sut = new App(commonFakes.props);
-            spyOn(sut.actions, 'stopShotting').and.callFake(() => {
-            });
-            
-            sut.catchKeyUpEvent(commonFakes.eventSpaceBarKeyCode);
-            
-            expect(sut.actions.stopShotting).toHaveBeenCalled();
-            expect(sut.actions.stopShotting.calls.count()).toEqual(commonFakes.once);
-        });
+//        it('When the application catches the "Space Bar Keyboard Press Up" event, then it invokes the "stopShotting" method from the "actions" object', () => {
+//            let sut = new App(commonFakes.props);
+//            spyOn(sut.actions, 'stopShotting').and.callFake(() => {
+//            });
+//            
+//            sut.catchKeyUpEvent(commonFakes.eventSpaceBarKeyCode);
+//            
+//            expect(sut.actions.stopShotting).toHaveBeenCalled();
+//            expect(sut.actions.stopShotting.calls.count()).toEqual(commonFakes.once);
+//        });
         
         it('With a "keyboard event" invokes the "preventDefault" method from the "event" object', () => {
             let sut = new App(commonFakes.props);

@@ -48,6 +48,8 @@ describe('UserSpaceShip - ', () => {
             expect(sut.movementInterval).toEqual(commonFakes.movementInterval);
             expect(sut.maths instanceof UserSpaceShipMaths).toBeTruthy();
             expect(sut.state instanceof Object).toBeTruthy();
+            expect(sut.actions instanceof Object).toBeTruthy();
+            expect(sut.actions.stopShotting instanceof Function).toBeTruthy();
             expect(sut.state.shots).toBeFalsy();
             expect(sut.state.style instanceof Object).toBeTruthy();
             expect(sut.state.style.width).toEqual(commonFakes.userSpaceShipWidth);
@@ -286,9 +288,6 @@ describe('UserSpaceShip - ', () => {
             spyOn(sut.startShotting, 'bind').and.callFake(() => {
                 calledTimes++;
             });
-            spyOn(sut.stopShotting, 'bind').and.callFake(() => {
-                calledTimes++;
-            });
             
             sut.componentDidMount();
             
@@ -304,9 +303,7 @@ describe('UserSpaceShip - ', () => {
             expect(sut.stopMoving.bind.calls.count()).toEqual(commonFakes.once);
             expect(sut.startShotting.bind).toHaveBeenCalled();
             expect(sut.startShotting.bind.calls.count()).toEqual(commonFakes.once);
-            expect(sut.stopShotting.bind).toHaveBeenCalled();
-            expect(sut.stopShotting.bind.calls.count()).toEqual(commonFakes.once);
-            expect(calledTimes).toEqual(commonFakes.sevenTimes);
+            expect(calledTimes).toEqual(commonFakes.sixTimes);
         });
     });
     
@@ -1111,12 +1108,6 @@ describe('UserSpaceShip - ', () => {
             expect(sut.state.shot.top).toEqual(commonFakes.position.top);
             expect(sut.state.shot.angle).toEqual(commonFakes.flatAngleInRadians);
             expect(sut.state.shot.rotation).toEqual(commonFakes.flatAngleInDegrees);
-        });
-    });
-    
-    describe('stopShotting - ', () => {
-        it(' - ', () => {
-            
         });
     });
 });

@@ -13,13 +13,14 @@ class UserShot extends Component {
             image: '/images/userShot.png'
         };
                 
+        //    throw '-' + JSON.stringify(props.shot) + '-';
         if(!!props.shot) {            
             this.maths.setAngle(props.shot.angle);
             let style = {
                 top: props.shot.top,
                 left: props.shot.left
             };
-            
+                        
             this.state.style = style;
         }
     }
@@ -38,6 +39,10 @@ class UserShot extends Component {
     
     doShot() {
         let position = this.maths.moveToNextEllipticalPosition();
+        
+        // TODO: si la postion esta cerca del centro:
+        // this.props.actions.stopShotting(this);
+        
         this.setState({
             style: {
                 top: position.top,
@@ -48,6 +53,7 @@ class UserShot extends Component {
     
     componentDidMount() {
         this.startShotting();
+        // REVISAR ??? -> this.props.actions.stopShotting = this.stopShotting.bind(this);
     }
     
     componentWillUnmount() {

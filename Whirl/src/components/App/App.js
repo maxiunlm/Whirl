@@ -22,8 +22,7 @@ class App extends Component {
             },
             startShotting: () => {
             },
-            stopShotting: () => {
-            }
+            //stopShotting: () => {            }
         };
 
         this.spaceBarKeyCode = 32;
@@ -49,9 +48,9 @@ class App extends Component {
 //                 break;
 //                 case downKeyCode:
 //                 break;
-            case this.spaceBarKeyCode:
-                this.actions.stopShotting();
-                break;
+//            case this.spaceBarKeyCode:
+//                this.actions.stopShotting();
+//                break;
             default:
                 break;
         }
@@ -89,6 +88,8 @@ class App extends Component {
     }
 
     render() {
+        // actionStop={(event) => this.actions.stopShotting(event) }
+        // actionStop={(event) => this.actions.stopShotting(event) }
         return(
                 <div>
                     <UserSpaceShip actions={this.actions} />
@@ -100,8 +101,7 @@ class App extends Component {
                         <br/>
                         <br/>
                         <ShotButton
-                            actionStart={(event) => this.actions.startShotting(event) }
-                            actionStop={(event) => this.actions.stopShotting(event) }/>
+                            actionStart={(event) => this.actions.startShotting(event) } />
                     </div>
                     
                     <div className="rightCircleButtons">
@@ -112,8 +112,7 @@ class App extends Component {
                         <br/>
                         <br/>
                         <ShotButton
-                            actionStart={(event) => this.actions.startShotting(event) }
-                            actionStop={(event) => this.actions.stopShotting(event) }/>
+                            actionStart={(event) => this.actions.startShotting(event) }/>
                     </div>
                 </div>
                 );
