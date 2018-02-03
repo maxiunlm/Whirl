@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './FlatCircleButtons.css';
 
-class LeftDirection extends Component {
+class RightDirection extends Component {
     constructor(props) {
         super(props);
     }
@@ -16,13 +16,13 @@ class LeftDirection extends Component {
                         onMouseOut={this.props.actionStop}
                         onMouseUp={this.props.actionStop}
                         >
-                    <img id="leftDirection"
-                        className="flatCircleButton"
+                    <img id="rightDirection"
+                         className="flatCircleButton"
                         src="/images/Cicle-50percent-opacity.png"
-                        alt="&lt;"/>
+                        alt="&gt;"/>
                 </button>
                 );
     }
-};
+}
 
-export default LeftDirection;
+export default RightDirection;
