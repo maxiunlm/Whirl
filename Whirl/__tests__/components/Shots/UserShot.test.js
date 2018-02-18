@@ -1,4 +1,4 @@
-/* global expect, spyOn, jasmine, Function */
+/* global expect, spyOn, jasmine, Function, Dimensions, EllipsePath */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -27,6 +27,7 @@ describe('UserShot - ', () => {
             expect(sut.maths instanceof ShotMaths).toBeTruthy();
             expect(sut.ioc instanceof IoC4Javascript).toBeTruthy();
             expect(sut.movementInterval).toEqual(commonFakes.movementInterval);
+            expect(sut.actions).toEqual(commonFakes.props.actions);
             expect(sut.state.image).toEqual(commonFakes.userShotImage);
             expect(sut.state.style.left).toEqual(commonFakes.positionLeft);
             expect(sut.state.style.top).toEqual(commonFakes.positionTop);
@@ -41,6 +42,17 @@ describe('UserShot - ', () => {
             expect(sut.movementInterval).toEqual(commonFakes.movementInterval);
             expect(sut.state.image).toEqual(commonFakes.userShotImage);
             expect(sut.state.style).toEqual(undefined);
+        });
+        
+        it('Without any parameterinvokes the "getDimensions" method from the "sut" object', () => {
+            spyOn(EllipsePath.prototype, 'getDimensions').and.callFake(() => {
+                return new Dimensions();
+            });
+            
+            new UserShot(new Object());
+            
+            expect(EllipsePath.prototype.getDimensions).toHaveBeenCalled();
+            expect(EllipsePath.prototype.getDimensions.calls.count()).toEqual(commonFakes.once);
         });
     });
     
@@ -134,7 +146,7 @@ describe('UserShot - ', () => {
         it('without any parameter invokes "moveToNextEllipticalPosition" which returns the new Position', () => {
             let setStateParameter;
             let sut = new UserShot(commonFakes);
-            spyOn(ShotMaths.prototype, 'moveToNextEllipticalPosition').and.callFake(() => {                    
+            spyOn(ShotMaths.prototype, 'moveToNextEllipticalPosition').and.callFake(() => {
                 return commonFakes.position;
             });
             spyOn(UserShot.prototype, 'setState').and.callFake((state) => {
@@ -145,6 +157,30 @@ describe('UserShot - ', () => {
 
             expect(setStateParameter.style.top).toEqual(commonFakes.position.top);
             expect(setStateParameter.style.left).toEqual(commonFakes.position.left);
+        });
+ 
+        it('when the top position is less than 10px to center point, then invokes "stopShotting" method from "actions" object', () => {
+            let sut = new UserShot(commonFakes);
+            spyOn(commonFakes.actions, 'stopShotting').and.callThrough();
+            spyOn(ShotMaths.prototype, 'moveToNextEllipticalPosition').and.callFake(() => {                    
+                return commonFakes.position; // TODO: ~= centerY
+            });
+            sut.doShot();
+
+            expect(commonFakes.actions.stopShotting).toHaveBeenCalled();
+            expect(commonFakes.actions.stopShotting.calls.count()).toEqual(commonFakes.once);
+        });
+        
+        it('when the left position is less than 10px to center point, then invokes "stopShotting" method from "actions" object', () => {
+            let sut = new UserShot(commonFakes);
+            spyOn(commonFakes.actions, 'stopShotting').and.callThrough();
+            spyOn(ShotMaths.prototype, 'moveToNextEllipticalPosition').and.callFake(() => {                    
+                return commonFakes.position; // TODO: ~= centerX
+            });
+            sut.doShot();
+
+            expect(commonFakes.actions.stopShotting).toHaveBeenCalled();
+            expect(commonFakes.actions.stopShotting.calls.count()).toEqual(commonFakes.once);
         });
     });
     
@@ -160,7 +196,6 @@ describe('UserShot - ', () => {
             expect(sut.startShotting.calls.count()).toEqual(commonFakes.once);
         });
     });
-    
     
     describe('componentWillUnmount - ', () => {
         it('Without parameters invokes "stopShotting" from the "sut" object', () => {
@@ -197,6 +232,27 @@ describe('UserShot - ', () => {
             sut.stopShotting();
             
             expect(sut.shotInterval).toBeFalsy();
+        });
+    });
+    
+    describe('getDimensions - ', () => {
+        
+        it('With "dimensionsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
+            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
+            let sut = new UserShot(commonFakes);
+            
+            sut.getDimensions();
+            
+            expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.dimensionsKey);
+        });
+        
+        it('With "dimensionsKey" string key calls the "getInstanceOf" method from "IoC4Javascript" object wich returns an "Dimensions" instance', () => {
+            spyOn(IoC4Javascript.prototype, 'getInstanceOf').and.callThrough();
+            let sut = new UserShot(commonFakes);
+            
+            let result = sut.getDimensions();
+            
+            expect(result instanceof Dimensions).toBeTruthy();
         });
     });
 });

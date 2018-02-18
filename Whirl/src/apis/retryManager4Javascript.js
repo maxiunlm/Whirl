@@ -11,6 +11,7 @@ class RetryManager4Javascript {
         this.retryMessage = retryManagerConfiguration.retryMessage;
         this.onRetryEvent = retryManagerConfiguration.onRetryEvent;
         this.onStopRetryingEvent = retryManagerConfiguration.onStopRetryingEvent;
+        this.confirmAction = retryManagerConfiguration.confirmAction || this.defaultConfirmAction.bind(this);
     }
 
     validateRetryManagerConfiguration(retryManagerConfiguration) {
@@ -18,8 +19,12 @@ class RetryManager4Javascript {
             throw new TypeError('ERROR [validateRetryManagerConfiguration]: The "retryManagerConfiguration" object must be an instance of the "RetryManagerConfiguration" class.');
         }
     }
+    
+    setMaxAttemps(maxAttemps) {
+        this.maxAttemps = maxAttemps || 3;
+    }
 
-    getHasAnotherAttempt(exception, startValue) {
+    getHasAnotherAttempt(exception) {
         this.counterAttempIndex++;
         this.hasAnotherAttempt = this.counterAttempIndex <= this.maxAttemps;
 
@@ -28,7 +33,7 @@ class RetryManager4Javascript {
                 (exception.message || exception) +
                 '\n' + this.retryMessage;
 
-            if (confirm(message) && !!this.onRetryEvent) {
+            if (this.confirmAction(message) && !!this.onRetryEvent) {
                 this.onRetryEvent();
             } else if (this.onStopRetryingEvent) {
                 this.onStopRetryingEvent();
@@ -37,6 +42,10 @@ class RetryManager4Javascript {
         }
 
         return this.hasAnotherAttempt;
+    }
+    
+    defaultConfirmAction(message) {
+        return confirm(message);
     }
 
     resetCounterAttempIndex(startValue) {

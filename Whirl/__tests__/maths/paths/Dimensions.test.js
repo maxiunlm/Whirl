@@ -13,6 +13,8 @@ describe('Dimensions - ', () => {
             
             expect(sut.width).toEqual(commonFakes.gameWidth);
             expect(sut.height).toEqual(commonFakes.gameHeight);
+            expect(sut.centerX).toEqual(commonFakes.gameWidth / 2);
+            expect(sut.centerY).toEqual(commonFakes.gameHeight / 2);
         });
         
         it('Without any dimension sets the instance attributes to 0 (zero)', () => {
