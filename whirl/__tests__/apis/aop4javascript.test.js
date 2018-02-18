@@ -1,7 +1,7 @@
 /* global expect, spyOn */
 
 import ApiFakes from '../../Selenium/Fakes/apiFakes';
-import AopConfigParameters from '../../src/apis/aopConfigParameter';
+import AopConfigParameters from '../../src/apis/aopConfigParameters';
 import Aop4Javascript from '../../src/apis/aop4javascript';
 
 window['myFunction'] = function () {
