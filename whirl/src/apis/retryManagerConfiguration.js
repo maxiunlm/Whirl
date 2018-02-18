@@ -4,16 +4,24 @@ class RetryManagerConfiguration {
         this.hasAnotherAttempt = false;
         this.exceptionMessage = exceptionMessage || 'There was an error: ';
         this.retryMessage = retryMessage || 'Retry?';
-        this.onRetryEvent = onRetryEvent || false;
-        this.onStopRetryingEvent = onStopRetryingEvent || false;
-        this.confirmAction = confirmAction || false;
+        this.setConfirmAction(confirmAction);
+        this.onRetryEvent = onRetryEvent || this.defaultEvent.bind(this);
+        this.onStopRetryingEvent = onStopRetryingEvent || this.defaultEvent.bind(this);
         this.setMaxAttemps(maxAttemps);
 
         this.validateConfiguration();
     }
     
+    setConfirmAction(confirmAction) {
+        this.confirmAction = confirmAction || false;
+    }
+    
     setMaxAttemps(maxAttemps) {
         this.maxAttemps = maxAttemps || 3;
+    }
+    
+    defaultEvent() {
+        return true;
     }
 
     validateConfiguration() {

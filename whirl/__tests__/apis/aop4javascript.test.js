@@ -339,8 +339,9 @@ describe('Aop4Javascript - ', () => {
             spyOn(apiFakes, 'exceptionCallback').and.callThrough();
             spyOn(apiFakes, 'finallyCallback').and.callThrough();
             spyOn(apiFakes, 'wrapperCallback').and.callThrough();
-            spyOn(apiFakes.MySecondClass.prototype, 'exceptionTest').and.callFake(() => {
+            spyOn(apiFakes.MySecondClass.prototype, 'exceptionTest').and.callFake(function () {
                 called++;
+                throw Error('the exception was throwed successfully');
             });
             let aop = new Aop4Javascript();
             aop.wrap(aop.getAopConfigParameters(
@@ -352,6 +353,9 @@ describe('Aop4Javascript - ', () => {
                     apiFakes.finallyCallback,
                     apiFakes.wrapperCallback,
                     true));
+            aop.setConfirmAction(() => {
+                return true;
+            });
             let sut = new apiFakes.MySecondClass();
 
             try {
@@ -372,6 +376,7 @@ describe('Aop4Javascript - ', () => {
             spyOn(apiFakes, 'wrapperCallback').and.callThrough();
             spyOn(apiFakes.MySecondClass.prototype, 'exceptionTest').and.callFake(() => {
                 called++;
+                throw Error('the exception was throwed successfully');
             });
             let aop = new Aop4Javascript();
             aop.wrap(aop.getAopConfigParameters(
@@ -383,13 +388,15 @@ describe('Aop4Javascript - ', () => {
                     apiFakes.finallyCallback,
                     apiFakes.wrapperCallback,
                     true));
+            aop.setConfirmAction(function () {
+                return true;
+            });
             aop.setMaxAttemps(apiFakes.twice);
             let sut = new apiFakes.MySecondClass();
 
             try {
                 sut.exceptionTest();
             } catch (e) {
-                
             }
 
             expect(called).toEqual(apiFakes.twice);

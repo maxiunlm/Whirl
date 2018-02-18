@@ -4,14 +4,15 @@ class RetryManager4Javascript {
     constructor(retryManagerConfiguration) {
         this.validateRetryManagerConfiguration(retryManagerConfiguration);
 
-        this.counterAttempIndex = retryManagerConfiguration.startValue;
+        this.counterAttempIndex = retryManagerConfiguration.startValue || 0;
         this.hasAnotherAttempt = retryManagerConfiguration.hasAnotherAttempt;
         this.maxAttemps = retryManagerConfiguration.maxAttemps;
         this.exceptionMessage = retryManagerConfiguration.exceptionMessage;
         this.retryMessage = retryManagerConfiguration.retryMessage;
         this.onRetryEvent = retryManagerConfiguration.onRetryEvent;
         this.onStopRetryingEvent = retryManagerConfiguration.onStopRetryingEvent;
-        this.confirmAction = retryManagerConfiguration.confirmAction || this.defaultConfirmAction.bind(this);
+        this.setConfirmAction(false, retryManagerConfiguration);
+        this.getHasAnotherAttempt = this.getHasAnotherAttempt.bind(this);
     }
 
     validateRetryManagerConfiguration(retryManagerConfiguration) {
@@ -21,13 +22,20 @@ class RetryManager4Javascript {
     }
     
     setMaxAttemps(maxAttemps) {
+        //console.log('setMaxAttemps: ' + maxAttemps);
         this.maxAttemps = maxAttemps || 3;
+    }
+    
+    setConfirmAction(confirmAction, retryManagerConfiguration) {
+        this.confirmAction = confirmAction 
+                || retryManagerConfiguration.confirmAction
+                || this.defaultConfirmAction.bind(this);
     }
 
     getHasAnotherAttempt(exception) {
         this.counterAttempIndex++;
-        this.hasAnotherAttempt = this.counterAttempIndex <= this.maxAttemps;
-
+        this.hasAnotherAttempt = this.counterAttempIndex < this.maxAttemps;
+        
         if (this.hasAnotherAttempt) {
             let message = this.exceptionMessage +
                 (exception.message || exception) +
@@ -41,6 +49,7 @@ class RetryManager4Javascript {
             }
         }
 
+        //console.log('hasAnotherAttempt: ' + this.hasAnotherAttempt + '; counterAttempIndex: ' + this.counterAttempIndex);
         return this.hasAnotherAttempt;
     }
     

@@ -68,8 +68,9 @@ class Aop4Javascript extends UtilsBase4Javascript {
                 hasPassedAfter = true;
             }
         } catch (e) {
-            //console.log('EXCEPTION [wrapper]', e);
+            //console.log('mustUseRetryManager: ' + !!this.mustUseRetryManager);
             if (!!this.mustUseRetryManager && this.retryManager.getHasAnotherAttempt(e)) {
+                //console.log('Retry!');
                 this.wrapper(hasPassedBefore, hasPassedMethodReference, hasPassedAfter, hasPassedFinally);
                 return;
             }
@@ -97,6 +98,10 @@ class Aop4Javascript extends UtilsBase4Javascript {
     
     setMaxAttemps(maxAttemps) {
         this.aopConfigParameters.setMaxAttemps(maxAttemps);
+    }
+    
+    setConfirmAction(confirmAction) {
+        this.aopConfigParameters.setConfirmAction(confirmAction);
     }
 
     intercept(aopConfigParameters) {
