@@ -383,7 +383,9 @@ describe('Aop4Javascript - ', () => {
 
             try {
                 sut.exceptionTest();
-            } catch (e) {}
+            } catch (e) {
+                
+            }
 
             expect(apiFakes.MySecondClass.prototype.exceptionTest).toHaveBeenCalled();
             expect(apiFakes.MySecondClass.prototype.exceptionTest.calls.count()).toEqual(apiFakes.twice);
