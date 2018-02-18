@@ -1,4 +1,4 @@
-import AopConfigParameters from './aopconfigparameters';
+import AopConfigParameters from './aopConfigParameters';
 import UtilsBase4Javascript from './utilbase4javascript';
 
 class Aop4Javascript extends UtilsBase4Javascript {
@@ -93,6 +93,10 @@ class Aop4Javascript extends UtilsBase4Javascript {
                 }
             }
         }
+    }
+    
+    setMaxAttemps(maxAttemps) {
+        this.aopConfigParameters.setMaxAttemps(maxAttemps);
     }
 
     intercept(aopConfigParameters) {

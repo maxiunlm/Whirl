@@ -1,6 +1,8 @@
 class ApiFakes {
     constructor() {
+        this.defaultMaxAttemps = 3;
         this.once = 1;
+        this.twice = 2;
         this.param1 = 'param1';
         this.param2 = 'param2';
         

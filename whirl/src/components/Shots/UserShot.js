@@ -8,30 +8,25 @@ class UserShot extends Component {
         
         this.ioc = new IoC4Javascript();
         this.maths = this.getNewShotMaths();
-        this.dimensions = this.getDimensions();
-        this.movementInterval = 0.04;
-        this.actions = props.actions;
+        this.movementInterval = 0.04;        
         this.state = {
-            image: '/images/userShoot.png'
+            image: '/images/userShot.png'
         };
                 
+        //    throw '-' + JSON.stringify(props.shot) + '-';
         if(!!props.shot) {            
             this.maths.setAngle(props.shot.angle);
             let style = {
                 top: props.shot.top,
                 left: props.shot.left
             };
-            
+                        
             this.state.style = style;
         }
     }
     
     getNewShotMaths () {
         return this.ioc.getInstanceOf('shotMathsKey');
-    }
-    
-    getDimensions() {
-        return this.ioc.getInstanceOf('dimensionsKey');
     }
 
     startShotting() {
@@ -44,23 +39,21 @@ class UserShot extends Component {
     
     doShot() {
         let position = this.maths.moveToNextEllipticalPosition();
+        
+        // TODO: si la postion esta cerca del centro:
+        // this.props.actions.stopShotting(this);
+        
         this.setState({
             style: {
                 top: position.top,
                 left: position.left
             }
         });
-        
-        if(position.top < this.dimensions.centerY + 10 // TODO: hacer método dimsnsions.isCloseToCenterScreenPoint(point)
-            && position.top > this.dimensions.centerY - 10
-            && position.left < this.dimensions.centerX + 10
-            && position.left > this.dimensions.centerX - 10) {
-            this.actions.stopShotting();
-        }
     }
     
     componentDidMount() {
         this.startShotting();
+        // REVISAR ??? -> this.props.actions.stopShotting = this.stopShotting.bind(this);
     }
     
     componentWillUnmount() {

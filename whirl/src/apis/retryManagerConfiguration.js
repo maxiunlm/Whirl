@@ -1,5 +1,5 @@
 class RetryManagerConfiguration {
-    constructor(maxAttemps, retryMessage, exceptionMessage, startValue, onRetryEvent, onStopRetryingEvent) {
+    constructor(maxAttemps, retryMessage, exceptionMessage, startValue, onRetryEvent, onStopRetryingEvent, confirmAction) {
         this.startValue = startValue || 0;
         this.hasAnotherAttempt = false;
         this.maxAttemps = maxAttemps || 3;
@@ -7,6 +7,7 @@ class RetryManagerConfiguration {
         this.retryMessage = retryMessage || 'Retry?';
         this.onRetryEvent = onRetryEvent || false;
         this.onStopRetryingEvent = onStopRetryingEvent || false;
+        this.confirmAction = confirmAction || false;
 
         this.validateConfiguration();
     }

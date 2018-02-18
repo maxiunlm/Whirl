@@ -1,5 +1,5 @@
 import UtilsBase4Javascript from './utilbase4javascript';
-import AopConfigParameters from './aopconfigparameters';
+import AopConfigParameters from './aopConfigParameters';
 import Aop4Javascript from './aop4javascript';
 import Mapper4Javascript from './mapper4javascript';
 

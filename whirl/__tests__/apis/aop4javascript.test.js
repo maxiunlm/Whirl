@@ -1,7 +1,7 @@
 /* global expect, spyOn */
 
 import ApiFakes from '../../Selenium/Fakes/apiFakes';
-import AopConfigParameters from '../../src/apis/aopconfigparameters';
+import AopConfigParameters from '../../src/apis/aopConfigParameters';
 import Aop4Javascript from '../../src/apis/aop4javascript';
 
 window['myFunction'] = function () {
@@ -331,5 +331,63 @@ describe('Aop4Javascript - ', () => {
         });
     });
     
-    // TODO: Retry Manager !!!
+    describe('Retry Manager - ', () => {
+        it('With the "mustUseRetryManager === true" when there is an exception then the App retry calling the method call "defaultMaxAttemps" times', () => {
+            spyOn(apiFakes, 'beforeCallback').and.callThrough();
+            spyOn(apiFakes, 'afterCallback').and.callThrough();
+            spyOn(apiFakes, 'exceptionCallback').and.callThrough();
+            spyOn(apiFakes, 'finallyCallback').and.callThrough();
+            spyOn(apiFakes, 'wrapperCallback').and.callThrough();
+            spyOn(apiFakes.MySecondClass, 'exceptionTest').and.callThrough();
+            let aop = new Aop4Javascript();
+            aop.wrap(aop.getAopConfigParameters(
+                    apiFakes.MySecondClass,
+                    'exceptionTest',
+                    apiFakes.beforeCallback,
+                    apiFakes.afterCallback,
+                    apiFakes.exceptionCallback,
+                    apiFakes.finallyCallback,
+                    apiFakes.wrapperCallback,
+                    true));
+            let sut = new apiFakes.MySecondClass();
+
+            try {
+                sut.exceptionTest();
+            } catch (e) {
+            }
+
+            expect(apiFakes.MySecondClass.exceptionTest).toHaveBeenCalled();
+            expect(apiFakes.beforeCallback.calls.count()).toEqual(apiFakes.defaultMaxAttemps);
+        });
+        
+        
+        it('With twice "attemps" configured when there is an exception then the App retry calling the method call "defaultMaxAttemps" times', () => {
+            spyOn(apiFakes, 'beforeCallback').and.callThrough();
+            spyOn(apiFakes, 'afterCallback').and.callThrough();
+            spyOn(apiFakes, 'exceptionCallback').and.callThrough();
+            spyOn(apiFakes, 'finallyCallback').and.callThrough();
+            spyOn(apiFakes, 'wrapperCallback').and.callThrough();
+            spyOn(apiFakes.MySecondClass, 'exceptionTest').and.callThrough();
+            let aop = new Aop4Javascript();
+            aop.wrap(aop.getAopConfigParameters(
+                    apiFakes.MySecondClass,
+                    'exceptionTest',
+                    apiFakes.beforeCallback,
+                    apiFakes.afterCallback,
+                    apiFakes.exceptionCallback,
+                    apiFakes.finallyCallback,
+                    apiFakes.wrapperCallback,
+                    true));
+            aop.setMaxAttemps(apiFakes.twice);
+            let sut = new apiFakes.MySecondClass();
+
+            try {
+                sut.exceptionTest();
+            } catch (e) {
+            }
+
+            expect(apiFakes.MySecondClass.exceptionTest).toHaveBeenCalled();
+            expect(apiFakes.beforeCallback.calls.count()).toEqual(apiFakes.twice);
+        });
+    });
 });

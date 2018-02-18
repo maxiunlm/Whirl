@@ -9,6 +9,10 @@ class UserSpaceShip extends Component {
     constructor(props) {
         super(props);
         
+        this.actions = {
+            stopShotting: this.stopShotting.bind(this) // TODO: TDD !!!!
+        };        
+        
         this.ioc = new IoC4Javascript();
         this.maths = this.getNewUserSpaceShipMaths();
         this.movementInterval = 0.04;
@@ -127,8 +131,10 @@ class UserSpaceShip extends Component {
         });
     }
 
-    stopShotting() {
-        // TODO: TDD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    stopShotting(shot) { // TODO: TDD !!!
+        shot.stopShotting();
+        
+        // TODO: isdentificar el SHOT en particular y sacarlo de la lista de SHOTs !!!!
     }
 
     componentDidMount() {
@@ -138,15 +144,15 @@ class UserSpaceShip extends Component {
         this.props.actions.stopMovingUserSpaceShipToRight = this.stopMovingToRight.bind(this);
         this.props.actions.stopMovingUserSpaceShip = this.stopMoving.bind(this);
         this.props.actions.startShotting = this.startShotting.bind(this);
-        this.props.actions.stopShotting = this.stopShotting.bind(this);
     }
 
     render() {
         let shot = '';
         
+        // TODO: poner el SHOT de una lista de SHOTs
         if(!!this.state.shot) {// TODO: TDD !!!!!!!!!!!!!!!
-            shot = <UserShot shot={this.state.shot} actions={this.props.actions} />;
-        } 
+            shot = <UserShot shot={this.state.shot} actions={this.actions} />;
+        }
     
         return (
                 <div id="userSpaceShipContainer">

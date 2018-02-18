@@ -121,9 +121,7 @@ class CommonFakes {
         this.userShotImage = '/images/userShot.png';
         this.userSpaceShipHeight = 70;
         this.userSpaceShipWidth = 40;
-        this.actions = {
-            stopShotting: () => { }
-        };
+        this.actions = {};
         this.movementInterval = 0.04;
     }
     
@@ -141,7 +139,7 @@ class CommonFakes {
         this.positionLeft = 1;
         this.positionTop = 2;
         this.position = {top: this.positionTop, left: this.positionLeft};
-        this.props.shot = this.position;
+        this.shot = this.position;
         this.stateChangedPosition = {
             style: {
                 width: this.userSpaceShipWidth,
