@@ -338,7 +338,7 @@ describe('Aop4Javascript - ', () => {
             spyOn(apiFakes, 'exceptionCallback').and.callThrough();
             spyOn(apiFakes, 'finallyCallback').and.callThrough();
             spyOn(apiFakes, 'wrapperCallback').and.callThrough();
-            spyOn(apiFakes.MySecondClass, 'exceptionTest').and.callThrough();
+            spyOn(apiFakes.MySecondClass.prototype, 'exceptionTest').and.callThrough();
             let aop = new Aop4Javascript();
             aop.wrap(aop.getAopConfigParameters(
                     apiFakes.MySecondClass,
@@ -356,8 +356,8 @@ describe('Aop4Javascript - ', () => {
             } catch (e) {
             }
 
-            expect(apiFakes.MySecondClass.exceptionTest).toHaveBeenCalled();
-            expect(apiFakes.beforeCallback.calls.count()).toEqual(apiFakes.defaultMaxAttemps);
+            expect(apiFakes.MySecondClass.prototype.exceptionTest).toHaveBeenCalled();
+            expect(apiFakes.MySecondClass.prototype.exceptionTest.calls.count()).toEqual(apiFakes.defaultMaxAttemps);
         });
         
         
@@ -367,7 +367,7 @@ describe('Aop4Javascript - ', () => {
             spyOn(apiFakes, 'exceptionCallback').and.callThrough();
             spyOn(apiFakes, 'finallyCallback').and.callThrough();
             spyOn(apiFakes, 'wrapperCallback').and.callThrough();
-            spyOn(apiFakes.MySecondClass, 'exceptionTest').and.callThrough();
+            spyOn(apiFakes.MySecondClass.prototype, 'exceptionTest').and.callThrough();
             let aop = new Aop4Javascript();
             aop.wrap(aop.getAopConfigParameters(
                     apiFakes.MySecondClass,
@@ -383,11 +383,10 @@ describe('Aop4Javascript - ', () => {
 
             try {
                 sut.exceptionTest();
-            } catch (e) {
-            }
+            } catch (e) {}
 
-            expect(apiFakes.MySecondClass.exceptionTest).toHaveBeenCalled();
-            expect(apiFakes.beforeCallback.calls.count()).toEqual(apiFakes.twice);
+            expect(apiFakes.MySecondClass.prototype.exceptionTest).toHaveBeenCalled();
+            expect(apiFakes.MySecondClass.prototype.exceptionTest.calls.count()).toEqual(apiFakes.twice);
         });
     });
 });
