@@ -333,12 +333,15 @@ describe('Aop4Javascript - ', () => {
     
     describe('Retry Manager - ', () => {
         it('With the "mustUseRetryManager === true" when there is an exception then the App retry calling the method call "defaultMaxAttemps" times', () => {
+            let called = 0;
             spyOn(apiFakes, 'beforeCallback').and.callThrough();
             spyOn(apiFakes, 'afterCallback').and.callThrough();
             spyOn(apiFakes, 'exceptionCallback').and.callThrough();
             spyOn(apiFakes, 'finallyCallback').and.callThrough();
             spyOn(apiFakes, 'wrapperCallback').and.callThrough();
-            spyOn(apiFakes.MySecondClass.prototype, 'exceptionTest').and.callThrough();
+            spyOn(apiFakes.MySecondClass.prototype, 'exceptionTest').and.callFake(() => {
+                called++;
+            });
             let aop = new Aop4Javascript();
             aop.wrap(aop.getAopConfigParameters(
                     apiFakes.MySecondClass,
@@ -356,18 +359,20 @@ describe('Aop4Javascript - ', () => {
             } catch (e) {
             }
 
-            expect(apiFakes.MySecondClass.prototype.exceptionTest).toHaveBeenCalled();
-            expect(apiFakes.MySecondClass.prototype.exceptionTest.calls.count()).toEqual(apiFakes.defaultMaxAttemps);
+            expect(called).toEqual(apiFakes.defaultMaxAttemps);
         });
         
         
         it('With twice "attemps" configured when there is an exception then the App retry calling the method call "defaultMaxAttemps" times', () => {
+            let called = 0;
             spyOn(apiFakes, 'beforeCallback').and.callThrough();
             spyOn(apiFakes, 'afterCallback').and.callThrough();
             spyOn(apiFakes, 'exceptionCallback').and.callThrough();
             spyOn(apiFakes, 'finallyCallback').and.callThrough();
             spyOn(apiFakes, 'wrapperCallback').and.callThrough();
-            spyOn(apiFakes.MySecondClass.prototype, 'exceptionTest').and.callThrough();
+            spyOn(apiFakes.MySecondClass.prototype, 'exceptionTest').and.callFake(() => {
+                called++;
+            });
             let aop = new Aop4Javascript();
             aop.wrap(aop.getAopConfigParameters(
                     apiFakes.MySecondClass,
@@ -387,8 +392,7 @@ describe('Aop4Javascript - ', () => {
                 
             }
 
-            expect(apiFakes.MySecondClass.prototype.exceptionTest).toHaveBeenCalled();
-            expect(apiFakes.MySecondClass.prototype.exceptionTest.calls.count()).toEqual(apiFakes.twice);
+            expect(called).toEqual(apiFakes.twice);
         });
     });
 });

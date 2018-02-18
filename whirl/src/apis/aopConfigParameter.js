@@ -10,10 +10,8 @@ class AopConfigParameters {
             exceptionCallback,
             finallyCallback,
             wrapperCallback,
-            mustUseRetryManager,
-            maxAttemps
+            mustUseRetryManager
             ) {
-        this.setMaxAttemps(maxAttemps);
         this.objectReference = objectReference || window;
         this.methodName = methodName || '<unknown>';
         this.beforeCallback = beforeCallback || false;
@@ -30,7 +28,7 @@ class AopConfigParameters {
     }
     
     setMaxAttemps(maxAttemps) {
-        this.maxAttemps = maxAttemps || 3;
+        this.retryManager.setMaxAttemps(maxAttemps);
     }
 
     setRetryManager(configuration) {
