@@ -1,4 +1,4 @@
-import AopConfigParameters from './aopConfigParameters';
+import AopConfigParameters from './aopConfigParameter';
 import UtilsBase4Javascript from './utilbase4javascript';
 
 class Aop4Javascript extends UtilsBase4Javascript {
