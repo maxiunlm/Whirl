@@ -19,8 +19,8 @@ class ApiFakes {
             this.algo = 'algo';
         };
         
-        this.MyThirdClass.prototype.constructMyFourthClass = function () {
-            return new this.MyFourthClass();
+        this.MyThirdClass.prototype.constructAnArray = function () {
+            return new Array();
         };
 
         this.MySecondClass = function () {

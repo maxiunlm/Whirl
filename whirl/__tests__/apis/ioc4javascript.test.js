@@ -41,12 +41,16 @@ describe('IoC4Javascript - ', () => {
     describe('registerConstructor - ', () => {
         it('With a "String Key" and a constructor method then regster this method into the "IoC Object"', () => {
             let sut = new IoC4Javascript();
-            let myThirdClass = apiFakes.MyThirdClass();
-            sut.registerConstructor(apiFakes.constructorKey, myThirdClass.constructMyFourthClass.bind(myThirdClass));
+            let myThirdClass = new apiFakes.MyThirdClass();
+            sut.registerConstructor(apiFakes.constructorKey, myThirdClass.constructAnArray.bind(myThirdClass));
             
             let result = sut.getInstanceOf(apiFakes.constructorKey);
             
-            expect(result instanceof apiFakes.MyFourthClass).toBeTruthy();
+            expect(result instanceof Array).toBeTruthy();
         });
+    });
+    
+    describe('registerType - ', () => {
+        
     });
 });
