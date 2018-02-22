@@ -25,7 +25,7 @@ class CommonFakes {
 
         this.flatAngleInRadians = Math.PI;
         this.flatAngleInDegrees = 180;
-        
+
         this.loadAppFakes();
         this.loadUserSpaceShipFakes();
         this.loadUserShotFakes();
@@ -34,8 +34,8 @@ class CommonFakes {
         this.loadObjectManagerConfigFakes();
         this.loadInstances();
     }
-    
-    loadObjectManagerConfigFakes() {        
+
+    loadObjectManagerConfigFakes() {
         this.dimensionsKey = 'dimensionsKey';
         this.userSpaceShipMathsKey = 'userSpaceShipMathsKey';
         this.userSpaceShipGeometricKey = 'userSpaceShipGeometricKey';
@@ -45,42 +45,41 @@ class CommonFakes {
         this.shotMathsKey = 'shotMathsKey';
         this.userShotKey = 'userShotKey';
         this.ioc = new IoC4Javascript(false);
-        
+
         try {
             this.ioc.registerConstructor(this.dimensionsKey, function () {
                 return new Dimensions(this.gameWidth, this.gameHeight);
             }.bind(this));
-            
+
             this.ioc.registerType.call(this.ioc, EllipsePath, this.ellipsePathKey);
             this.ioc.registerType.call(this.ioc, Position, this.positionKey);
             this.ioc.registerType.call(this.ioc, UserSpaceShipMaths, this.userSpaceShipMathsKey);
-            this.ioc.registerConstructor.call(this.ioc,'userShotKey', () => {
+            this.ioc.registerConstructor.call(this.ioc, 'userShotKey', () => {
                 return new UserShot(new Object());
             });
-            
-            this.ioc.registerSingletonType.call(this.ioc, UserSpaceShipGeometric, this.userSpaceShipGeometricKey);            
+
+            this.ioc.registerSingletonType.call(this.ioc, UserSpaceShipGeometric, this.userSpaceShipGeometricKey);
             this.ioc.registerSingletonType.call(this.ioc, Dimensions, this.dimensionsKey);
             this.ioc.registerSingletonType.call(this.ioc, Calculus, this.calculusKey);
             this.ioc.registerType.call(this.ioc, ShotMaths, this.shotMathsKey);
-            
+
             this.ioc.getInstanceOf.bind(this.ioc);
-        }
-        catch (e) {
+        } catch (e) {
             console.log('WARNING [CommonFakes::loadObjectManagerConfigFakes]: trying to config the IoC.', e);
         }
     }
-    
+
     loadUserShotFakes() {
         this.minimumRadius = 10;
         this.deltaRadius = 2;
     }
-    
+
     loadInstances() {
         this.dimensions = new Dimensions(this.gameWidth, this.gameHeight);
         this.userSpaceShipGeometric = new UserSpaceShipGeometric();
         this.ellipsePath = new EllipsePath();
     }
-    
+
     loadAppFakes() {
         this.gameWidth = 1024;
         this.gameHeight = 768;
@@ -88,7 +87,7 @@ class CommonFakes {
         this.leftKeyCode = 37;
         this.upKeyCode = 38;
         this.rightKeyCode = 39;
-        this.downKeyCode = 40;   
+        this.downKeyCode = 40;
         this.props = {
             ioc: this.ioc,
             angle: this.initialNumberValue
@@ -113,7 +112,7 @@ class CommonFakes {
             }
         };
     }
-    
+
     loadUserSpaceShipFakes() {
         this.userSpaceShipImageStopped = '/images/UserSpaceShipStopped.png';
         this.userSpaceShipImageToLeft = '/images/UserSpaceShipToLeft.png';
@@ -121,11 +120,13 @@ class CommonFakes {
         this.userShotImage = '/images/userShot.png';
         this.userSpaceShipHeight = 70;
         this.userSpaceShipWidth = 40;
-        this.actions = {};
+        this.actions = {
+            stopShotting: function () {}
+        };
         this.movementInterval = 0.04;
     }
-    
-    loadEllipsePathFakes(){
+
+    loadEllipsePathFakes() {
         this.ellipsePathHalfDivider = 2;
         this.ellipsePathDeltaA = -100;
         this.ellipsePathDeltaB = 100;
@@ -134,8 +135,8 @@ class CommonFakes {
         this.ellipsePathDeltaAngle = 0.01;
         this.ellipsePathRadiusDelta = 2;
     }
-    
-    loadPostionFakes(){
+
+    loadPostionFakes() {
         this.positionLeft = 1;
         this.positionTop = 2;
         this.position = {top: this.positionTop, left: this.positionLeft};
@@ -158,7 +159,7 @@ class CommonFakes {
             }
         };
     }
-    
+
     rountToTwoDecimals(value) {
         return Math.round(value * 100) / 100;
     }

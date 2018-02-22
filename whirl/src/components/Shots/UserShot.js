@@ -25,6 +25,10 @@ class UserShot extends Component {
         }
     }
     
+    getDimensions () {
+        return this.ioc.getInstanceOf('dimensionsKey');
+    }
+    
     getNewShotMaths () {
         return this.ioc.getInstanceOf('shotMathsKey');
     }

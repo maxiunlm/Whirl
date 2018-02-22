@@ -3,16 +3,17 @@ import AopConfigParameters from './aopConfigParameters';
 import Aop4Javascript from './aop4javascript';
 import Mapper4Javascript from './mapper4javascript';
 
-let ioc4JavascriptInstance = null;
+//let ioc4JavascriptInstance = null;
+window.ioc4JavascriptInstance = null;
 
 class IoC4Javascript extends UtilsBase4Javascript {
     constructor(forceNewInstance) {
         super();
 
-        if (!forceNewInstance && !!ioc4JavascriptInstance) {
-            return ioc4JavascriptInstance;
+        if (!forceNewInstance && !!window.ioc4JavascriptInstance) {
+            return window.ioc4JavascriptInstance;
         } else if (!forceNewInstance) {
-            ioc4JavascriptInstance = this;
+            window.ioc4JavascriptInstance = this;
         }
 
         this.types = {};
@@ -31,7 +32,7 @@ class IoC4Javascript extends UtilsBase4Javascript {
     }
 
     deleteInstance() {
-        ioc4JavascriptInstance = null;
+        window.ioc4JavascriptInstance = null;
     }
 
     validateConstructorCallbackType(constructorCallback) {
