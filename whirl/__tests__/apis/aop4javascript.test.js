@@ -25,7 +25,7 @@ function wrapperCallback(aopConfigParameters, argumentsCall) {
 }
 
 describe('Aop4Javascript - ', () => {
-    var apiFakes = new ApiFakes();
+    let apiFakes = new ApiFakes();
 
     describe('CONSTRUCTOR - ', () => {
         it('without parameters then instance an "Aop4Javascript" object', () => {

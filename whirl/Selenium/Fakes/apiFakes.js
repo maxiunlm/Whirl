@@ -5,6 +5,7 @@ class ApiFakes {
         this.twice = 2;
         this.param1 = 'param1';
         this.param2 = 'param2';
+        this.constructorKey = 'constructorKey';
         
         this.MyFifthClass = function () {
             this.pedro = '10';
@@ -16,6 +17,10 @@ class ApiFakes {
 
         this.MyThirdClass = function () {
             this.algo = 'algo';
+        };
+        
+        this.MyThirdClass.prototype.constructMyFourthClass = function () {
+            return new this.MyFourthClass();
         };
 
         this.MySecondClass = function () {
