@@ -28,7 +28,7 @@ class MainApp {
         this.ioc.registerType(UserSpaceShipMaths, 'userSpaceShipMathsKey');
         this.ioc.registerType(EllipsePath, 'ellipsePathKey');
         this.ioc.registerType(Position, 'positionKey');
-        this.ioc.registerConstructor('userShotKey', () => {
+        this.ioc.registerConstructor('userShotKey', (ioc, aop, mapper) => {
             return new UserShot(new Object());
         });
         

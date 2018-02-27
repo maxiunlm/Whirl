@@ -6,6 +6,10 @@ class ApiFakes {
         this.param1 = 'param1';
         this.param2 = 'param2';
         this.constructorKey = 'constructorKey';
+        this.myFifthClassKey = 'myFifthClassKey';
+        this.mySecondClassKey = 'mySecondClassKey';
+        this.myThirdClassKey = 'myThirdClassKey';
+        this.myFourthClassKey = 'myFourthClassKey';
         
         this.MyFifthClass = function () {
             this.pedro = '10';
