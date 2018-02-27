@@ -4,6 +4,7 @@ import IoC4Javascript from '../../src/apis/ioc4javascript';
 
 describe('IoC4Javascript - ', () => {
     let apiFakes = new ApiFakes();
+    
     describe('CONSTRUCTOR - ', () => {
         it('without parameters then instance an "IoC4Javascript" object', () => {
             let sut = new IoC4Javascript();
@@ -39,28 +40,21 @@ describe('IoC4Javascript - ', () => {
     });
 
     describe('registerConstructor - ', () => {
-        it('with a "String Key" and a constructor method then regster this method into the "IoC Object"', () => {
+        it('with a "String Key" and a constructor method then regsters this method into the "IoC Object"', () => {
             let sut = new IoC4Javascript();
-            let myThirdClass = new apiFakes.MyThirdClass();
+            spyOn(ApiFakes.prototype, 'constructAnObject').and.callThrough();
 
-            sut.registerConstructor(apiFakes.constructorKey, myThirdClass.constructAnArray.bind(myThirdClass));
+            sut.registerConstructor(apiFakes.constructorKey, apiFakes.constructAnObject.bind(apiFakes));
             let result = sut.getInstanceOf(apiFakes.constructorKey);
 
-            expect(result instanceof Array).toBeTruthy();
+            expect(ApiFakes.prototype.constructAnObject).toHaveBeenCalled();
+            expect(ApiFakes.prototype.constructAnObject.calls.count()).toEqual(apiFakes.once);
         });
     });
 
     describe('registerType - ', () => {
-        it('with an Object Class Type and a Key then the IoC register a Type', () => {
-            let sut = new IoC4Javascript();
 
-            sut.registerType(apiFakes.MyFifthClass, apiFakes.myFifthClassKey);
-            let result = sut.getInstanceOf(apiFakes.myFifthClassKey);
-
-            expect(result instanceof apiFakes.MyFifthClass).toBeTruthy();
-        });
-
-        it('with an Object Class Type and a Key and an Empty Callback Metho then the IoC register a Type', () => {
+        it('with an Object Class Type and a Key and an Empty Callback Metho then the IoC registers a Type', () => {
             let sut = new IoC4Javascript();
 
             sut.registerType(apiFakes.MyFifthClass, apiFakes.myFifthClassKey, () => {
@@ -71,7 +65,7 @@ describe('IoC4Javascript - ', () => {
             expect(result instanceof apiFakes.MyFifthClass).toBeTruthy();
         });
 
-        it('with an Object Class Type and a Key and a Callback Method then the IoC register a Type', () => {
+        it('with an Object Class Type and a Key and a Callback Method then the IoC registers a Type', () => {
             let sut = new IoC4Javascript();
 
             sut.registerType(apiFakes.MyFifthClass, apiFakes.myFifthClassKey, () => {
@@ -82,7 +76,7 @@ describe('IoC4Javascript - ', () => {
             expect(result instanceof apiFakes.MyFifthClass).toBeTruthy();
         });
 
-        it('with an Object Class Type and a Key and a Callback Method then the IoC register a Type', () => {
+        it('with an Object Class Type and a Key and a Callback Method then the IoC registers a Type', () => {
             let sut = new IoC4Javascript();
             let originalObject = new apiFakes.MyFifthClass();
 
@@ -96,17 +90,8 @@ describe('IoC4Javascript - ', () => {
     });
 
     describe('registerSingletonType - ', () => {
-        it('with an Object Class Type and a Key then the IoC register a Type', () => {
-            let sut = new IoC4Javascript();
+        it('with an Object Class Type and a Key when the IoC registers a Type then the IoC always returns the same Instance Object', () => {
 
-            sut.registerSingletonType(apiFakes.MySecondClass, apiFakes.mySecondClassKey);
-            let result = sut.getInstanceOf(apiFakes.mySecondClassKey);
-
-            expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
-        });
-
-        it('with an Object Class Type and a Key when the IoC register a Type then the IoC always returns the same Instance Object', () => {
-            
             let sut = new IoC4Javascript();
 
             sut.registerSingletonType(apiFakes.MyThirdClass, apiFakes.myThirdClassKey);
@@ -117,7 +102,7 @@ describe('IoC4Javascript - ', () => {
             expect(result).toBe(secondResult);
         });
 
-        it('with an Object Class Type and a Key and an Empty Callback Metho then the IoC register the Type', () => {
+        it('with an Object Class Type and a Key and an Empty Callback Metho then the IoC registers the Type', () => {
             let sut = new IoC4Javascript();
 
             sut.registerSingletonType(apiFakes.MyFifthClass, apiFakes.myFifthClassKey, () => {
@@ -128,7 +113,7 @@ describe('IoC4Javascript - ', () => {
             expect(result instanceof apiFakes.MyFifthClass).toBeTruthy();
         });
 
-        it('with an Object Class Type and a Key and a Callback Method then the IoC register the Type', () => {
+        it('with an Object Class Type and a Key and a Callback Method then the IoC registers the Type', () => {
             let sut = new IoC4Javascript();
 
             sut.registerSingletonType(apiFakes.MyFifthClass, apiFakes.myFifthClassKey, () => {
@@ -139,7 +124,7 @@ describe('IoC4Javascript - ', () => {
             expect(result instanceof apiFakes.MyFifthClass).toBeTruthy();
         });
 
-        it('with an Object Class Type and a Key and a Callback Method then the IoC register the Type', () => {
+        it('with an Object Class Type and a Key and a Callback Method then the IoC registers the Type', () => {
             let sut = new IoC4Javascript();
             let originalObject = new apiFakes.MyFifthClass();
 
@@ -150,8 +135,8 @@ describe('IoC4Javascript - ', () => {
 
             expect(result).toBe(originalObject);
         });
-        
-        it('with an Object Class Type and a Key and an Inastance Object then the IoC register the Type', () => {
+
+        it('with an Object Class Type and a Key and an Inastance Object then the IoC registers the Type', () => {
             let sut = new IoC4Javascript();
             let originalObject = new apiFakes.MyFourthClass();
 
@@ -159,6 +144,36 @@ describe('IoC4Javascript - ', () => {
             let result = sut.getInstanceOf(apiFakes.myFourthClassKey);
 
             expect(result).toBe(originalObject);
+        });
+    });
+
+    describe('getInstanceOf - ', () => {
+        it('with an Object Class Type and a Key when the "registerType" method registers a Type then the IoC returns an Instanced Object', () => {
+            let sut = new IoC4Javascript();
+
+            sut.registerType(apiFakes.MyFifthClass, apiFakes.myFifthClassKey);
+            let result = sut.getInstanceOf(apiFakes.myFifthClassKey);
+
+            expect(result instanceof apiFakes.MyFifthClass).toBeTruthy();
+        });
+        
+        it('with a Singleton Object Class Type and a Key then the "registerSingletonType" method registers a Type then the IoC returns an Instanced Object', () => {
+            let sut = new IoC4Javascript();
+
+            sut.registerSingletonType(apiFakes.MySecondClass, apiFakes.mySecondClassKey);
+            let result = sut.getInstanceOf(apiFakes.mySecondClassKey);
+
+            expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+        });
+        
+        it('with an Object Constructor Method and a Key then the "registerConstructor" method registers a Type then the IoC returns an Instanced Object', () => {
+            let sut = new IoC4Javascript();
+            let myThirdClass = new apiFakes.MyThirdClass();
+
+            sut.registerConstructor(apiFakes.constructorKey, myThirdClass.constructAnArray.bind(myThirdClass));
+            let result = sut.getInstanceOf(apiFakes.constructorKey);
+
+            expect(result instanceof Array).toBeTruthy();
         });
     });
 });

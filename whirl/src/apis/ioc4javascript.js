@@ -14,6 +14,10 @@ class IoC4Javascript extends UtilsBase4Javascript {
             return window.ioc4JavascriptInstance;
         } else if (!forceNewInstance) {
             window.ioc4JavascriptInstance = this;
+//            window.ioc4JavascriptInstance.getInstanceOf = window.ioc4JavascriptInstance.getInstanceOf.bind(window.ioc4JavascriptInstance);
+//            window.ioc4JavascriptInstance.registerType = window.ioc4JavascriptInstance.registerType.bind(window.ioc4JavascriptInstance);
+//            window.ioc4JavascriptInstance.registerConstructor = window.ioc4JavascriptInstance.registerConstructor.bind(window.ioc4JavascriptInstance);
+//            window.ioc4JavascriptInstance.registerSingletonType = window.ioc4JavascriptInstance.registerSingletonType.bind(window.ioc4JavascriptInstance);
         }
 
         this.types = {};

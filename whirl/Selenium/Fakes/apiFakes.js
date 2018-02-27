@@ -86,6 +86,10 @@ class ApiFakes {
         };
     }
     
+    constructAnObject () {
+        return new Array();
+    }
+    
     beforeCallback () {
         //console.log('--> beforeCallback');
     }
