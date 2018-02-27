@@ -18,7 +18,7 @@ class RegisterMapperConfiguration extends BaseMapperConfiguration {
                 exceptedAttributes
                 );
         
-        this.maxAttemps = 3;
+        //this.maxAttemps = 3;
         this.originObjectType = originObjectType || false;
         this.mapperCallback = mapperCallback || false;
         this.destinationKey = destinationKey || '';

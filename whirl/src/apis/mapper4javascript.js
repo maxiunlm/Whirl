@@ -7,7 +7,7 @@ class Mapper4Javascript extends UtilsBase4Javascript {
     constructor(mapperTypes) {
         super();
         this.mappers = {};
-        this.mapperTypes = mapperTypes || {};
+        this.mapperTypes = mapperTypes || new RegisterMapperConfiguration();
     }
 
     validateAlreadyRegisteredMapper(key, objectTypeName, keyName) {
