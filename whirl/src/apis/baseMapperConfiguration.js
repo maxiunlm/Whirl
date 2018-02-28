@@ -8,7 +8,7 @@ class BaseMapperConfiguration extends UtilsBase4Javascript {
             exceptedAttributes
             ) {
         super();
-        this.destinationObjectType = destinationObjectType || false;
+        this.destinationObjectType = destinationObjectType || Object; // false;
         this.ignoreAllAttributes = !!ignoreAllAttributes;
         this.exceptedAttributes = exceptedAttributes || [];
         this.ignoredAttributes = ignoredAttributes || [];

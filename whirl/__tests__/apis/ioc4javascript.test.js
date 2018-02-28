@@ -6,7 +6,7 @@ describe('IoC4Javascript - ', () => {
     let apiFakes = new ApiFakes();
     
     describe('CONSTRUCTOR - ', () => {
-        it('without parameters then instance an "IoC4Javascript" object', () => {
+        it('without parameters then instances an "IoC4Javascript" object', () => {
             let sut = new IoC4Javascript();
 
             expect(sut instanceof IoC4Javascript).toBeTruthy();

@@ -55,6 +55,7 @@ class UtilsBase4Javascript {
         typeName = typeName || 'Object';
 
         if (!!instance && !!type && !(instance instanceof type)) {
+            console.log(instance, typeName, type, !(instance instanceof type));
             throw new TypeError('EXCEPTION [validateType]: the "' + typeName + '" must be a valid instance of "' + typeName + '".\n' + this.getCallStack());
         }
 

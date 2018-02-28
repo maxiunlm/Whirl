@@ -28,7 +28,7 @@ describe('Aop4Javascript - ', () => {
     let apiFakes = new ApiFakes();
 
     describe('CONSTRUCTOR - ', () => {
-        it('without parameters then instance an "Aop4Javascript" object', () => {
+        it('without parameters then instances an "Aop4Javascript" object', () => {
 
             let sut = new Aop4Javascript();
 
@@ -36,7 +36,7 @@ describe('Aop4Javascript - ', () => {
             expect(sut.types instanceof Object).toBeTruthy();
         });
 
-        it('with an "AopConfigParameters" and the "types" parameters then instance an Aop4Javascript object', () => {
+        it('with an "AopConfigParameters" and the "types" parameters then instances an Aop4Javascript object', () => {
             let config = new AopConfigParameters();
 
             let sut = new Aop4Javascript(config, apiFakes.types);
