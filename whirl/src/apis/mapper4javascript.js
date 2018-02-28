@@ -4,10 +4,11 @@ import RegisterMapperConfiguration from './registerMapperConfiguration';
 
 
 class Mapper4Javascript extends UtilsBase4Javascript {
-    constructor(mapperTypes) {
+    constructor(defaultRegisterMapperConfiguration) {
         super();
         this.mappers = {};
-        this.mapperTypes = mapperTypes || new RegisterMapperConfiguration();
+        this.defaultConfiguration = defaultRegisterMapperConfiguration || new RegisterMapperConfiguration();
+        this.mapperTypes = {};
     }
 
     validateAlreadyRegisteredMapper(key, objectTypeName, keyName) {
@@ -266,19 +267,35 @@ class Mapper4Javascript extends UtilsBase4Javascript {
     }
 
     registerMapper(registerMapperConfiguration) {
-        this.validateInstance(registerMapperConfiguration, 'RegisterMapperConfiguration', RegisterMapperConfiguration);
-        this.validateAlreadyRegisteredMapper(registerMapperConfiguration.originKey, registerMapperConfiguration.originObjectType.name, 'originKey');
-        this.validateAlreadyRegisteredMapper(registerMapperConfiguration.destinationKey, registerMapperConfiguration.destinationObjectType.name, 'destinationKey');
+        //this.validateInstance(registerMapperConfiguration, 'RegisterMapperConfiguration', RegisterMapperConfiguration);
+        this.validateAlreadyRegisteredMapper(
+                registerMapperConfiguration.originKey || this.defaultConfiguration.originKey,
+                registerMapperConfiguration.originObjectType.name || this.defaultConfiguration.originObjectType.name,
+                'originKey');
+        this.validateAlreadyRegisteredMapper(
+                registerMapperConfiguration.destinationKey || this.defaultConfiguration.destinationKey,
+                registerMapperConfiguration.destinationObjectType.name || this.defaultConfiguration.destinationObjectType.name,
+                'destinationKey');
 
-        let originKey = registerMapperConfiguration.originKey || registerMapperConfiguration.originObjectType.name;
-        let destinationKey = registerMapperConfiguration.destinationKey || registerMapperConfiguration.destinationObjectType.name;
+        let originKey = registerMapperConfiguration.originKey
+                || registerMapperConfiguration.originObjectType.name
+                || this.defaultConfiguration.originKey
+                || this.defaultConfiguration.originObjectType.name;
+        let destinationKey = registerMapperConfiguration.destinationKey
+                || registerMapperConfiguration.destinationObjectType.name
+                || this.defaultConfiguration.destinationKey
+                || this.defaultConfiguration.destinationObjectType.name;
 
         if (!this.mapperTypes[originKey]) {
-            this.registerMepperKeyTypes(registerMapperConfiguration.originObjectType, originKey);
+            this.registerMepperKeyTypes(
+                    registerMapperConfiguration.originObjectType || this.defaultConfiguration.originObjectType,
+                    originKey);
         }
 
         if (!this.mapperTypes[destinationKey]) {
-            this.registerMepperKeyTypes(registerMapperConfiguration.destinationObjectType, destinationKey);
+            this.registerMepperKeyTypes(
+                    registerMapperConfiguration.destinationObjectType || this.defaultConfiguration.destinationObjectType,
+                    destinationKey);
         }
 
         let key = originKey + '2' + destinationKey;
@@ -291,12 +308,12 @@ class Mapper4Javascript extends UtilsBase4Javascript {
             key: key,
             originKey: originKey,
             destinationKey: destinationKey,
-            destinationObjectType: registerMapperConfiguration.destinationObjectType,
-            originObjectType: registerMapperConfiguration.originObjectType,
+            destinationObjectType: registerMapperConfiguration.destinationObjectType || this.defaultConfiguration.destinationObjectType,
+            originObjectType: registerMapperConfiguration.originObjectType || this.defaultConfiguration.originObjectType,
             mapperCallback: mapperCallback,
-            ignoredAttributes: registerMapperConfiguration.ignoredAttributes,
-            ignoreAllAttributes: registerMapperConfiguration.ignoreAllAttributes,
-            exceptedAttributes: registerMapperConfiguration.exceptedAttributes
+            ignoredAttributes: registerMapperConfiguration.ignoredAttributes || this.defaultConfiguration.ignoredAttributes,
+            ignoreAllAttributes: registerMapperConfiguration.ignoreAllAttributes || this.defaultConfiguration.ignoreAllAttributes,
+            exceptedAttributes: registerMapperConfiguration.exceptedAttributes || this.defaultConfiguration.exceptedAttributes
         };
     }
 

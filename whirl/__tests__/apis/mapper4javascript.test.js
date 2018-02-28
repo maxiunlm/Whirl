@@ -1,4 +1,4 @@
-/* global expect */
+/* global expect, jasmine, Function */
 import ApiFakes from '../../Selenium/Fakes/apiFakes';
 import RegisterMapperConfiguration from '../../src/apis/RegisterMapperConfiguration';
 import Mapper4Javascript from '../../src/apis/Mapper4Javascript';
@@ -7,14 +7,14 @@ describe('Mapper4Javascript - ', () => {
     let apiFakes = new ApiFakes();
 
     describe('CONSTRUCTOR - ', () => {
-//        it('without parameters then throws an instances of "TypeError" exception.', () => {
-//            try {
-//                let sut = new Mapper4Javascript();
-//                expect(false).toBeTruthy();
-//            } catch (e) {
-//                expect(e instanceof TypeError).toBeTruthy();
-//            }
-//        });
+        //        it('without parameters then throws an instances of "TypeError" exception.', () => {
+        //            try {
+        //                let sut = new Mapper4Javascript();
+        //                expect(false).toBeTruthy();
+        //            } catch (e) {
+        //                expect(e instanceof TypeError).toBeTruthy();
+        //            }
+        //        });
 
         it('with a "RegisterMapperConfiguration" parameter then instances an "Mapper4Javascript" object', () => {
             let paramConfig = new RegisterMapperConfiguration(Array, Object);
@@ -22,7 +22,8 @@ describe('Mapper4Javascript - ', () => {
             let sut = new Mapper4Javascript(paramConfig);
 
             expect(sut.mappers).toBeDefined();
-            expect(sut.mapperTypes instanceof RegisterMapperConfiguration).toBeTruthy();
+            expect(sut.mapperTypes).toBeDefined();
+            expect(sut.defaultConfiguration instanceof RegisterMapperConfiguration).toBeTruthy();
         });
     });
 
@@ -34,7 +35,14 @@ describe('Mapper4Javascript - ', () => {
             sut.registerMapper(paramConfig);
 
             expect(sut.mappers).toBeDefined();
-            expect(sut.mapperTypes instanceof RegisterMapperConfiguration).toBeTruthy();
+            expect(sut.mappers['Object2Array'].originKey).toEqual('Object');
+            expect(sut.mappers['Object2Array'].destinationKey).toEqual('Array');
+            expect(sut.mappers['Object2Array'].destinationObjectType).toEqual(Array);
+            expect(sut.mappers['Object2Array'].originObjectType instanceof Object).toBeTruthy();
+            expect(sut.mappers['Object2Array'].mapperCallback).toEqual(jasmine.any(Function));
+            expect(sut.mappers['Object2Array'].ignoredAttributes).toEqual(jasmine.any(Array));
+            expect(sut.mappers['Object2Array'].exceptedAttributes).toEqual(jasmine.any(Array));
+            expect(sut.mappers['Object2Array'].ignoreAllAttributes).toEqual(false);
         });
     });
 });
