@@ -31,6 +31,20 @@ class Aop4Javascript extends UtilsBase4Javascript {
         return aopConfigParameters;
     }
 
+    wrapAll(aopConfigParameters) {
+        aopConfigParameters = aopConfigParameters || this.aopConfigParameters;
+        aopConfigParameters.wrapper = this.wrapper;
+        
+        let keys = Object.keys(aopConfigParameters.objectReference);
+        let methodList  = keys.filter((key, index, arr) => {
+            return this.isFunction(aopConfigParameters.objectReference[key]);
+        });
+        
+        aopConfigParameters.methodName = methodList;
+        
+        this.surround(aopConfigParameters, this.wrapper);
+    }
+
     wrap(aopConfigParameters) {
         aopConfigParameters = aopConfigParameters || this.aopConfigParameters;
         aopConfigParameters.wrapper = this.wrapper;
@@ -148,6 +162,10 @@ class Aop4Javascript extends UtilsBase4Javascript {
                 if (this.isMatchedMethodName(objectReference, methodName, key)) {
                     methodNamesList.push(key);
                 }
+            }.bind(this));
+        } else if (methodName instanceof Array) {
+            methodName.forEach(function (key, index, allKeys) {
+                methodNamesList.push(key);
             }.bind(this));
         }
 

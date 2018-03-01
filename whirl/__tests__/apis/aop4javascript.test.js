@@ -75,6 +75,64 @@ describe('Aop4Javascript - ', () => {
             expect(apiFakes.wrapperCallback).not.toHaveBeenCalled();
         });
 
+        it('with an "AopConfigParameters" parameter when calls the method that "/another*/" then invokes "beforeCallback, afterCallback, finallyCallback, wrapperCallback" methods', () => {
+            spyOn(apiFakes, 'beforeCallback').and.callThrough();
+            spyOn(apiFakes, 'afterCallback').and.callThrough();
+            spyOn(apiFakes, 'finallyCallback').and.callThrough();
+            spyOn(apiFakes, 'wrapperCallback').and.callThrough();
+            let aop = new Aop4Javascript();
+            aop.wrap(aop.getAopConfigParameters(
+                    apiFakes.MyClass,
+                    /^another+/,
+                    apiFakes.beforeCallback,
+                    apiFakes.afterCallback,
+                    null,
+                    apiFakes.finallyCallback,
+                    apiFakes.wrapperCallback
+                    ));
+            let sut = apiFakes.MyClass;
+
+            sut.test();
+            sut.anotherTest();
+
+            expect(apiFakes.beforeCallback).toHaveBeenCalled();
+            expect(apiFakes.beforeCallback.calls.count()).toEqual(apiFakes.once);
+            expect(apiFakes.afterCallback).toHaveBeenCalled();
+            expect(apiFakes.afterCallback.calls.count()).toEqual(apiFakes.once);
+            expect(apiFakes.finallyCallback).toHaveBeenCalled();
+            expect(apiFakes.finallyCallback.calls.count()).toEqual(apiFakes.once);
+            expect(apiFakes.wrapperCallback).not.toHaveBeenCalled();
+        });
+
+        it('with an "AopConfigParameters" parameter when calls methods of the array list then invokes "beforeCallback, afterCallback, finallyCallback, wrapperCallback" methods', () => {
+            spyOn(apiFakes, 'beforeCallback').and.callThrough();
+            spyOn(apiFakes, 'afterCallback').and.callThrough();
+            spyOn(apiFakes, 'finallyCallback').and.callThrough();
+            spyOn(apiFakes, 'wrapperCallback').and.callThrough();
+            let aop = new Aop4Javascript();
+            aop.wrap(aop.getAopConfigParameters(
+                    apiFakes.MyClass,
+                    ['test', 'anotherTest'],
+                    apiFakes.beforeCallback,
+                    apiFakes.afterCallback,
+                    null,
+                    apiFakes.finallyCallback,
+                    apiFakes.wrapperCallback
+                    ));
+            let sut = apiFakes.MyClass;
+
+            sut.test();
+            sut.anotherTest();
+
+            expect(apiFakes.beforeCallback).toHaveBeenCalled();
+            expect(apiFakes.beforeCallback.calls.count()).toEqual(apiFakes.twice);
+            expect(apiFakes.afterCallback).toHaveBeenCalled();
+            expect(apiFakes.afterCallback.calls.count()).toEqual(apiFakes.twice);
+            expect(apiFakes.finallyCallback).toHaveBeenCalled();
+            expect(apiFakes.finallyCallback.calls.count()).toEqual(apiFakes.twice);
+            expect(apiFakes.wrapperCallback).not.toHaveBeenCalled();
+        });
+
         it('with an "AopConfigParameters" parameter when calls the "test" method and it has an exception then invokes "beforeCallback, finallyCallback, wrapperCallback" methods', () => {
             spyOn(apiFakes, 'beforeCallback').and.callThrough();
             spyOn(apiFakes, 'afterCallback').and.callThrough();
@@ -105,6 +163,37 @@ describe('Aop4Javascript - ', () => {
             expect(apiFakes.exceptionCallback.calls.count()).toEqual(apiFakes.once);
             expect(apiFakes.finallyCallback).toHaveBeenCalled();
             expect(apiFakes.finallyCallback.calls.count()).toEqual(apiFakes.once);
+            expect(apiFakes.wrapperCallback).not.toHaveBeenCalled();
+        });
+    });
+    
+    describe('wrapAll - ', () => {
+        it('with an "AopConfigParameters" parameter for each method then invokes "beforeCallback, afterCallback, finallyCallback, wrapperCallback" methods', () => {
+            spyOn(apiFakes, 'beforeCallback').and.callThrough();
+            spyOn(apiFakes, 'afterCallback').and.callThrough();
+            spyOn(apiFakes, 'finallyCallback').and.callThrough();
+            spyOn(apiFakes, 'wrapperCallback').and.callThrough();
+            let aop = new Aop4Javascript();
+            aop.wrapAll(aop.getAopConfigParameters(
+                    apiFakes.MyClass,
+                    null,
+                    apiFakes.beforeCallback,
+                    apiFakes.afterCallback,
+                    null,
+                    apiFakes.finallyCallback,
+                    apiFakes.wrapperCallback
+                    ));
+            let sut = apiFakes.MyClass;
+
+            sut.test();
+            sut.anotherTest();
+
+            expect(apiFakes.beforeCallback).toHaveBeenCalled();
+            expect(apiFakes.beforeCallback.calls.count()).toEqual(apiFakes.twice);
+            expect(apiFakes.afterCallback).toHaveBeenCalled();
+            expect(apiFakes.afterCallback.calls.count()).toEqual(apiFakes.twice);
+            expect(apiFakes.finallyCallback).toHaveBeenCalled();
+            expect(apiFakes.finallyCallback.calls.count()).toEqual(apiFakes.twice);
             expect(apiFakes.wrapperCallback).not.toHaveBeenCalled();
         });
     });
