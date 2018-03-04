@@ -9,6 +9,15 @@ class Mapper4Javascript extends UtilsBase4Javascript {
         this.mappers = {};
         this.defaultConfiguration = defaultRegisterMapperConfiguration || new RegisterMapperConfiguration();
         this.mapperTypes = {};
+
+        this.registerMapper = this.registerMapper.bind(this);
+        this.getMappedObject = this.getMappedObject.bind(this);
+        this.mapAllAttributesCallback = this.mapAllAttributesCallback.bind(this);
+        this.mapAllOriginCallback = this.mapAllOriginCallback.bind(this);
+        this.mapAllOriginAttributesCallback = this.mapAllOriginAttributesCallback.bind(this);
+        this.mapAllOriginMethodsCallback = this.mapAllOriginMethodsCallback.bind(this);
+        this.mapAllCallback = this.mapAllCallback.bind(this);
+        this.mapAllMethodsCallback = this.mapAllMethodsCallback.bind(this);
     }
 
     validateAlreadyRegisteredMapper(key, objectTypeName, keyName) {
@@ -59,7 +68,8 @@ class Mapper4Javascript extends UtilsBase4Javascript {
                 && destinationObject.__proto__.constructor.name !== destinationMapper.typeName) {
             throw new TypeError('EXCEPTION [validateDestinationObjectType]: The destination object type expeted is "' +
                     destinationObjectType + '" but the recived object type was "' +
-                    destinationObject.__proto__.constructor.name + '".\n' + this.getCallStack());
+                    destinationObject.__proto__.constructor.name + '".\nThe "Destination Mapper" is' +
+                    JSON.stringify(destinationMapper) + '\n' + this.getCallStack());
         }
     }
 
@@ -67,19 +77,6 @@ class Mapper4Javascript extends UtilsBase4Javascript {
         if (!!destinationObject) {
             this.validateType(destinationObject, 'destinationObject');
         }
-    }
-
-    getMappedObject(getterMapperConfiguration) {
-        this.validateInstance(getterMapperConfiguration, 'GetterMapperConfiguration', GetterMapperConfiguration);
-        this.validateDestinationObjectInstance(getterMapperConfiguration.destinationObject);
-
-        getterMapperConfiguration.destinationMapper = this.getDestinationMapper(getterMapperConfiguration);
-        getterMapperConfiguration.destinationKey = this.getDestinationKey(getterMapperConfiguration.destinationMapper);
-        getterMapperConfiguration.destinationObject = this.verifyDestinationObjectInstance(getterMapperConfiguration);
-        getterMapperConfiguration.originObjects = this.getOriginObjectList(getterMapperConfiguration.originObject);
-        let mappedObject = this.doMappedObjectForList(getterMapperConfiguration);
-
-        return mappedObject;
     }
 
     verifyDestinationObjectInstance(getterMapperConfiguration) {
@@ -100,6 +97,45 @@ class Mapper4Javascript extends UtilsBase4Javascript {
         return mappedObject;
     }
 
+    doMappedObject(originObject, getterMapperConfiguration) {
+        this.validateOriginObjectMustBeAnInstancedObject(originObject);
+        this.validateType(originObject, 'originObject');
+
+        let originMapper = this.findFirstElement(this.mapperTypes, function (mapperType) {
+            return mapperType.typeName === originObject.__proto__.constructor.name;
+        });
+        this.validateObjectMustBeRegistered(originObject, originMapper);
+
+        let originKey = this.getObjectMapperKey(originMapper);
+
+        let key = originKey + '2' + getterMapperConfiguration.destinationKey;
+        this.validateAlreadyRegisteredMapperHasNotBeenRegistered(key, 'mapper key', this.mappers);
+
+        getterMapperConfiguration.configureIgnoredAttributes(this.mappers[key]);
+
+        let mapperCallback = getterMapperConfiguration.mapperCallback || this.mappers[key].mapperCallback;
+
+        return mapperCallback(getterMapperConfiguration, originObject);
+    }
+
+    getObjectMapperKey(objectMapper) {
+        let key;
+
+        if (!!objectMapper.key) {
+            key = objectMapper.key;
+
+            this.validateKeyType(key, 'destinationKey');
+            this.validateAlreadyRegisteredMapperHasNotBeenRegistered(key, 'destinationKey');
+        } else {
+            key = objectMapper.typeName;
+
+            this.validateKeyType(key, 'destinationKey');
+            this.validateAlreadyRegisteredMapperHasNotBeenRegistered(key, 'destinationKey');
+        }
+
+        return key;
+    }
+
     getOriginObjectList(originObject) {
         let originObjects = originObject;
 
@@ -108,15 +144,6 @@ class Mapper4Javascript extends UtilsBase4Javascript {
         }
 
         return originObjects;
-    }
-
-    getDestinationKey(destinationMapper) {
-        let destinationKey = destinationMapper.typeName || destinationMapper.key;
-
-        this.validateKeyType(destinationKey, 'destinationKey');
-        this.validateAlreadyRegisteredMapperHasNotBeenRegistered(destinationKey, 'destinationKey');
-
-        return destinationKey;
     }
 
     getDestinationMapper(getterMapperConfiguration) {
@@ -143,49 +170,16 @@ class Mapper4Javascript extends UtilsBase4Javascript {
         return destinationMapper;
     }
 
-    doMappedObject(originObject, getterMapperConfiguration) {
-        this.validateOriginObjectMustBeAnInstancedObject(originObject);
-        this.validateType(originObject, 'originObject');
-
-        let originMapper = this.findFirstElement(this.mapperTypes, function (mapperType) {
-            return mapperType.typeName === originObject.__proto__.constructor.name;
-        });
-        this.validateObjectMustBeRegistered(originObject, originMapper);
-
-        let originKey = originMapper.typeName || originMapper.key;
-        this.validateKeyType(originKey, 'originKey');
-        this.validateAlreadyRegisteredMapperHasNotBeenRegistered(originKey, 'originKey');
-
-        let key = originKey + '2' + getterMapperConfiguration.destinationKey;
-        this.validateAlreadyRegisteredMapperHasNotBeenRegistered(key, 'mapper key', this.mappers);
-
-        getterMapperConfiguration.configureIgnoredAttributes(this.mappers[key]);
-
-        return this.mappers[key].mapperCallback(getterMapperConfiguration, originObject);
-    }
-
     defaultMapperCallback(getterMapperConfiguration, originObject) {
         return this.mapAllAttributesCallback(getterMapperConfiguration, originObject);
     }
 
-    mapAllAttributesCallback(getterMapperConfiguration, originObject) {
-        let destinationObjectKeys = Object.keys(getterMapperConfiguration.destinationObject);
+    registerMepperKeyTypes(type, key) {
+        this.validateKeyType(key);
+        this.validateType(type);
+        this.validateAlreadyRegisteredMapper(key, type.name, 'key');
 
-        destinationObjectKeys.forEach(function (key, index, allKeys) {
-            this.copyAttribute(getterMapperConfiguration, originObject, key);
-        }.bind(this));
-
-        return getterMapperConfiguration.destinationObject;
-    }
-
-    copyAttribute(getterMapperConfiguration, originObject, key) {
-        if ((!!getterMapperConfiguration.destinationObject[key]
-                && !this.isFunction(getterMapperConfiguration.destinationObject[key]))
-                && (!!originObject[key] && !this.isFunction(originObject[key]))
-                && this.mustMapAttribute(getterMapperConfiguration, key)
-                ) {
-            getterMapperConfiguration.destinationObject[key] = originObject[key];
-        }
+        this.mapperTypes[key] = {key: key, typeName: type.name, type: type};
     }
 
     mustMapAttribute(getterMapperConfiguration, attributeName) {
@@ -202,6 +196,26 @@ class Mapper4Javascript extends UtilsBase4Javascript {
         return true;
     }
 
+    copyAttribute(getterMapperConfiguration, originObject, key) {
+        if ((!!getterMapperConfiguration.destinationObject[key]
+                && !this.isFunction(getterMapperConfiguration.destinationObject[key]))
+                && (!!originObject[key] && !this.isFunction(originObject[key]))
+                && this.mustMapAttribute(getterMapperConfiguration, key)
+                ) {
+            getterMapperConfiguration.destinationObject[key] = originObject[key];
+        }
+    }
+
+    mapAllAttributesCallback(getterMapperConfiguration, originObject) {
+        let destinationObjectKeys = Object.keys(getterMapperConfiguration.destinationObject);
+
+        destinationObjectKeys.forEach(function (key, index, allKeys) {
+            this.copyAttribute(getterMapperConfiguration, originObject, key);
+        }.bind(this));
+
+        return getterMapperConfiguration.destinationObject;
+    }
+
     mapAllOriginCallback(getterMapperConfiguration, originObject) {
         let originObjectKeys = Object.keys(originObject);
 
@@ -209,7 +223,7 @@ class Mapper4Javascript extends UtilsBase4Javascript {
             if (this.mustMapAttribute(getterMapperConfiguration, key)) {
                 getterMapperConfiguration.destinationObject[key] = originObject[key];
             }
-        });
+        }.bind(this));
 
         return getterMapperConfiguration.destinationObject;
     }
@@ -222,20 +236,21 @@ class Mapper4Javascript extends UtilsBase4Javascript {
                     && this.mustMapAttribute(getterMapperConfiguration, key)) {
                 getterMapperConfiguration.destinationObject[key] = originObject[key];
             }
-        });
+        }.bind(this));
 
         return getterMapperConfiguration.destinationObject;
     }
 
     mapAllOriginMethodsCallback(getterMapperConfiguration, originObject) {
         let originObjectKeys = Object.keys(originObject);
+        originObjectKeys = originObjectKeys.concat(Object.getOwnPropertyNames(originObject.__proto__));
 
         originObjectKeys.forEach(function (key, index, allKeys) {
             if (this.isFunction(originObject[key])
                     && this.mustMapAttribute(getterMapperConfiguration, key)) {
                 getterMapperConfiguration.destinationObject[key] = originObject[key];
             }
-        });
+        }.bind(this));
 
         return getterMapperConfiguration.destinationObject;
     }
@@ -248,22 +263,41 @@ class Mapper4Javascript extends UtilsBase4Javascript {
                     && this.mustMapAttribute(getterMapperConfiguration, key)) {
                 getterMapperConfiguration.destinationObject[key] = originObject[key];
             }
-        });
+        }.bind(this));
 
         return getterMapperConfiguration.destinationObject;
     }
 
     mapAllMethodsCallback(getterMapperConfiguration, originObject) {
         let destinationObjectKeys = Object.keys(getterMapperConfiguration.destinationObject);
+        destinationObjectKeys = destinationObjectKeys.concat(
+                Object.getOwnPropertyNames(getterMapperConfiguration.destinationObject.__proto__)
+                );
 
         destinationObjectKeys.forEach(function (key, index, allKeys) {
             if (!!originObject[key] && this.isFunction(originObject[key])
                     && this.mustMapAttribute(getterMapperConfiguration, key)) {
+                console.log(originObject, key);
                 getterMapperConfiguration.destinationObject[key] = originObject[key];
+            } else {
+                console.log(getterMapperConfiguration.destinationObject, key);
             }
-        });
+        }.bind(this));
 
         return getterMapperConfiguration.destinationObject;
+    }
+
+    getMappedObject(getterMapperConfiguration) {
+        //this.validateInstance(getterMapperConfiguration, 'GetterMapperConfiguration', GetterMapperConfiguration);
+        this.validateDestinationObjectInstance(getterMapperConfiguration.destinationObject);
+
+        getterMapperConfiguration.destinationMapper = this.getDestinationMapper(getterMapperConfiguration);
+        getterMapperConfiguration.destinationKey = this.getObjectMapperKey(getterMapperConfiguration.destinationMapper);
+        getterMapperConfiguration.destinationObject = this.verifyDestinationObjectInstance(getterMapperConfiguration);
+        getterMapperConfiguration.originObjects = this.getOriginObjectList(getterMapperConfiguration.originObject);
+        let mappedObject = this.doMappedObjectForList(getterMapperConfiguration);
+
+        return mappedObject;
     }
 
     registerMapper(registerMapperConfiguration) {
@@ -315,14 +349,6 @@ class Mapper4Javascript extends UtilsBase4Javascript {
             ignoreAllAttributes: registerMapperConfiguration.ignoreAllAttributes || this.defaultConfiguration.ignoreAllAttributes,
             exceptedAttributes: registerMapperConfiguration.exceptedAttributes || this.defaultConfiguration.exceptedAttributes
         };
-    }
-
-    registerMepperKeyTypes(type, key) {
-        this.validateKeyType(key);
-        this.validateType(type);
-        this.validateAlreadyRegisteredMapper(key, type.name, 'key');
-
-        this.mapperTypes[key] = {key: key, typeName: type.name, type: type};
     }
 }
 

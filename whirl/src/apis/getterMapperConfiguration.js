@@ -7,7 +7,8 @@ class GetterMapperConfiguration extends BaseMapperConfiguration {
             destinationObject,
             ignoredAttributes,
             ignoreAllAttributes,
-            exceptedAttributes
+            exceptedAttributes,
+            mapperCallback
             ) {
         super(
                 destinationObjectType,
@@ -16,6 +17,7 @@ class GetterMapperConfiguration extends BaseMapperConfiguration {
                 exceptedAttributes
                 );
 
+        this.mapperCallback = mapperCallback || false;
         this.originObject = originObject || false;
         this.destinationObject = destinationObject || false;
     }

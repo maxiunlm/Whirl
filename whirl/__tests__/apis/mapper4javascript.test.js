@@ -1,7 +1,43 @@
-/* global expect, jasmine, Function */
+/* global expect, jasmine, Function, spyOn */
 import ApiFakes from '../../Selenium/Fakes/apiFakes';
 import RegisterMapperConfiguration from '../../src/apis/RegisterMapperConfiguration';
+import GetterMapperConfiguration from '../../src/apis/GetterMapperConfiguration';
 import Mapper4Javascript from '../../src/apis/Mapper4Javascript';
+
+class OriginTestClass {
+    constructor() {
+        this.internalFifthClassAttribute = true;
+        this.pedro = '10';
+
+        this.originMethod = this.originMethod.bind(this);
+    }
+
+    originMethod() {
+        return true;
+    }
+
+    anotherTest2(obj) {
+        console.log('OriginTestClass::anotherTest2 was called');
+        return this.originMethod.call(obj);
+    }
+}
+
+class DestinationTestClass {
+    constructor() {
+        this.pedro = -1;
+        this.pepe = '3';
+        this.lui = '4';
+        this.objectAttribute;
+    }
+
+    destinyMethod(param1, param2) {
+    }
+
+    anotherTest2() {
+        console.log('DestinationTestClass::anotherTest2 was called');
+        return false;
+    }
+}
 
 describe('Mapper4Javascript - ', () => {
     let apiFakes = new ApiFakes();
@@ -45,42 +81,433 @@ describe('Mapper4Javascript - ', () => {
             expect(sut.mappers['Object2Array'].ignoreAllAttributes).toEqual(false);
         });
     });
+
+    describe('getMappedObject - ', () => {
+        it('with a "GetterMapperConfiguration" then maps the Origin Object to the Destination Object', () => {
+            let origin = new apiFakes.MyFifthClass();
+            let destiny = new apiFakes.MySecondClass();
+            let sut = new Mapper4Javascript();
+            let paramConfig = new RegisterMapperConfiguration(
+                    apiFakes.MySecondClass,
+                    apiFakes.MyFifthClass,
+                    null,
+                    apiFakes.mySecondClassKey,
+                    apiFakes.myFifthClassKey);
+            let getterConfig = new GetterMapperConfiguration(apiFakes.mySecondClassKey, origin, destiny);
+            sut.registerMapper(paramConfig);
+
+            let result = sut.getMappedObject(getterConfig);
+
+            expect(result).toBeDefined();
+            expect(result).toBe(destiny);
+            expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+            expect(result.pedro).toEqual(origin.pedro);
+        });
+    });
+
+    describe('Changing the default Mapper Callback by: ', () => {
+        describe('mapAllAttributesCallback - ', () => {
+            it('changing the default Mapper Callback to "mapAllAttributesCallback" in the "RegisterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new apiFakes.MyFifthClass();
+                let destiny = new apiFakes.MySecondClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        apiFakes.MySecondClass,
+                        apiFakes.MyFifthClass,
+                        sut.mapAllAttributesCallback,
+                        apiFakes.mySecondClassKey,
+                        apiFakes.myFifthClassKey);
+                let getterConfig = new GetterMapperConfiguration(apiFakes.mySecondClassKey, origin, destiny);
+                sut.registerMapper(paramConfig);
+
+                let result = sut.getMappedObject(getterConfig);
+
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+                expect(result.pedro).toEqual(origin.pedro);
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+                expect(result.internalMethod).toBeUndefined();
+                expect(origin.internalMethod).toBeDefined();
+                expect(origin.internalMethod instanceof Function).toBeTruthy();
+            });
+
+            it('changing the default Mapper Callback to "mapAllAttributesCallback" in the "GetterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new apiFakes.MyFifthClass();
+                let destiny = new apiFakes.MySecondClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        apiFakes.MySecondClass,
+                        apiFakes.MyFifthClass,
+                        null,
+                        apiFakes.mySecondClassKey,
+                        apiFakes.myFifthClassKey);
+                let getterConfig = new GetterMapperConfiguration(
+                        apiFakes.mySecondClassKey,
+                        origin,
+                        destiny,
+                        undefined,
+                        undefined,
+                        undefined,
+                        sut.mapAllAttributesCallback);
+                sut.registerMapper(paramConfig);
+
+                let result = sut.getMappedObject(getterConfig);
+
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+                expect(result.pedro).toEqual(origin.pedro);
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+                expect(result.internalMethod).toBeUndefined();
+                expect(origin.internalMethod).toBeDefined();
+                expect(origin.internalMethod instanceof Function).toBeTruthy();
+            });
+        });
+
+        describe('mapAllOriginCallback - ', () => {
+            it('changing the default Mapper Callback to "mapAllOriginCallback" in the "RegisterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new apiFakes.MyFifthClass();
+                let destiny = new apiFakes.MySecondClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        apiFakes.MySecondClass,
+                        apiFakes.MyFifthClass,
+                        sut.mapAllOriginCallback,
+                        apiFakes.mySecondClassKey,
+                        apiFakes.myFifthClassKey);
+                let getterConfig = new GetterMapperConfiguration(apiFakes.mySecondClassKey, origin, destiny);
+                sut.registerMapper(paramConfig);
+
+                let result = sut.getMappedObject(getterConfig);
+
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+                expect(result.pedro).toEqual(origin.pedro);
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+            });
+
+            it('changing the default Mapper Callback to "mapAllOriginCallback" in the "GetterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new apiFakes.MyFifthClass();
+                let destiny = new apiFakes.MySecondClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        apiFakes.MySecondClass,
+                        apiFakes.MyFifthClass,
+                        null,
+                        apiFakes.mySecondClassKey,
+                        apiFakes.myFifthClassKey);
+                let getterConfig = new GetterMapperConfiguration(
+                        apiFakes.mySecondClassKey,
+                        origin,
+                        destiny,
+                        undefined,
+                        undefined,
+                        undefined,
+                        sut.mapAllOriginCallback);
+                sut.registerMapper(paramConfig);
+
+                let result = sut.getMappedObject(getterConfig);
+
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+                expect(result.pedro).toEqual(origin.pedro);
+                expect(result.internalMethod).toBeDefined();
+                expect(result.internalMethod instanceof Function).toBeTruthy();
+                expect(origin.internalMethod).toBeDefined();
+                expect(origin.internalMethod instanceof Function).toBeTruthy();
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+            });
+        });
+
+        describe('mapAllOriginAttributesCallback - ', () => {
+            it('changing the default Mapper Callback to "mapAllOriginAttributesCallback" in the "RegisterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new apiFakes.MyFifthClass();
+                let destiny = new apiFakes.MySecondClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        apiFakes.MySecondClass,
+                        apiFakes.MyFifthClass,
+                        sut.mapAllOriginAttributesCallback,
+                        apiFakes.mySecondClassKey,
+                        apiFakes.myFifthClassKey);
+                let getterConfig = new GetterMapperConfiguration(apiFakes.mySecondClassKey, origin, destiny);
+                sut.registerMapper(paramConfig);
+
+                let result = sut.getMappedObject(getterConfig);
+
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+                expect(result.pedro).toEqual(origin.pedro);
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+            });
+
+            it('changing the default Mapper Callback to "mapAllOriginAttributesCallback" in the "GetterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new apiFakes.MyFifthClass();
+                let destiny = new apiFakes.MySecondClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        apiFakes.MySecondClass,
+                        apiFakes.MyFifthClass,
+                        null,
+                        apiFakes.mySecondClassKey,
+                        apiFakes.myFifthClassKey);
+                let getterConfig = new GetterMapperConfiguration(
+                        apiFakes.mySecondClassKey,
+                        origin,
+                        destiny,
+                        undefined,
+                        undefined,
+                        undefined,
+                        sut.mapAllOriginAttributesCallback);
+
+                sut.registerMapper(paramConfig);
+
+                let result = sut.getMappedObject(getterConfig);
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+                expect(result.pedro).toEqual(origin.pedro);
+                expect(result.internalMethod).toBeUndefined();
+                expect(origin.internalMethod).toBeDefined();
+                expect(origin.internalMethod instanceof Function).toBeTruthy();
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+            });
+        });
+
+        describe('mapAllOriginMethodsCallback - ', () => {
+            it('changing the default Mapper Callback to "mapAllOriginMethodsCallback" in the "RegisterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new apiFakes.MyFifthClass();
+                let destiny = new apiFakes.MySecondClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        apiFakes.MySecondClass,
+                        apiFakes.MyFifthClass,
+                        sut.mapAllOriginMethodsCallback,
+                        apiFakes.mySecondClassKey,
+                        apiFakes.myFifthClassKey);
+                let getterConfig = new GetterMapperConfiguration(apiFakes.mySecondClassKey, origin, destiny);
+                sut.registerMapper(paramConfig);
+
+                let result = sut.getMappedObject(getterConfig);
+
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+                expect(result.pedro).not.toEqual(origin.pedro);
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+            });
+
+            it('changing the default Mapper Callback to "mapAllOriginMethodsCallback" in the "GetterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new apiFakes.MyFifthClass();
+                let destiny = new apiFakes.MySecondClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        apiFakes.MySecondClass,
+                        apiFakes.MyFifthClass,
+                        null,
+                        apiFakes.mySecondClassKey,
+                        apiFakes.myFifthClassKey);
+                let getterConfig = new GetterMapperConfiguration(
+                        apiFakes.mySecondClassKey,
+                        origin,
+                        destiny,
+                        undefined,
+                        undefined,
+                        undefined,
+                        sut.mapAllOriginMethodsCallback);
+                sut.registerMapper(paramConfig);
+
+                let result = sut.getMappedObject(getterConfig);
+
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+                expect(result.pedro).not.toEqual(origin.pedro);
+                expect(result.internalMethod).toBeDefined();
+                expect(result.internalMethod instanceof Function).toBeTruthy();
+                expect(origin.internalMethod).toBeDefined();
+                expect(origin.internalMethod instanceof Function).toBeTruthy();
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+            });
+        });
+
+        describe('mapAllCallback - ', () => {
+            it('changing the default Mapper Callback to "mapAllCallback" in the "RegisterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new apiFakes.MyFifthClass();
+                let destiny = new apiFakes.MySecondClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        apiFakes.MySecondClass,
+                        apiFakes.MyFifthClass,
+                        sut.mapAllCallback,
+                        apiFakes.mySecondClassKey,
+                        apiFakes.myFifthClassKey);
+                let getterConfig = new GetterMapperConfiguration(apiFakes.mySecondClassKey, origin, destiny);
+                sut.registerMapper(paramConfig);
+
+                let result = sut.getMappedObject(getterConfig);
+
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+                expect(result.pedro).toEqual(origin.pedro);
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(result.internalFifthClassAttribute).toBeUndefined();
+                expect(origin.internalFifthClassAttribute).toBeDefined();
+                expect(result.internalMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+            });
+
+            it('changing the default Mapper Callback to "mapAllCallback" in the "GetterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new apiFakes.MyFifthClass();
+                let destiny = new apiFakes.MySecondClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        apiFakes.MySecondClass,
+                        apiFakes.MyFifthClass,
+                        null,
+                        apiFakes.mySecondClassKey,
+                        apiFakes.myFifthClassKey);
+                let getterConfig = new GetterMapperConfiguration(
+                        apiFakes.mySecondClassKey,
+                        origin,
+                        destiny,
+                        undefined,
+                        undefined,
+                        undefined,
+                        sut.mapAllCallback);
+                sut.registerMapper(paramConfig);
+
+                let result = sut.getMappedObject(getterConfig);
+
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
+                expect(result.pedro).toEqual(origin.pedro);
+                expect(result.internalFifthClassAttribute).toBeUndefined();
+                expect(origin.internalFifthClassAttribute).toBeDefined();
+                expect(result.internalMethod).toBeUndefined();
+                expect(origin.internalMethod).toBeDefined();
+                expect(origin.internalMethod instanceof Function).toBeTruthy();
+                expect(result.fifthClassMethod).toBeUndefined();
+                expect(origin.fifthClassMethod).toBeDefined();
+                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
+            });
+        });
+
+        describe('mapAllMethodsCallback - ', () => {
+            it('changing the default Mapper Callback to "mapAllMethodsCallback" in the "RegisterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new OriginTestClass();
+                let destiny = new DestinationTestClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        DestinationTestClass,
+                        OriginTestClass,
+                        sut.mapAllMethodsCallback,
+                        'DestinationTestClassKey',
+                        'OriginTestClassKey');
+                let getterConfig = new GetterMapperConfiguration(
+                        'DestinationTestClassKey',
+                        origin,
+                        destiny,
+                        undefined,
+                        undefined,
+                        undefined,
+                        sut.mapAllMethodsCallback);
+                sut.registerMapper(paramConfig);
+                let result = sut.getMappedObject(getterConfig);
+
+                let wasOriginMethodCalled = result.anotherTest2(origin);
+
+                expect(wasOriginMethodCalled).toBeTruthy()();
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof DestinationTestClass).toBeTruthy();
+                expect(result.pedro).not.toEqual(origin.pedro);
+                expect(result.originMethod).toBeUndefined();
+                expect(origin.originMethod).toBeDefined();
+                expect(origin.originMethod instanceof Function).toBeTruthy();
+                expect(origin.destinyMethod).toBeUndefined();
+                expect(result.destinyMethod).toBeDefined();
+                expect(result.destinyMethod instanceof Function).toBeTruthy();
+                expect(result.anotherTest2).toBeDefined();
+                expect(result.anotherTest2 instanceof Function).toBeTruthy();
+                expect(origin.anotherTest2).toBeDefined();
+                expect(origin.anotherTest2 instanceof Function).toBeTruthy();
+            });
+
+            it('changing the default Mapper Callback to "mapAllMethodsCallback" in the "GetterMapperConfiguration" object then maps the Origin Object to the Destination Object', () => {
+                let origin = new OriginTestClass();
+                let destiny = new DestinationTestClass();
+                let sut = new Mapper4Javascript();
+                let paramConfig = new RegisterMapperConfiguration(
+                        DestinationTestClass,
+                        OriginTestClass,
+                        null,
+                        'DestinationTestClassKey',
+                        'OriginTestClassKey');
+                let getterConfig = new GetterMapperConfiguration(
+                        'DestinationTestClassKey',
+                        origin,
+                        destiny,
+                        undefined,
+                        undefined,
+                        undefined,
+                        sut.mapAllMethodsCallback);
+                sut.registerMapper(paramConfig);
+                let result = sut.getMappedObject(getterConfig);
+
+                let wasOriginMethodCalled = result.anotherTest2(origin);
+
+                expect(wasOriginMethodCalled).toBeTruthy()();
+                expect(result).toBeDefined();
+                expect(result).toBe(destiny);
+                expect(result instanceof DestinationTestClass).toBeTruthy();
+                expect(result.pedro).not.toEqual(origin.pedro);
+                expect(result.originMethod).toBeUndefined();
+                expect(origin.originMethod).toBeDefined();
+                expect(origin.originMethod instanceof Function).toBeTruthy();
+                expect(origin.destinyMethod).toBeUndefined();
+                expect(result.destinyMethod).toBeDefined();
+                expect(result.destinyMethod instanceof Function).toBeTruthy();
+                expect(result.anotherTest2).toBeDefined();
+                expect(result.anotherTest2 instanceof Function).toBeTruthy();
+                expect(origin.anotherTest2).toBeDefined();
+                expect(origin.anotherTest2 instanceof Function).toBeTruthy();
+            });
+        });
+    });
 });
-
-
-/*
- 
- let configuration = new RegisterMapperConfiguration(MySecondClass, MyClass);
- configuration.ignoredAttributes = ['lui'];
- //configuration.ignoreAllAttributes
- //configuration.exceptedAttributes
- mapper.registerMapper(configuration);//, 'mySecondClass');
- mapper.registerMapper(new RegisterMapperConfiguration(MySecondClass, MyFifthClass));//, 'mySecondClass');
- ioc.registerSingletonType(MySecondClass, 'mySecondClass', function (instance, ioc, aop, mapper) {
- instance.objectAttribute = this.getInstanceOf('myFourthClass')
- instance = mapper.getMappedObject(
- new GetterMapperConfiguration(
- 'mySecondClass',
- [ myClass, new MyFifthClass() ],
- instance,
- ['pepe']
- )
- );
- return instance;
- }.bind(ioc));
- 
- ///////////////////////////////////////////////////////////
- 
- var mySecondClass = ioc.getInstanceOf('mySecondClass');
- 
- console.log(Object.entries(mySecondClass));
- console.log(_.allKeys(MySecondClass));
- for (var key in MySecondClass) console.log(key)
- 
- console.log('myClass', JSON.stringify(myClass));
- console.log('mySecondClass', JSON.stringify(mySecondClass));
- mySecondClass.prueba('Hola Mundo!!');
- mySecondClass.otraPrueba('Hola Mundo!!');
- mySecondClass.otraPruebaMas('Hola Mundo!!');
- 
- */

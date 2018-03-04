@@ -10,11 +10,23 @@ class ApiFakes {
         this.mySecondClassKey = 'mySecondClassKey';
         this.myThirdClassKey = 'myThirdClassKey';
         this.myFourthClassKey = 'myFourthClassKey';
+        this.myFifthClassKey = 'myFifthClassKey';
         
         this.MyFifthClass = function () {
+            this.internalFifthClassAttribute = true;
             this.pedro = '10';
+            this.internalMethod = function () {
+            };
+            this.internalMethod = this.internalMethod.bind(this);
+        };
+        
+        this.MyFifthClass.prototype.fifthClassMethod = function () {
         };
 
+        this.MyFifthClass.prototype.anotherTest2 = function () {
+            this.fifthClassMethod();
+        };
+        
         this.MyFourthClass = function () {
             this.something = 'something';
         };
@@ -93,15 +105,19 @@ class ApiFakes {
     beforeCallback () {
         //console.log('--> beforeCallback');
     }
+    
     afterCallback () {
         //console.log('--> afterCallback');
     }
+    
     exceptionCallback () {
         //console.log('--> exceptionCallback');
     }
+    
     finallyCallback () {
         //console.log('--> finallyCallback');
     }
+    
     wrapperCallback () {
         //console.log('--> wrapperCallback');
     }
