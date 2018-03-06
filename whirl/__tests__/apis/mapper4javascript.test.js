@@ -18,7 +18,7 @@ class OriginTestClass {
 
     anotherTest2(obj) {
         console.log('OriginTestClass::anotherTest2 was called');
-        return this.originMethod.call(obj);
+        return obj.originMethod();
     }
 }
 
@@ -189,10 +189,8 @@ describe('Mapper4Javascript - ', () => {
                 expect(result).toBe(destiny);
                 expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
                 expect(result.pedro).toEqual(origin.pedro);
-                expect(result.fifthClassMethod).toBeUndefined();
-                expect(origin.fifthClassMethod).toBeDefined();
-                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
-                expect(result.fifthClassMethod).toBeUndefined();
+                expect(result.fifthClassMethod).toBeDefined();
+                expect(result.fifthClassMethod instanceof Function).toBeTruthy();
                 expect(origin.fifthClassMethod).toBeDefined();
                 expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
             });
@@ -223,11 +221,8 @@ describe('Mapper4Javascript - ', () => {
                 expect(result).toBe(destiny);
                 expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
                 expect(result.pedro).toEqual(origin.pedro);
-                expect(result.internalMethod).toBeDefined();
-                expect(result.internalMethod instanceof Function).toBeTruthy();
-                expect(origin.internalMethod).toBeDefined();
-                expect(origin.internalMethod instanceof Function).toBeTruthy();
-                expect(result.fifthClassMethod).toBeUndefined();
+                expect(result.fifthClassMethod).toBeDefined();
+                expect(result.fifthClassMethod instanceof Function).toBeTruthy();
                 expect(origin.fifthClassMethod).toBeDefined();
                 expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
             });
@@ -316,10 +311,7 @@ describe('Mapper4Javascript - ', () => {
                 expect(result).toBe(destiny);
                 expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
                 expect(result.pedro).not.toEqual(origin.pedro);
-                expect(result.fifthClassMethod).toBeUndefined();
-                expect(origin.fifthClassMethod).toBeDefined();
-                expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
-                expect(result.fifthClassMethod).toBeUndefined();
+                expect(result.fifthClassMethod).toBeDefined();
                 expect(origin.fifthClassMethod).toBeDefined();
                 expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
             });
@@ -350,11 +342,7 @@ describe('Mapper4Javascript - ', () => {
                 expect(result).toBe(destiny);
                 expect(result instanceof apiFakes.MySecondClass).toBeTruthy();
                 expect(result.pedro).not.toEqual(origin.pedro);
-                expect(result.internalMethod).toBeDefined();
-                expect(result.internalMethod instanceof Function).toBeTruthy();
-                expect(origin.internalMethod).toBeDefined();
-                expect(origin.internalMethod instanceof Function).toBeTruthy();
-                expect(result.fifthClassMethod).toBeUndefined();
+                expect(result.fifthClassMethod).toBeDefined();
                 expect(origin.fifthClassMethod).toBeDefined();
                 expect(origin.fifthClassMethod instanceof Function).toBeTruthy();
             });
@@ -442,17 +430,14 @@ describe('Mapper4Javascript - ', () => {
                 let getterConfig = new GetterMapperConfiguration(
                         'DestinationTestClassKey',
                         origin,
-                        destiny,
-                        undefined,
-                        undefined,
-                        undefined,
-                        sut.mapAllMethodsCallback);
+                        destiny,);
                 sut.registerMapper(paramConfig);
+                origin.originMethod = origin.originMethod.bind(origin);
                 let result = sut.getMappedObject(getterConfig);
 
                 let wasOriginMethodCalled = result.anotherTest2(origin);
 
-                expect(wasOriginMethodCalled).toBeTruthy()();
+                expect(wasOriginMethodCalled).toBeTruthy();
                 expect(result).toBeDefined();
                 expect(result).toBe(destiny);
                 expect(result instanceof DestinationTestClass).toBeTruthy();
@@ -479,7 +464,7 @@ describe('Mapper4Javascript - ', () => {
                         null,
                         'DestinationTestClassKey',
                         'OriginTestClassKey');
-                let getterConfig = new GetterMapperConfiguration(
+                    let getterConfig = new GetterMapperConfiguration(
                         'DestinationTestClassKey',
                         origin,
                         destiny,
@@ -488,11 +473,12 @@ describe('Mapper4Javascript - ', () => {
                         undefined,
                         sut.mapAllMethodsCallback);
                 sut.registerMapper(paramConfig);
+                origin.originMethod = origin.originMethod.bind(origin);
                 let result = sut.getMappedObject(getterConfig);
 
                 let wasOriginMethodCalled = result.anotherTest2(origin);
 
-                expect(wasOriginMethodCalled).toBeTruthy()();
+                expect(wasOriginMethodCalled).toBeTruthy();
                 expect(result).toBeDefined();
                 expect(result).toBe(destiny);
                 expect(result instanceof DestinationTestClass).toBeTruthy();

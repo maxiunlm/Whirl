@@ -2,7 +2,6 @@ import UtilsBase4Javascript from './utilbase4javascript';
 import GetterMapperConfiguration from './getterMapperConfiguration';
 import RegisterMapperConfiguration from './registerMapperConfiguration';
 
-
 class Mapper4Javascript extends UtilsBase4Javascript {
     constructor(defaultRegisterMapperConfiguration) {
         super();
@@ -217,7 +216,7 @@ class Mapper4Javascript extends UtilsBase4Javascript {
     }
 
     mapAllOriginCallback(getterMapperConfiguration, originObject) {
-        let originObjectKeys = Object.keys(originObject);
+        let originObjectKeys = this.getAllMappedObjectKeys(originObject);
 
         originObjectKeys.forEach(function (key, index, allKeys) {
             if (this.mustMapAttribute(getterMapperConfiguration, key)) {
@@ -242,8 +241,7 @@ class Mapper4Javascript extends UtilsBase4Javascript {
     }
 
     mapAllOriginMethodsCallback(getterMapperConfiguration, originObject) {
-        let originObjectKeys = Object.keys(originObject);
-        originObjectKeys = originObjectKeys.concat(Object.getOwnPropertyNames(originObject.__proto__));
+        let originObjectKeys = this.getAllMappedObjectKeys(originObject);
 
         originObjectKeys.forEach(function (key, index, allKeys) {
             if (this.isFunction(originObject[key])
@@ -256,7 +254,7 @@ class Mapper4Javascript extends UtilsBase4Javascript {
     }
 
     mapAllCallback(getterMapperConfiguration, originObject) {
-        let destinationObjectKeys = Object.keys(getterMapperConfiguration.destinationObject);
+        let destinationObjectKeys = this.getAllMappedObjectKeys(getterMapperConfiguration.destinationObject);
 
         destinationObjectKeys.forEach(function (key, index, allKeys) {
             if (!!originObject[key]
@@ -269,13 +267,12 @@ class Mapper4Javascript extends UtilsBase4Javascript {
     }
 
     mapAllMethodsCallback(getterMapperConfiguration, originObject) {
-        let destinationObjectKeys = Object.keys(getterMapperConfiguration.destinationObject);
-        destinationObjectKeys = destinationObjectKeys.concat(
-                Object.getOwnPropertyNames(getterMapperConfiguration.destinationObject.__proto__)
-                );
+        let destinationObjectKeys = this.getAllMappedObjectKeys(getterMapperConfiguration.destinationObject);
 
         destinationObjectKeys.forEach(function (key, index, allKeys) {
-            if (!!originObject[key] && this.isFunction(originObject[key])
+            if (key !== 'constructor' 
+                    && !!originObject[key] 
+                    && this.isFunction(originObject[key])
                     && this.mustMapAttribute(getterMapperConfiguration, key)) {
                 console.log(originObject, key);
                 getterMapperConfiguration.destinationObject[key] = originObject[key];
@@ -285,6 +282,18 @@ class Mapper4Javascript extends UtilsBase4Javascript {
         }.bind(this));
 
         return getterMapperConfiguration.destinationObject;
+    }
+    
+    getAllMappedObjectKeys(mappedObject) {
+        let keys = Object.keys(mappedObject);
+        
+        if (!!mappedObject.__proto__) {
+            keys = keys.concat(
+                    Object.getOwnPropertyNames(mappedObject.__proto__)
+                    );
+        }
+        
+        return keys;
     }
 
     getMappedObject(getterMapperConfiguration) {
@@ -303,12 +312,16 @@ class Mapper4Javascript extends UtilsBase4Javascript {
     registerMapper(registerMapperConfiguration) {
         //this.validateInstance(registerMapperConfiguration, 'RegisterMapperConfiguration', RegisterMapperConfiguration);
         this.validateAlreadyRegisteredMapper(
-                registerMapperConfiguration.originKey || this.defaultConfiguration.originKey,
-                registerMapperConfiguration.originObjectType.name || this.defaultConfiguration.originObjectType.name,
+                registerMapperConfiguration.originKey
+				|| this.defaultConfiguration.originKey,
+                registerMapperConfiguration.originObjectType.name
+				|| this.defaultConfiguration.originObjectType.name,
                 'originKey');
         this.validateAlreadyRegisteredMapper(
                 registerMapperConfiguration.destinationKey || this.defaultConfiguration.destinationKey,
-                registerMapperConfiguration.destinationObjectType.name || this.defaultConfiguration.destinationObjectType.name,
+                registerMapperConfiguration.destinationObjectType.name
+				|| this.defaultConfiguration.destinationObjectType.name
+				|| '',
                 'destinationKey');
 
         let originKey = registerMapperConfiguration.originKey
