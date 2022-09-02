@@ -1,255 +1,250 @@
-import AopConfigParameters from './aopConfigParameters';
-import UtilsBase4Javascript from './utilbase4javascript';
+import AopConfigParameters from "./aopConfigParameters";
+import UtilsBase4Javascript from "./utilbase4javascript";
 
 class Aop4Javascript extends UtilsBase4Javascript {
-    constructor(aopConfigParameters, types) {
-        super();
-        this.aopConfigParameters = aopConfigParameters || new AopConfigParameters();
-        this.types = types || {};
-    }
+	constructor(aopConfigParameters, types) {
+		super();
+		this.aopConfigParameters = aopConfigParameters || new AopConfigParameters();
+		this.types = types || {};
+	}
 
-    getAopConfigParameters(
-            objectReference,
-            methodName,
-            beforeCallback,
-            afterCallback,
-            exceptionCallback,
-            finallyCallback,
-            wrapperCallback,
-            mustUseRetryManager) {
-        let aopConfigParameters = new AopConfigParameters(
-                objectReference || this.aopConfigParameters.objectReference,
-                methodName || this.aopConfigParameters.methodName,
-                beforeCallback || this.aopConfigParameters.beforeCallback,
-                afterCallback || this.aopConfigParameters.afterCallback,
-                exceptionCallback || this.aopConfigParameters.exceptionCallback,
-                finallyCallback || this.aopConfigParameters.finallyCallback,
-                wrapperCallback || this.aopConfigParameters.wrapperCallback,
-                mustUseRetryManager || this.aopConfigParameters.mustUseRetryManager
-                );
+	getAopConfigParameters(objectReference, methodName, beforeCallback, afterCallback, exceptionCallback, finallyCallback, wrapperCallback, mustUseRetryManager) {
+		let aopConfigParameters = new AopConfigParameters(
+			objectReference || this.aopConfigParameters.objectReference,
+			methodName || this.aopConfigParameters.methodName,
+			beforeCallback || this.aopConfigParameters.beforeCallback,
+			afterCallback || this.aopConfigParameters.afterCallback,
+			exceptionCallback || this.aopConfigParameters.exceptionCallback,
+			finallyCallback || this.aopConfigParameters.finallyCallback,
+			wrapperCallback || this.aopConfigParameters.wrapperCallback,
+			mustUseRetryManager || this.aopConfigParameters.mustUseRetryManager
+		);
 
-        return aopConfigParameters;
-    }
+		return aopConfigParameters;
+	}
 
-    wrapAll(aopConfigParameters) {
-        aopConfigParameters = aopConfigParameters || this.aopConfigParameters;
-        aopConfigParameters.wrapper = this.wrapper;
-        
-        let keys = Object.keys(aopConfigParameters.objectReference);
-        let methodList  = keys.filter((key, index, arr) => {
-            return this.isFunction(aopConfigParameters.objectReference[key]);
-        });
-        
-        aopConfigParameters.methodName = methodList;
-        
-        this.surround(aopConfigParameters, this.wrapper);
-    }
+	wrapAll(aopConfigParameters) {
+		aopConfigParameters = aopConfigParameters || this.aopConfigParameters;
+		aopConfigParameters.wrapper = this.wrapper;
 
-    wrap(aopConfigParameters) {
-        aopConfigParameters = aopConfigParameters || this.aopConfigParameters;
-        aopConfigParameters.wrapper = this.wrapper;
-        this.surround(aopConfigParameters, this.wrapper);
-    }
+		let keys = Object.keys(aopConfigParameters.objectReference);
+		let methodList = keys.filter((key, index, arr) => {
+			return this.isFunction(aopConfigParameters.objectReference[key]);
+		});
 
-    wrapper(hasPassedBefore, hasPassedMethodReference, hasPassedAfter, hasPassedFinally) {
-        hasPassedBefore = hasPassedBefore || false;
-        hasPassedMethodReference = hasPassedMethodReference || false;
-        hasPassedAfter = hasPassedAfter || false;
-        hasPassedFinally = hasPassedFinally || false;
+		aopConfigParameters.methodName = methodList;
 
-        try {
-            //console.log(this.beforeCallback, hasPassedBefore);
-            if (!!this.beforeCallback && !hasPassedBefore) {
-                this.beforeCallback.call(this);
-                hasPassedBefore = true;
-            }
+		this.surround(aopConfigParameters, this.wrapper);
+	}
 
-            //console.log(this, this.methodReference, hasPassedMethodReference, arguments);
-            if (!!this.methodReference && !hasPassedMethodReference) {
-                let argumentsCall = Array.prototype.slice.call(arguments, 1);
+	wrap(aopConfigParameters) {
+		aopConfigParameters = aopConfigParameters || this.aopConfigParameters;
+		aopConfigParameters.wrapper = this.wrapper;
+		this.surround(aopConfigParameters, this.wrapper);
+	}
 
-                if (this.mustContinueExecuting()) {
-                    this.execMethodReference(argumentsCall);
+	wrapper(hasPassedBefore, hasPassedMethodReference, hasPassedAfter, hasPassedFinally) {
+		hasPassedBefore = hasPassedBefore || false;
+		hasPassedMethodReference = hasPassedMethodReference || false;
+		hasPassedAfter = hasPassedAfter || false;
+		hasPassedFinally = hasPassedFinally || false;
 
-                    hasPassedMethodReference = true;
-                }
-            } else {
-                throw new Error('The "methodReference" is required.');
-            }
+		try {
+			//console.log(this.beforeCallback, hasPassedBefore);
+			if (!!this.beforeCallback && !hasPassedBefore) {
+				this.beforeCallback.call(this);
+				hasPassedBefore = true;
+			}
 
-            if (!!this.afterCallback && this.mustContinueExecuting() && !hasPassedAfter) {
-                this.afterCallback.call(this);
-                hasPassedAfter = true;
-            }
-        } catch (e) {
-            if (!!this.mustUseRetryManager && this.retryManager.getHasAnotherAttempt(e)) {
-                this.wrapper(hasPassedBefore, hasPassedMethodReference, hasPassedAfter, hasPassedFinally);
-                return;
-            }
+			//console.log(this, this.methodReference, hasPassedMethodReference, arguments);
+			if (!!this.methodReference && !hasPassedMethodReference) {
+				let argumentsCall = Array.prototype.slice.call(arguments, 1);
 
-            if (!!this.exceptionCallback) {
-                this.exceptionCallback.call(this, e);
-            }
-            else {
-                console.log('EXCEPTION [wrapper]', e);
-            }
-        } finally {
-            try {
-                if (!!this.finallyCallback && this.mustContinueExecuting() && !hasPassedFinally) {
-                    this.finallyCallback.call(this);
-                    hasPassedFinally = true;
-                }
-            } catch (ex) {
-                console.log('EXCEPTION [wrapper][finally]', ex);
-                if (!!this.mustUseRetryManager && this.retryManager.getHasAnotherAttempt(ex)) {
-                    this.wrapper(true, true, true, false);
-                }
-            }
-        }
-    }
-    
-    setMaxAttemps(maxAttemps) {
-        this.aopConfigParameters.setMaxAttemps(maxAttemps);
-    }
-    
-    setConfirmAction(confirmAction) {
-        this.aopConfigParameters.setConfirmAction(confirmAction);
-    }
+				if (this.mustContinueExecuting()) {
+					this.execMethodReference(argumentsCall);
 
-    intercept(aopConfigParameters) {
-        this.surround.call(this, aopConfigParameters, this.interceptor);
-    }
+					hasPassedMethodReference = true;
+				}
+			} else {
+				throw new Error('The "methodReference" is required.');
+			}
 
-    interceptor() {
-        try {
-            let argumentsCall = Array.prototype.slice.call(arguments, 1);
-            let result = this.wrapperCallback(this, argumentsCall);
-            
-            return result;
-        } catch (e) {
-            console.log('EXCEPTION [interceptor]', e);
-        }
-    }
+			if (!!this.afterCallback && this.mustContinueExecuting() && !hasPassedAfter) {
+				this.afterCallback.call(this);
+				hasPassedAfter = true;
+			}
+		} catch (e) {
+			if (!!this.mustUseRetryManager && this.retryManager.getHasAnotherAttempt(e)) {
+				this.wrapper(hasPassedBefore, hasPassedMethodReference, hasPassedAfter, hasPassedFinally);
+				return;
+			}
 
-    surround(aopConfigParameters, surrounderMethod) {
-        this.validateAopConfigParameters(aopConfigParameters);
-        this.configObjectReference(aopConfigParameters);
+			if (!!this.exceptionCallback) {
+				this.exceptionCallback.call(this, e);
+			} else {
+				console.log("EXCEPTION [wrapper]", e);
+			}
+		} finally {
+			try {
+				if (!!this.finallyCallback && this.mustContinueExecuting() && !hasPassedFinally) {
+					this.finallyCallback.call(this);
+					hasPassedFinally = true;
+				}
+			} catch (ex) {
+				console.log("EXCEPTION [wrapper][finally]", ex);
+				if (!!this.mustUseRetryManager && this.retryManager.getHasAnotherAttempt(ex)) {
+					this.wrapper(true, true, true, false);
+				}
+			}
+		}
+	}
 
-        let methodNames = this.getMethodNamesList(aopConfigParameters);
+	setMaxAttemps(maxAttemps) {
+		this.aopConfigParameters.setMaxAttemps(maxAttemps);
+	}
 
-        methodNames.forEach(function (methodName, index, allMethodNames) {
-            this.doSurround(aopConfigParameters, surrounderMethod, methodName);
-        }.bind(this));
-    }
+	setConfirmAction(confirmAction) {
+		this.aopConfigParameters.setConfirmAction(confirmAction);
+	}
 
-    configObjectReference(aopConfigParameters) {
-        if (this.isString(aopConfigParameters.objectReference)) {
-            aopConfigParameters.objectReference = this.types[aopConfigParameters.objectReference].type;
-        }
-    }
+	intercept(aopConfigParameters) {
+		this.surround.call(this, aopConfigParameters, this.interceptor);
+	}
 
-    getMethodNamesList(aopConfigParameters) {
-        let methodName = aopConfigParameters.methodName;
-        let objectReference = aopConfigParameters.objectReference;
-        let methodNamesList = [];
+	interceptor() {
+		try {
+			let argumentsCall = Array.prototype.slice.call(arguments, 1);
+			let result = this.wrapperCallback(this, argumentsCall);
 
-        if (this.isFunction(methodName)) {
-            methodName = methodName.name;
-        } else if (methodName instanceof RegExp) {
-            let objectReferenceKeys = this.getObjectReferenceKeys(objectReference);
+			return result;
+		} catch (e) {
+			console.log("EXCEPTION [interceptor]", e);
+		}
+	}
 
-            objectReferenceKeys.forEach(function (key, index, allKeys) {
-                if (this.isMatchedMethodName(objectReference, methodName, key)) {
-                    methodNamesList.push(key);
-                }
-            }.bind(this));
-        } else if (methodName instanceof Array) {
-            methodName.forEach(function (key, index, allKeys) {
-                methodNamesList.push(key);
-            }.bind(this));
-        }
+	surround(aopConfigParameters, surrounderMethod) {
+		this.validateAopConfigParameters(aopConfigParameters);
+		this.configObjectReference(aopConfigParameters);
 
-        if (methodNamesList.length === 0) {
-            methodNamesList = [methodName];
-        }
+		let methodNames = this.getMethodNamesList(aopConfigParameters);
 
-        return methodNamesList;
-    }
+		methodNames.forEach(
+			function (methodName, index, allMethodNames) {
+				this.doSurround(aopConfigParameters, surrounderMethod, methodName);
+			}.bind(this)
+		);
+	}
 
-    getObjectReferenceKeys(objectReference) {
-        let objectReferenceKeys = [];
+	configObjectReference(aopConfigParameters) {
+		if (this.isString(aopConfigParameters.objectReference)) {
+			aopConfigParameters.objectReference = this.types[aopConfigParameters.objectReference].type;
+		}
+	}
 
-        if (!!objectReference.prototype) {
-            objectReferenceKeys = objectReferenceKeys.concat(Object.keys(objectReference.prototype));
-        }
+	getMethodNamesList(aopConfigParameters) {
+		let methodName = aopConfigParameters.methodName;
+		let objectReference = aopConfigParameters.objectReference;
+		let methodNamesList = [];
 
-        if (objectReference instanceof Object) {
-            objectReferenceKeys = objectReferenceKeys.concat(Object.keys(objectReference.__proto__));
-        }
+		if (this.isFunction(methodName)) {
+			methodName = methodName.name;
+		} else if (methodName instanceof RegExp) {
+			let objectReferenceKeys = this.getObjectReferenceKeys(objectReference);
 
-        if (!!objectReference) {
-            objectReferenceKeys = objectReferenceKeys.concat(Object.keys(objectReference));
-        }
+			objectReferenceKeys.forEach((key, index, allKeys) => {
+				if (this.isMatchedMethodName(objectReference, methodName, key)) {
+					methodNamesList.push(key);
+				}
+			});
+		} else if (methodName instanceof Array) {
+			methodName.forEach((key, index, allKeys) => {
+				methodNamesList.push(key);
+			});
+		}
 
-        return objectReferenceKeys;
-    }
+		if (methodNamesList.length === 0) {
+			methodNamesList = [methodName];
+		}
 
-    isMatchedMethodName(objectReference, regularExpession, key) {
-        return ((!!objectReference[key] && this.isFunction(objectReference[key]))
-                || (!!objectReference.prototype && !!objectReference.prototype[key] && this.isFunction(objectReference.prototype[key])))
-                && regularExpession.test(key);
-    }
+		return methodNamesList;
+	}
 
-    doSurround(aopConfigParameters, surrounderMethod, methodName) {
-        let aopEvent = this.getAopEvent();
-        let configParameters = new AopConfigParameters();
-        configParameters.copy(aopConfigParameters);
-        configParameters.aopEvent = aopEvent;
-        configParameters.mustContinueExecuting = this.mustContinueExecuting.bind(configParameters);
-        configParameters.setMethodReference.call(configParameters, methodName, surrounderMethod);
-    }
+	getObjectReferenceKeys(objectReference) {
+		let objectReferenceKeys = [];
 
-    validateAopConfigParameters(aopConfigParameters) {
-        if (!aopConfigParameters) {
-            throw new Error('EXCEPTION [wrap]: the "aopConfigParameters" is obligatory.');
-        }
+		if (!!objectReference.prototype) {
+			objectReferenceKeys = objectReferenceKeys.concat(Object.keys(objectReference.prototype));
+		}
 
-        this.aopConfigParameters.objectReference = aopConfigParameters.objectReference || this.aopConfigParameters.objectReference;
-        this.aopConfigParameters.methodName = aopConfigParameters.methodName || this.aopConfigParameters.methodName;
-        this.aopConfigParameters.beforeCallback = aopConfigParameters.beforeCallback || this.aopConfigParameters.beforeCallback;
-        this.aopConfigParameters.afterCallback = aopConfigParameters.afterCallback || this.aopConfigParameters.afterCallback;
-        this.aopConfigParameters.exceptionCallback = aopConfigParameters.exceptionCallback || this.aopConfigParameters.exceptionCallback;
-        this.aopConfigParameters.exceptionCallback = aopConfigParameters.exceptionCallback || this.aopConfigParameters.finallyCallback;
-        this.aopConfigParameters.wrapperCallback = aopConfigParameters.wrapperCallback || this.aopConfigParameters.wrapperCallback;
-        this.aopConfigParameters.mustUseRetryManager = aopConfigParameters.mustUseRetryManager || this.aopConfigParameters.mustUseRetryManager;
-        this.aopConfigParameters.retryManager = aopConfigParameters.retryManager || this.aopConfigParameters.retryManager;
-        this.aopConfigParameters.wrapper = aopConfigParameters.wrapper || this.aopConfigParameters.wrapper;
-    }
+		if (objectReference instanceof Object) {
+			objectReferenceKeys = objectReferenceKeys.concat(Object.keys(objectReference.__proto__));
+		}
 
-    getAopEvent() {
-        let aopEvent = new Event(this.__proto__.constructor.name, {
-            bubbles: false,
-            cancelable: false,
-            scopped: false,
-            composed: false
-        });
+		if (!!objectReference) {
+			objectReferenceKeys = objectReferenceKeys.concat(Object.keys(objectReference));
+		}
 
-        return aopEvent;
-    }
+		return objectReferenceKeys;
+	}
 
-    mustContinueExecuting() {
-        return !this.aopEvent.defaultPrevented;
-    }
-    
-    registerType(type, key) {
-        this.validateAlreadyRegistered(this.types, key);
-        this.validateKeyType(key);
-        this.validateType(type);
+	isMatchedMethodName(objectReference, regularExpession, key) {
+		return (
+			((!!objectReference[key] && this.isFunction(objectReference[key])) ||
+				(!!objectReference.prototype && !!objectReference.prototype[key] && this.isFunction(objectReference.prototype[key]))) &&
+			regularExpession.test(key)
+		);
+	}
 
-        this.types[key] = { key: key, typeName: type.name, type: type };
+	doSurround(aopConfigParameters, surrounderMethod, methodName) {
+		let aopEvent = this.getAopEvent();
+		let configParameters = new AopConfigParameters();
+		configParameters.copy(aopConfigParameters);
+		configParameters.aopEvent = aopEvent;
+		configParameters.mustContinueExecuting = this.mustContinueExecuting.bind(configParameters);
+		configParameters.setMethodReference.call(configParameters, methodName, surrounderMethod);
+	}
 
-        return this;
-    }
+	validateAopConfigParameters(aopConfigParameters) {
+		if (!aopConfigParameters) {
+			throw new Error('EXCEPTION [wrap]: the "aopConfigParameters" is obligatory.');
+		}
+
+		this.aopConfigParameters.objectReference = aopConfigParameters.objectReference || this.aopConfigParameters.objectReference;
+		this.aopConfigParameters.methodName = aopConfigParameters.methodName || this.aopConfigParameters.methodName;
+		this.aopConfigParameters.beforeCallback = aopConfigParameters.beforeCallback || this.aopConfigParameters.beforeCallback;
+		this.aopConfigParameters.afterCallback = aopConfigParameters.afterCallback || this.aopConfigParameters.afterCallback;
+		this.aopConfigParameters.exceptionCallback = aopConfigParameters.exceptionCallback || this.aopConfigParameters.exceptionCallback;
+		this.aopConfigParameters.exceptionCallback = aopConfigParameters.exceptionCallback || this.aopConfigParameters.finallyCallback;
+		this.aopConfigParameters.wrapperCallback = aopConfigParameters.wrapperCallback || this.aopConfigParameters.wrapperCallback;
+		this.aopConfigParameters.mustUseRetryManager = aopConfigParameters.mustUseRetryManager || this.aopConfigParameters.mustUseRetryManager;
+		this.aopConfigParameters.retryManager = aopConfigParameters.retryManager || this.aopConfigParameters.retryManager;
+		this.aopConfigParameters.wrapper = aopConfigParameters.wrapper || this.aopConfigParameters.wrapper;
+	}
+
+	getAopEvent() {
+		let aopEvent = new Event(this.__proto__.constructor.name, {
+			bubbles: false,
+			cancelable: false,
+			scopped: false,
+			composed: false,
+		});
+
+		return aopEvent;
+	}
+
+	mustContinueExecuting() {
+		return !this.aopEvent.defaultPrevented;
+	}
+
+	registerType(type, key) {
+		this.validateAlreadyRegistered(this.types, key);
+		this.validateKeyType(key);
+		this.validateType(type);
+
+		this.types[key] = { key: key, typeName: type.name, type: type };
+
+		return this;
+	}
 }
 
 export default Aop4Javascript;

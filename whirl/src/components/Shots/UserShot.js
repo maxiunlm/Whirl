@@ -1,74 +1,99 @@
-import IoC4Javascript from '../../../src/apis/ioc4javascript';
-import React, { Component } from 'react';
-import './UserShot.css';
+import "./UserShot.css";
+import userShotImg from "../../images/userShot.png";
+import IoC4Javascript from "../../../src/apis/ioc4javascript";
+import React, { Component } from "react";
 
 class UserShot extends Component {
-    constructor(props) {
-        super(props);
-        
-        this.ioc = new IoC4Javascript();
-        this.maths = this.getNewShotMaths();
-        this.movementInterval = 0.04;        
-        this.state = {
-            image: '/images/userShot.png'
-        };
-                
-        //    throw '-' + JSON.stringify(props.shot) + '-';
-        if(!!props.shot) {            
-            this.maths.setAngle(props.shot.angle);
-            let style = {
-                top: props.shot.top,
-                left: props.shot.left
-            };
-                        
-            this.state.style = style;
-        }
-    }
-    
-    getDimensions () {
-        return this.ioc.getInstanceOf('dimensionsKey');
-    }
-    
-    getNewShotMaths () {
-        return this.ioc.getInstanceOf('shotMathsKey');
-    }
+	constructor(props) {
+		super(props);
 
-    startShotting() {
-        this.shotInterval = setInterval(this.doShot.bind(this), this.movementInterval);
-    }
+		this.ioc = new IoC4Javascript();
+		this.maths = this.getNewShotMaths();
+		this.movementInterval = 0.05;
+		this.state = {};
+		this.mustContinue = true;
 
-    stopShotting() {
-        clearInterval(this.shotInterval);
-    }
-    
-    doShot() {
-        let position = this.maths.moveToNextEllipticalPosition();
-        
-        // TODO: si la postion esta cerca del centro:
-        // this.props.actions.stopShotting(this);
-        
-        this.setState({
-            style: {
-                top: position.top,
-                left: position.left
-            }
-        });
-    }
-    
-    componentDidMount() {
-        this.startShotting();
-        // REVISAR ??? -> this.props.actions.stopShotting = this.stopShotting.bind(this);
-    }
-    
-    componentWillUnmount() {
-        this.stopShotting();
-    }
+		//    throw '-' + JSON.stringify(props.shot) + '-';
+		if (!!props.shot) {
+			this.maths.setAngle(props.shot.angle);
 
-    render() {
-        return (
-                <img className="userShot"  src={this.state.image} alt="." className="userShot" style={this.state.style} />
-                );
-    }
+			this.state = {
+				style: {
+					top: props.shot.top,
+					left: props.shot.left,
+					transformOrigin: "center center",
+				},
+			};
+		}
+	}
+
+	getDimensions() {
+		return this.ioc.getInstanceOf("dimensionsKey");
+	}
+
+	getNewShotMaths() {
+		return this.ioc.getInstanceOf("shotMathsKey");
+	}
+
+	startShotting() {
+		this.startingAt = new Date();
+		this.shotInterval = setInterval(this.doShot.bind(this), this.movementInterval);
+		//setTimeout(this.doShot.bind(this), this.movementInterval);
+	}
+
+	stopShotting() {
+		this.mustContinue = false;
+		clearInterval(this.shotInterval);
+	}
+
+	doShot() {
+		if (!this.mustContinue) {
+			return;
+		}
+
+		let position = this.maths.moveToNextEllipticalPosition();
+
+		// TODO: si la postion esta cerca del centro:
+		if (this.isTimeout() || this.maths.isNearToCenter(position)) {
+			this.props.actions.stopShotting(this);
+			return;
+		}
+
+		this.setState({
+			style: {
+				top: position.top,
+				left: position.left,
+			},
+		});
+
+		// setTimeout(this.doShot.bind(this), this.movementInterval);
+	}
+
+	isTimeout() {
+		const endingAt = new Date();
+		const deltaInMilliseconds = endingAt.getTime() - this.startingAt.getTime();
+		return deltaInMilliseconds > 1000;
+	}
+
+	componentDidMount() {
+		this.startShotting();
+		// REVISAR ??? -> this.props.actions.stopShotting = this.stopShotting.bind(this);
+	}
+
+	componentWillUnmount() {
+		this.stopShotting();
+		this.mustContinue = true;
+	}
+
+	render() {
+		if (!this.mustContinue) {
+			return <span />;
+		}
+
+		this.state.style.transform = this.props.shot.transform;
+
+		return <img className="userShot" src={userShotImg} alt="." style={this.state.style} />;
+	}
 }
 
 export default UserShot;

@@ -1,129 +1,123 @@
-import UtilsBase4Javascript from './utilbase4javascript';
-import AopConfigParameters from './aopConfigParameters';
-import Aop4Javascript from './aop4javascript';
-import Mapper4Javascript from './mapper4javascript';
+import UtilsBase4Javascript from "./utilbase4javascript";
+import AopConfigParameters from "./aopConfigParameters";
+import Aop4Javascript from "./aop4javascript";
+import Mapper4Javascript from "./mapper4javascript";
 
 //let ioc4JavascriptInstance = null;
 window.ioc4JavascriptInstance = null;
 
 class IoC4Javascript extends UtilsBase4Javascript {
-    constructor(forceNewInstance) {
-        super();
+	constructor(forceNewInstance) {
+		super();
 
-        if (!forceNewInstance && !!window.ioc4JavascriptInstance) {
-            return window.ioc4JavascriptInstance;
-        } else if (!forceNewInstance) {
-            window.ioc4JavascriptInstance = this;
-//            window.ioc4JavascriptInstance.getInstanceOf = window.ioc4JavascriptInstance.getInstanceOf.bind(window.ioc4JavascriptInstance);
-//            window.ioc4JavascriptInstance.registerType = window.ioc4JavascriptInstance.registerType.bind(window.ioc4JavascriptInstance);
-//            window.ioc4JavascriptInstance.registerConstructor = window.ioc4JavascriptInstance.registerConstructor.bind(window.ioc4JavascriptInstance);
-//            window.ioc4JavascriptInstance.registerSingletonType = window.ioc4JavascriptInstance.registerSingletonType.bind(window.ioc4JavascriptInstance);
-        }
+		if (!forceNewInstance && !!window.ioc4JavascriptInstance) {
+			return window.ioc4JavascriptInstance;
+		} else if (!forceNewInstance) {
+			window.ioc4JavascriptInstance = this;
+			//            window.ioc4JavascriptInstance.getInstanceOf = window.ioc4JavascriptInstance.getInstanceOf.bind(window.ioc4JavascriptInstance);
+			//            window.ioc4JavascriptInstance.registerType = window.ioc4JavascriptInstance.registerType.bind(window.ioc4JavascriptInstance);
+			//            window.ioc4JavascriptInstance.registerConstructor = window.ioc4JavascriptInstance.registerConstructor.bind(window.ioc4JavascriptInstance);
+			//            window.ioc4JavascriptInstance.registerSingletonType = window.ioc4JavascriptInstance.registerSingletonType.bind(window.ioc4JavascriptInstance);
+		}
 
-        this.types = {};
-        this.constructors = {};
-        this.singletons = {};
+		this.types = {};
+		this.constructors = {};
+		this.singletons = {};
 
-        if (typeof Aop4Javascript !== typeof undefined) {
-            this.aop = new Aop4Javascript(new AopConfigParameters(), this.types);
-            this.registerSingletonType(Aop4Javascript, 'AOP', null, this.aop);
-        }
+		if (typeof Aop4Javascript !== typeof undefined) {
+			this.aop = new Aop4Javascript(new AopConfigParameters(), this.types);
+			this.registerSingletonType(Aop4Javascript, "AOP", null, this.aop);
+		}
 
-        if (typeof Mapper4Javascript !== typeof undefined) {
-            this.mapper = new Mapper4Javascript(this.types);
-            this.registerSingletonType(Mapper4Javascript, 'Mapper', null, this.mapper);
-        }
-    }
+		if (typeof Mapper4Javascript !== typeof undefined) {
+			this.mapper = new Mapper4Javascript(this.types);
+			this.registerSingletonType(Mapper4Javascript, "Mapper", null, this.mapper);
+		}
+	}
 
-    deleteInstance() {
-        window.ioc4JavascriptInstance = null;
-    }
+	deleteInstance() {
+		window.ioc4JavascriptInstance = null;
+	}
 
-    validateConstructorCallbackType(constructorCallback) {
-        if (!this.isFunction(constructorCallback)) {
-            throw ('EXCEPTION [registerConstructor]: the "constructorCallback" must be a valid "Function" wich returns an instance object.\n' + this.getCallStack());
-        }
-    }
+	validateConstructorCallbackType(constructorCallback) {
+		if (!this.isFunction(constructorCallback)) {
+			throw new Error(
+				`EXCEPTION [registerConstructor]: the "constructorCallback" must be a valid "Function" which returns an instance object.\n${this.getCallStack()}`
+			);
+		}
+	}
 
-    validateTypeHasBeenRegistered(key) {
-        if (!!key && !this.types[key]) {
-            throw ('EXCEPTION [validateTypeHasBeenRegistered]: the key "' + key + '" has not been registered yet.\n' + this.getCallStack());
-        }
-    }
+	validateTypeHasBeenRegistered(key) {
+		if (!!key && !this.types[key]) {
+			throw new Error('EXCEPTION [validateTypeHasBeenRegistered]: the key "' + key + '" has not been registered yet.\n' + this.getCallStack());
+		}
+	}
 
-    createInstanceOf(key) {
-        let instance = this.tryConstructorCallback(key);
+	createInstanceOf(key) {
+		let instance = this.tryConstructorCallback(key);
 
-        if (!instance) {
-            if (!!this.getType(key).prototype) {
-                let objectType = this.getType(key);
-                instance = new objectType();
-            } else if (!!this.getType(key)) {
-                instance = this.getType(key);
-            } else {
-                throw ('You must register an Object Type for the key "' + key + '" before to use it.');
-            }
-        }
+		if (!instance) {
+			if (!!this.getType(key).prototype) {
+				let objectType = this.getType(key);
+				instance = new objectType();
+			} else if (!!this.getType(key)) {
+				instance = this.getType(key);
+			} else {
+				throw new Error('You must register an Object Type for the key "' + key + '" before to use it.');
+			}
+		}
 
-        if (!!this.types[key].instanceDefinitionCallback) {
-            instance = this.types[key].instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
-        }
+		if (!!this.types[key].instanceDefinitionCallback) {
+			instance = this.types[key].instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
+		}
 
-        return instance;
-    }
+		return instance;
+	}
 
-    getType(key) {
-        this.validateKeyType(key);
-        this.validateTypeHasBeenRegistered(key);
+	getType(key) {
+		this.validateKeyType(key);
+		this.validateTypeHasBeenRegistered(key);
 
-        return this.types[key].type;
-    }
+		return this.types[key].type;
+	}
 
-    getInstanceOf(key, instanceDefinitionCallback) {
-        let instance = this.singletons[key] ||
-            this.tryConstructorCallback(key) ||
-            this.createInstanceOf(key);
+	getInstanceOf(key, instanceDefinitionCallback) {
+		let instance = this.singletons[key] || this.tryConstructorCallback(key) || this.createInstanceOf(key);
 
-        if (!!instanceDefinitionCallback) {
-            instance = instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
-        }
+		if (!!instanceDefinitionCallback) {
+			instance = instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
+		}
 
-        return instance;
-    }
+		return instance;
+	}
 
-    tryConstructorCallback(key) {
-        return (!!this.constructors[key] &&
-            this.constructors[key].constructorCallback(
-                this,
-                this.aop,
-                this.mapper
-            )
-        );
-    }
+	tryConstructorCallback(key) {
+		return !!this.constructors[key] && this.constructors[key].constructorCallback(this, this.aop, this.mapper);
+	}
 
-    registerType(type, key, instanceDefinitionCallback) {
-        this.validateAlreadyRegistered(this.types, key);
-        this.validateKeyType(key);
-        this.validateType(type);
+	registerType(type, key, instanceDefinitionCallback) {
+		this.validateAlreadyRegistered(this.types, key);
+		this.validateKeyType(key);
+		this.validateType(type);
 
-        this.types[key] = { key: key, typeName: type.name, type: type, instanceDefinitionCallback: instanceDefinitionCallback };
+		this.types[key] = { key: key, typeName: type.name, type: type, instanceDefinitionCallback: instanceDefinitionCallback };
 
-        return this;
-    }
+		return this;
+	}
 
-    registerConstructor(key, constructorCallback) {
-        this.validateAlreadyRegistered(this.constructors, key, 'constructors');
-        this.validateKeyType(key);
-        this.validateConstructorCallbackType(constructorCallback);
+	registerConstructor(key, constructorCallback) {
+		this.validateAlreadyRegistered(this.constructors, key, "constructors");
+		this.validateKeyType(key);
+		this.validateConstructorCallbackType(constructorCallback);
 
-        this.constructors[key] = { constructorCallback: constructorCallback };
-    }
+		this.constructors[key] = { constructorCallback: constructorCallback };
+	}
 
-    registerSingletonType(type, key, instanceDefinitionCallback, instance) {
-        this.registerType(type, key, instanceDefinitionCallback);
+	registerSingletonType(type, key, instanceDefinitionCallback, instance) {
+		this.registerType(type, key, instanceDefinitionCallback);
 
-        this.singletons[key] = instance || this.createInstanceOf(key);
-    }
+		this.singletons[key] = instance || this.createInstanceOf(key);
+	}
 }
 
-export default IoC4Javascript
+export default IoC4Javascript;
