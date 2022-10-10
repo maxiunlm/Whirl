@@ -54,7 +54,7 @@ class UserShot extends Component {
 		let position = this.maths.moveToNextEllipticalPosition();
 
 		// TODO: si la postion esta cerca del centro:
-		if (this.isTimeout() || this.maths.isNearToCenter(position)) {
+		if (this.isNearToCenter(position)) {
 			this.props.actions.stopShotting(this);
 			return;
 		}
@@ -67,6 +67,11 @@ class UserShot extends Component {
 		});
 
 		// setTimeout(this.doShot.bind(this), this.movementInterval);
+	}
+
+	isNearToCenter(position) {
+		const result = this.isTimeout() || this.maths.isNearToCenter(position);
+		return result;
 	}
 
 	isTimeout() {
