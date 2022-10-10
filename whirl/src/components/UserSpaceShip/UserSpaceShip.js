@@ -18,6 +18,8 @@ class UserSpaceShip extends Component {
 		this.movementInterval = 0.04;
 		this.lastShot = new Date();
 		this.shots = [];
+		const width = this.maths.getWidth();
+		const height = this.maths.getHeight();
 		this.state = {
 			image: "/images/UserSpaceShipStopped.png",
 			shots: false,
@@ -27,16 +29,16 @@ class UserSpaceShip extends Component {
 				toRight: "/images/UserSpaceShipToRight.png",
 			},
 			style: {
-				width: this.maths.getWidth(),
-				height: this.maths.getHeight(),
+				width: width,
+				height: height,
 				top: this.maths.getTop(),
 				left: this.maths.getLeft(),
 				transformOrigin: "top left",
 				transform: "rotate(0deg)",
 			},
 			shipStyle: {
-				width: this.maths.getWidth(),
-				height: this.maths.getHeight(),
+				width: width,
+				height: height,
 			},
 		};
 	}
