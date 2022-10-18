@@ -159,7 +159,6 @@ describe("UserShot - ", () => {
 			expect(setStateParameter.style.left).toEqual(commonFakes.position.left);
 		});
 
-		// TODO: !!!
 		it('when the position is near to center point, then invokes "stopShotting" method from "actions" object', () => {
 			let sut = new UserShot(commonFakes);
 			sut.startingAt = new Date();
@@ -168,7 +167,7 @@ describe("UserShot - ", () => {
 			});
 			spyOn(commonFakes.actions, "stopShotting").and.callThrough();
 			spyOn(ShotMaths.prototype, "moveToNextEllipticalPosition").and.callFake(() => {
-				return commonFakes.position; // TODO: ~= centerY
+				return commonFakes.position;
 			});
 			spyOn(sut, "isNearToCenter").and.callFake(() => {
 				return true;
@@ -179,17 +178,6 @@ describe("UserShot - ", () => {
 			expect(commonFakes.actions.stopShotting).toHaveBeenCalled();
 			expect(commonFakes.actions.stopShotting.calls.count()).toEqual(commonFakes.once);
 		});
-		//        it('when the left position is less than 10px to center point, then invokes "stopShotting" method from "actions" object', () => {
-		//            let sut = new UserShot(commonFakes);
-		//            spyOn(commonFakes.actions, 'stopShotting').and.callThrough();
-		//            spyOn(ShotMaths.prototype, 'moveToNextEllipticalPosition').and.callFake(() => {
-		//                return commonFakes.position; // TODO: ~= centerX
-		//            });
-		//            sut.doShot();
-		//
-		//            expect(commonFakes.actions.stopShotting).toHaveBeenCalled();
-		//            expect(commonFakes.actions.stopShotting.calls.count()).toEqual(commonFakes.once);
-		//        });
 	});
 
 	describe("componentDidMount - ", () => {
@@ -249,13 +237,108 @@ describe("UserShot - ", () => {
 			expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.dimensionsKey);
 		});
 
-		it('With "dimensionsKey" string key calls the "getInstanceOf" method from "IoC4Javascript" object wich returns an "Dimensions" instance', () => {
+		it('With "dimensionsKey" string key calls the "getInstanceOf" method from "IoC4Javascript" object which returns an "Dimensions" instance', () => {
 			spyOn(IoC4Javascript.prototype, "getInstanceOf").and.callThrough();
 			let sut = new UserShot(commonFakes);
 
 			let result = sut.getDimensions();
 
 			expect(result instanceof Dimensions).toBeTruthy();
+		});
+	});
+
+	describe("isNearToCenter - ", () => {
+		it("With a position object invokes the isNearToCenter method from a ShotMaths object", () => {
+			spyOn(ShotMaths.prototype, "isNearToCenter").and.callFake(() => true);
+			let sut = new UserShot(commonFakes);
+			spyOn(sut, "isTimeout").and.callFake(() => false);
+
+			sut.isNearToCenter(commonFakes.position);
+
+			expect(ShotMaths.prototype.isNearToCenter).toHaveBeenCalledWith(commonFakes.position);
+		});
+
+		it("With a position object invokes the isTimeout method from the sut object", () => {
+			spyOn(ShotMaths.prototype, "isNearToCenter").and.callFake(() => true);
+			let sut = new UserShot(commonFakes);
+			spyOn(sut, "isTimeout").and.callFake(() => false);
+
+			sut.isNearToCenter(commonFakes.position);
+
+			expect(sut.isTimeout).toHaveBeenCalled();
+		});
+
+		it("With a position object calls the isTimeout method which returns false", () => {
+			spyOn(ShotMaths.prototype, "isNearToCenter").and.callFake(() => false);
+			let sut = new UserShot(commonFakes);
+			spyOn(sut, "isTimeout").and.callFake(() => false);
+
+			let result = sut.isNearToCenter(commonFakes.position);
+
+			expect(result).toBeFalsy();
+		});
+
+		it("With a position object calls the isNearToCenter method which returns false", () => {
+			spyOn(ShotMaths.prototype, "isNearToCenter").and.callFake(() => false);
+			let sut = new UserShot(commonFakes);
+			spyOn(sut, "isTimeout").and.callFake(() => false);
+
+			let result = sut.isNearToCenter(commonFakes.position);
+
+			expect(result).toBeFalsy();
+		});
+
+		it("With a position object calls the isTimeout method which returns true", () => {
+			spyOn(ShotMaths.prototype, "isNearToCenter").and.callFake(() => false);
+			let sut = new UserShot(commonFakes);
+			spyOn(sut, "isTimeout").and.callFake(() => true);
+
+			let result = sut.isNearToCenter(commonFakes.position);
+
+			expect(result).toBeTruthy();
+		});
+
+		it("With a position object calls the isNearToCenter method which returns true", () => {
+			spyOn(ShotMaths.prototype, "isNearToCenter").and.callFake(() => true);
+			let sut = new UserShot(commonFakes);
+			spyOn(sut, "isTimeout").and.callFake(() => false);
+
+			let result = sut.isNearToCenter(commonFakes.position);
+
+			expect(result).toBeTruthy();
+		});
+	});
+
+	describe("isTimeout", () => {
+		it("With a startingAt date older than a second returns true", () => {
+			let sut = new UserShot(commonFakes);
+			sut.startingAt = new Date();
+			sut.startingAt.setFullYear(sut.startingAt.getFullYear() - 1);
+
+			let result = sut.isTimeout();
+
+			expect(result).toBeTruthy();
+		});
+
+		it("With a startingAt date nearly than a second returns false", () => {
+			let sut = new UserShot(commonFakes);
+			sut.startingAt = new Date();
+			sut.startingAt.setFullYear(sut.startingAt.getFullYear() + 1);
+
+			let result = sut.isTimeout();
+
+			expect(result).toBeFalsy();
+		});
+
+		it("With a startingAt date invokes the getTime method from the Date object twice", () => {
+			spyOn(Date.prototype, "getTime").and.callThrough();
+			let sut = new UserShot(commonFakes);
+			sut.startingAt = new Date();
+
+			sut.isTimeout();
+
+			expect(Date.prototype.getTime).toHaveBeenCalled();
+			expect(Date.prototype.getTime.calls.count()).toEqual(commonFakes.twice);
 		});
 	});
 });

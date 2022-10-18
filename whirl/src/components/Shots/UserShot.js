@@ -13,7 +13,6 @@ class UserShot extends Component {
 		this.state = {};
 		this.mustContinue = true;
 
-		//    throw '-' + JSON.stringify(props.shot) + '-';
 		if (!!props.shot) {
 			this.maths.setAngle(props.shot.angle);
 
@@ -38,7 +37,6 @@ class UserShot extends Component {
 	startShotting() {
 		this.startingAt = new Date();
 		this.shotInterval = setInterval(this.doShot.bind(this), this.movementInterval);
-		//setTimeout(this.doShot.bind(this), this.movementInterval);
 	}
 
 	stopShotting() {
@@ -53,7 +51,6 @@ class UserShot extends Component {
 
 		let position = this.maths.moveToNextEllipticalPosition();
 
-		// TODO: si la postion esta cerca del centro:
 		if (this.isNearToCenter(position)) {
 			this.props.actions.stopShotting(this);
 			return;
@@ -65,8 +62,6 @@ class UserShot extends Component {
 				left: position.left,
 			},
 		});
-
-		// setTimeout(this.doShot.bind(this), this.movementInterval);
 	}
 
 	isNearToCenter(position) {
