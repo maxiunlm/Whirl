@@ -1148,4 +1148,53 @@ describe("UserSpaceShip - ", () => {
 			expect(sut.shots[commonFakes.firstIndex].rotation).toEqual(commonFakes.flatAngleInDegrees);
 		});
 	});
+
+	describe("stopShotting", () => {
+		it("With a UserShot object invokes the stopShotting method from UserShot class", () => {
+			spyOn(UserShot.prototype, "stopShotting").and.callFake(() => {});
+			let sut = new UserSpaceShip(commonFakes);
+
+			sut.stopShotting(commonFakes.userShot);
+
+			expect(UserShot.prototype.stopShotting).toHaveBeenCalled();
+			expect(UserShot.prototype.stopShotting.calls.count()).toEqual(commonFakes.once);
+		});
+
+		it("With a UserShot object invokes the indexOf method from Array class", () => {
+			let sut = new UserSpaceShip(commonFakes);
+			spyOn(UserShot.prototype, "stopShotting").and.callFake(() => {});
+			spyOn(sut.shots, "indexOf").and.callFake(() => commonFakes.firstIndex);
+			sut.shots.push(commonFakes.shot);
+
+			sut.stopShotting(commonFakes.userShot);
+
+			expect(sut.shots.indexOf).toHaveBeenCalled();
+			expect(sut.shots.indexOf.calls.count()).toEqual(commonFakes.once);
+		});
+
+		it("With a UserShot object invokes the slice method from Array class", () => {
+			let sut = new UserSpaceShip(commonFakes);
+			spyOn(UserShot.prototype, "stopShotting").and.callFake(() => {});
+			spyOn(sut.shots, "slice").and.callFake(() => []);
+			sut.shots.push(commonFakes.shot);
+
+			sut.stopShotting(commonFakes.userShot);
+
+			expect(sut.shots.slice).toHaveBeenCalledWith(commonFakes.firstIndex, commonFakes.secondIndex);
+			expect(sut.shots.slice.calls.count()).toEqual(commonFakes.once);
+		});
+
+		it("With a UserShot object invokes the the setState method from sut object", () => {
+			let sut = new UserSpaceShip(commonFakes);
+			spyOn(UserShot.prototype, "stopShotting").and.callFake(() => {});
+			spyOn(sut.shots, "slice").and.callFake(() => []);
+			spyOn(sut, "setState").and.callThrough();
+			sut.shots.push(commonFakes.shot);
+
+			sut.stopShotting(commonFakes.userShot);
+
+			expect(sut.setState).toHaveBeenCalledWith(jasmine.any(Object));
+			expect(sut.setState.calls.count()).toEqual(commonFakes.once);
+		});
+	});
 });

@@ -10,7 +10,7 @@ class UserSpaceShip extends Component {
 		super(props);
 
 		this.actions = {
-			stopShotting: this.stopShotting.bind(this), // TODO: TDD !!!!
+			stopShotting: this.stopShotting.bind(this),
 		};
 
 		this.ioc = new IoC4Javascript();
@@ -134,7 +134,6 @@ class UserSpaceShip extends Component {
 	}
 
 	stopShotting(shot) {
-		// TODO: TDD !!!
 		shot.stopShotting();
 
 		const index = this.shots.indexOf(shot.props.shot);

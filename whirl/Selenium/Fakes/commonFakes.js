@@ -11,6 +11,7 @@ import UserSpaceShipGeometric from "../../src/maths/UserSpaceShip/UserSpaceShipG
 class CommonFakes {
 	constructor() {
 		this.firstIndex = 0;
+		this.secondIndex = 1;
 		this.defaultInteger = 0;
 		this.anytime = 0;
 		this.once = 1;
@@ -84,6 +85,7 @@ class CommonFakes {
 		this.dimensions = new Dimensions(this.gameWidth, this.gameHeight);
 		this.userSpaceShipGeometric = new UserSpaceShipGeometric();
 		this.ellipsePath = new EllipsePath();
+		this.userShot = new UserShot({ shot: this.shot });
 	}
 
 	loadAppFakes() {
@@ -115,6 +117,7 @@ class CommonFakes {
 			keyCode: this.rightKeyCode,
 			preventDefault: () => {},
 		};
+		this.refresh = { refresh: true };
 	}
 
 	loadUserSpaceShipFakes() {
@@ -144,7 +147,7 @@ class CommonFakes {
 		this.positionLeft = 1;
 		this.positionTop = 2;
 		this.position = { top: this.positionTop, left: this.positionLeft };
-		this.shot = this.position;
+		this.shot = { angle: this.initialNumberValue, top: this.positionTop, left: this.positionLeft };
 		this.stateChangedPosition = {
 			style: {
 				width: this.userSpaceShipWidth,
