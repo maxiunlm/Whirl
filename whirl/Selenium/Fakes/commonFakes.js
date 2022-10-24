@@ -98,7 +98,7 @@ class CommonFakes {
 		this.downKeyCode = 40;
 		this.props = {
 			ioc: this.ioc,
-			angle: this.initialNumberValue,
+			angle: this.startAngle,
 		};
 		this.eventSpaceBarKeyCode = {
 			keyCode: this.spaceBarKeyCode,
@@ -138,7 +138,7 @@ class CommonFakes {
 		this.ellipsePathDeltaA = -100;
 		this.ellipsePathDeltaB = 100;
 		this.ellipsePathRadiusPercentage = 0.54;
-		this.ellipsePathInitialAngle = 0;
+		this.ellipsePathInitialAngle = this.startAngle;
 		this.ellipsePathDeltaAngle = 0.01;
 		this.ellipsePathRadiusDelta = 2;
 	}
@@ -147,7 +147,7 @@ class CommonFakes {
 		this.positionLeft = 1;
 		this.positionTop = 2;
 		this.position = { top: this.positionTop, left: this.positionLeft };
-		this.shot = { angle: this.initialNumberValue, top: this.positionTop, left: this.positionLeft };
+		this.shot = { angle: this.startAngle, top: this.positionTop, left: this.positionLeft };
 		this.stateChangedPosition = {
 			style: {
 				width: this.userSpaceShipWidth,

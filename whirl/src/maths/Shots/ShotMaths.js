@@ -4,9 +4,7 @@ class ShotMaths {
 	constructor(deltaRadius) {
 		this.ioc = new IoC4Javascript();
 
-		//if (!!deltaRadius) { TODO: Revisar si va + TDD !!!
 		this.initialize(deltaRadius);
-		//}
 	}
 
 	initialize(deltaRadius) {
@@ -15,7 +13,6 @@ class ShotMaths {
 	}
 
 	setAngle(angle) {
-		// TODO: TDD !!!
 		this.path.setAngle(angle);
 	}
 
