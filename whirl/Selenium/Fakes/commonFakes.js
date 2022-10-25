@@ -147,6 +147,7 @@ class CommonFakes {
 		this.positionLeft = 1;
 		this.positionTop = 2;
 		this.position = { top: this.positionTop, left: this.positionLeft };
+		this.centerPosition = { top: this.gameHeight / 2, left: this.gameWidth / 2 };
 		this.shot = { angle: this.startAngle, top: this.positionTop, left: this.positionLeft };
 		this.stateChangedPosition = {
 			style: {

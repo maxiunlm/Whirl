@@ -37,7 +37,6 @@ class EllipsePath {
 	}
 
 	isNearToCenter(position) {
-		// TODO: TDD !!!
 		const isNearToCenterY = this.isNearToCenterY(position);
 		const isNearToCenterX = this.isNearToCenterX(position);
 
@@ -49,12 +48,10 @@ class EllipsePath {
 	}
 
 	isNearToCenterY(position) {
-		// TODO: TDD !!!
 		return position.top < this.dimensions.centerY + delta && position.top > this.dimensions.centerY - delta;
 	}
 
 	isNearToCenterX(position) {
-		// TODO: TDD !!!
 		return position.left < this.dimensions.centerX + delta && position.left > this.dimensions.centerX - delta;
 	}
 
