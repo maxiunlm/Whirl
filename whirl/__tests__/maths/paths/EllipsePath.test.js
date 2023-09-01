@@ -48,12 +48,12 @@ describe("EllipsePath", () => {
 
 	describe("getUserSpaceShipGeometric - ", () => {
 		it('With "userSpaceShipGeometricKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
-			spyOn(IoC4Javascript.prototype, "getInstanceOf").and.callThrough();
 			let sut = new EllipsePath();
+			spyOn(sut.ioc, "getInstanceOf").and.callThrough();
 
 			sut.getUserSpaceShipGeometric();
 
-			expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.userSpaceShipGeometricKey);
+			expect(sut.ioc.getInstanceOf).toHaveBeenCalledWith(commonFakes.userSpaceShipGeometricKey);
 			// TODO: REVISAR !!! Lo llama el 2 veces en lugar de una porque es un Singleton vuelve a computar (LOS TESTS NO SON INDEPENDEINTES) !!!
 			//expect(IoC4Javascript.prototype.getInstanceOf.calls.count()).toEqual(commonFakes.once);
 			// NO FUNCIONA !!! -> IoC4Javascript.prototype.getInstanceOf.calls.reset();
@@ -71,12 +71,12 @@ describe("EllipsePath", () => {
 
 	describe("getDimensions - ", () => {
 		it('With "dimensionsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
-			spyOn(IoC4Javascript.prototype, "getInstanceOf").and.callThrough();
 			let sut = new EllipsePath();
+			spyOn(sut.ioc, "getInstanceOf").and.callThrough();
 
 			sut.getDimensions();
 
-			expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.dimensionsKey);
+			expect(sut.ioc.getInstanceOf).toHaveBeenCalledWith(commonFakes.dimensionsKey);
 			// TODO: REVISAR !!! Lo llama el 2 veces en lugar de una porque es un Singleton vuelve a computar (LOS TESTS NO SON INDEPENDEINTES) !!!
 			//expect(IoC4Javascript.prototype.getInstanceOf.calls.count()).toEqual(commonFakes.once);
 			// NO FUNCIONA !!! -> IoC4Javascript.prototype.getInstanceOf.calls.reset();

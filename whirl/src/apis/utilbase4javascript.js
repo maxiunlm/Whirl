@@ -1,4 +1,18 @@
 class UtilsBase4Javascript {
+	constructor() {
+		this.dispose = this.dispose.bind(this);
+		this.isObject = this.isObject.bind(this);
+		this.isString = this.isString.bind(this);
+		this.isFunction = this.isFunction.bind(this);
+		this.getCallStack = this.getCallStack.bind(this);
+		this.validateType = this.validateType.bind(this);
+		this.validateKeyType = this.validateKeyType.bind(this);
+		this.validateInstance = this.validateInstance.bind(this);
+		this.findFirstElement = this.findFirstElement.bind(this);
+		this.addDisposeMethod = this.addDisposeMethod.bind(this);
+		this.validateAlreadyRegistered = this.validateAlreadyRegistered.bind(this);
+	}
+
 	getCallStack() {
 		try {
 			let callStack = "";
@@ -94,6 +108,26 @@ class UtilsBase4Javascript {
 		}
 
 		return {};
+	}
+
+	dispose() {
+		const keys = Object.keys(this);
+
+		keys.forEach((k) => {
+			if (!!this[k]) {
+				if (!!this[k].dispose && this.isFunction(this[k].dispose)) {
+					this[k].dispose();
+				}
+
+				this[k] = null;
+			}
+		});
+	}
+
+	addDisposeMethod(instance) {
+		if (!!instance && this.isObject(instance) && !instance.dispose) {
+			instance.dispose = this.dispose.bind(instance);
+		}
 	}
 }
 

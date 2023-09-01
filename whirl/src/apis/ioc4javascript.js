@@ -3,7 +3,6 @@ import AopConfigParameters from "./aopConfigParameters";
 import Aop4Javascript from "./aop4javascript";
 import Mapper4Javascript from "./mapper4javascript";
 
-//let ioc4JavascriptInstance = null;
 window.ioc4JavascriptInstance = null;
 
 class IoC4Javascript extends UtilsBase4Javascript {
@@ -14,12 +13,18 @@ class IoC4Javascript extends UtilsBase4Javascript {
 			return window.ioc4JavascriptInstance;
 		} else if (!forceNewInstance) {
 			window.ioc4JavascriptInstance = this;
-			//            window.ioc4JavascriptInstance.getInstanceOf = window.ioc4JavascriptInstance.getInstanceOf.bind(window.ioc4JavascriptInstance);
-			//            window.ioc4JavascriptInstance.registerType = window.ioc4JavascriptInstance.registerType.bind(window.ioc4JavascriptInstance);
-			//            window.ioc4JavascriptInstance.registerConstructor = window.ioc4JavascriptInstance.registerConstructor.bind(window.ioc4JavascriptInstance);
-			//            window.ioc4JavascriptInstance.registerSingletonType = window.ioc4JavascriptInstance.registerSingletonType.bind(window.ioc4JavascriptInstance);
 		}
 
+		this.getType = this.getType.bind(this);
+		this.registerType = this.registerType.bind(this);
+		this.getInstanceOf = this.getInstanceOf.bind(this);
+		this.deleteInstance = this.deleteInstance.bind(this);
+		this.createInstanceOf = this.createInstanceOf.bind(this);
+		this.registerConstructor = this.registerConstructor.bind(this);
+		this.registerSingletonType = this.registerSingletonType.bind(this);
+		this.tryConstructorCallback = this.tryConstructorCallback.bind(this);
+		this.validateTypeHasBeenRegistered = this.validateTypeHasBeenRegistered.bind(this);
+		this.validateConstructorCallbackType = this.validateConstructorCallbackType.bind(this);
 		this.types = {};
 		this.constructors = {};
 		this.singletons = {};
@@ -53,7 +58,8 @@ class IoC4Javascript extends UtilsBase4Javascript {
 		}
 	}
 
-	createInstanceOf(key) {
+	createInstanceOf(key, hasToAddDisposeMethod) {
+		hasToAddDisposeMethod = !!hasToAddDisposeMethod || false;
 		let instance = this.tryConstructorCallback(key);
 
 		if (!instance) {
@@ -71,6 +77,10 @@ class IoC4Javascript extends UtilsBase4Javascript {
 			instance = this.types[key].instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
 		}
 
+		if (hasToAddDisposeMethod) {
+			this.addDisposeMethod(instance);
+		}
+
 		return instance;
 	}
 
@@ -81,11 +91,19 @@ class IoC4Javascript extends UtilsBase4Javascript {
 		return this.types[key].type;
 	}
 
-	getInstanceOf(key, instanceDefinitionCallback) {
-		let instance = this.singletons[key] || this.tryConstructorCallback(key) || this.createInstanceOf(key);
+	getInstanceOf(key, instanceDefinitionCallback, hasToAddDisposeMethod) {
+		hasToAddDisposeMethod = !!hasToAddDisposeMethod || false;
+		let instance = this.singletons[key] || this.tryConstructorCallback(key) || this.createInstanceOf(key, hasToAddDisposeMethod);
 
 		if (!!instanceDefinitionCallback) {
+			// && this.isFunction(instanceDefinitionCallback)) {
 			instance = instanceDefinitionCallback(instance, this, this.aop, this.mapper) || instance;
+			// } else if (!!instanceDefinitionCallback && !this.isFunction(instanceDefinitionCallback)) {
+			// 	throw new Error('"instanceDefinitionCallback" must be a Function or undefined');
+		}
+
+		if (hasToAddDisposeMethod) {
+			this.addDisposeMethod(instance);
 		}
 
 		return instance;

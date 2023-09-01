@@ -23,6 +23,7 @@ class CommonFakes {
 		this.sevenTimes = 7;
 		this.startIndex = 0;
 		this.initialNumberValue = 0;
+		this.emptyString = "";
 		this.emptyObject = {};
 
 		this.startAngle = 0;

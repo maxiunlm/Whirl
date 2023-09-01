@@ -11,6 +11,7 @@ import UserSpaceShipGeometric from "./maths/UserSpaceShip/UserSpaceShipGeometric
 import UserShot from "./components/Shots/UserShot";
 import IoC4Javascript from "./apis/ioc4javascript";
 import "./index.css";
+import AlienSpaceShipMaths from "./maths/AlienSpaceShip/AlienSpaceShipMaths.js";
 
 class MainApp {
 	constructor() {
@@ -21,11 +22,10 @@ class MainApp {
 	}
 
 	registerObjectsConfigurations() {
-		this.ioc.getInstanceOf.bind(this.ioc);
-
 		this.ioc.registerConstructor("dimensionsKey", this.constructDimensions.bind(this));
 
 		this.ioc.registerType(UserSpaceShipMaths, "userSpaceShipMathsKey");
+		this.ioc.registerType(AlienSpaceShipMaths, "alienSpaceShipMathsKey");
 		this.ioc.registerType(EllipsePath, "ellipsePathKey");
 		this.ioc.registerType(Position, "positionKey");
 		this.ioc.registerType(ShotMaths, "shotMathsKey");

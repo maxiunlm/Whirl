@@ -56,20 +56,20 @@ describe("UserShot - ", () => {
 
 	describe("getNewShotMaths - ", () => {
 		it('With a "shotMathsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
-			spyOn(IoC4Javascript.prototype, "getInstanceOf").and.callThrough();
 			let sut = new UserShot(commonFakes);
+			spyOn(sut.ioc, "getInstanceOf").and.callThrough();
 
 			sut.getNewShotMaths();
 
-			expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.shotMathsKey);
+			expect(sut.ioc.getInstanceOf).toHaveBeenCalledWith(commonFakes.shotMathsKey);
 			//TODO: REVISAR !!! Lo llama el 4 veces en lugar de una porque es un Singleton vuelve a computar (LOS TESTS NO SON INDEPENDEINTES) !!!
 			//expect(IoC4Javascript.prototype.getInstanceOf.calls.count()).toEqual(commonFakes.once);
 			//// NO FUNCIONA !!! -> IoC4Javascript.prototype.getInstanceOf.calls.rest();
 		});
 
 		it('With a "shotMathsKey" string key calls the "getInstanceOf" method from "IoC4Javascript" object wich returns an "ShotMaths" instance', () => {
-			spyOn(IoC4Javascript.prototype, "getInstanceOf").and.callThrough();
 			let sut = new UserShot(commonFakes);
+			spyOn(sut.ioc, "getInstanceOf").and.callThrough();
 
 			let result = sut.getNewShotMaths();
 
@@ -229,17 +229,17 @@ describe("UserShot - ", () => {
 
 	describe("getDimensions - ", () => {
 		it('With "dimensionsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
-			spyOn(IoC4Javascript.prototype, "getInstanceOf").and.callThrough();
 			let sut = new UserShot(commonFakes);
+			spyOn(sut.ioc, "getInstanceOf").and.callThrough();
 
 			sut.getDimensions();
 
-			expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.dimensionsKey);
+			expect(sut.ioc.getInstanceOf).toHaveBeenCalledWith(commonFakes.dimensionsKey);
 		});
 
 		it('With "dimensionsKey" string key calls the "getInstanceOf" method from "IoC4Javascript" object which returns an "Dimensions" instance', () => {
-			spyOn(IoC4Javascript.prototype, "getInstanceOf").and.callThrough();
 			let sut = new UserShot(commonFakes);
+			spyOn(sut.ioc, "getInstanceOf").and.callThrough();
 
 			let result = sut.getDimensions();
 

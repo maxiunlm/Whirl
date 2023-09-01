@@ -154,15 +154,15 @@ describe("UserSpaceShip - ", () => {
 
 	describe("getNewUserSpaceShipMaths - ", () => {
 		it('With a "userSpaceShipMathsKey" string key invokes the "getInstanceOf" method from "IoC4Javascript" object', () => {
-			spyOn(IoC4Javascript.prototype, "getInstanceOf").and.callThrough();
 			let sut = new UserSpaceShip(commonFakes);
+			spyOn(sut.ioc, "getInstanceOf").and.callThrough();
 			spyOn(sut, "setState").and.callFake((state) => {
 				sut.state = state;
 			});
 
 			sut.getNewUserSpaceShipMaths();
 
-			expect(IoC4Javascript.prototype.getInstanceOf).toHaveBeenCalledWith(commonFakes.userSpaceShipMathsKey);
+			expect(sut.ioc.getInstanceOf).toHaveBeenCalledWith(commonFakes.userSpaceShipMathsKey);
 			//TODO: REVISAR !!! Lo llama el 4 veces en lugar de una porque es un Singleton vuelve a computar (LOS TESTS NO SON INDEPENDEINTES) !!!
 			//expect(IoC4Javascript.prototype.getInstanceOf.calls.count()).toEqual(commonFakes.once);
 			//// NO FUNCIONA !!! -> IoC4Javascript.prototype.getInstanceOf.calls.rest();
