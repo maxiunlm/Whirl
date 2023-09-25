@@ -4,7 +4,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import CommonFakes from "../../../Selenium/Fakes/commonFakes";
 import UserSpaceShipMaths from "../../../src/maths/UserSpaceShip/UserSpaceShipMaths";
-import UserSpaceShipGeometric from "../../../src/maths/UserSpaceShip/UserSpaceShipGeometric";
 import Dimensions from "../../../src/maths/paths/Dimensions";
 import UserSpaceShip from "../../../src/components/UserSpaceShip/UserSpaceShip";
 import UserShot from "../../../src/components/Shots/UserShot";

@@ -7,6 +7,7 @@ import UserSpaceShipMaths from "../../src/maths/UserSpaceShip/UserSpaceShipMaths
 import UserShot from "../../src/components/Shots/UserShot";
 import ShotMaths from "../../src/maths/Shots/ShotMaths";
 import UserSpaceShipGeometric from "../../src/maths/UserSpaceShip/UserSpaceShipGeometric";
+import AlienSpaceShipMaths from "../../src/maths/AlienSpaceShip/AlienSpaceShipMaths";
 
 class CommonFakes {
 	constructor() {
@@ -42,6 +43,7 @@ class CommonFakes {
 	loadObjectManagerConfigFakes() {
 		this.dimensionsKey = "dimensionsKey";
 		this.userSpaceShipMathsKey = "userSpaceShipMathsKey";
+		this.alienSpaceShipMathsKey = "alienSpaceShipMathsKey";
 		this.userSpaceShipGeometricKey = "userSpaceShipGeometricKey";
 		this.ellipsePathKey = "ellipsePathKey";
 		this.calculusKey = "calculusKey";
@@ -60,7 +62,9 @@ class CommonFakes {
 
 			this.ioc.registerType.call(this.ioc, EllipsePath, this.ellipsePathKey);
 			this.ioc.registerType.call(this.ioc, Position, this.positionKey);
+			this.ioc.registerType.call(this.ioc, Position, this.positionKey);
 			this.ioc.registerType.call(this.ioc, UserSpaceShipMaths, this.userSpaceShipMathsKey);
+			this.ioc.registerType.call(this.ioc, AlienSpaceShipMaths, this.alienSpaceShipMathsKey);
 			this.ioc.registerConstructor.call(this.ioc, "userShotKey", () => {
 				return new UserShot(new Object());
 			});
