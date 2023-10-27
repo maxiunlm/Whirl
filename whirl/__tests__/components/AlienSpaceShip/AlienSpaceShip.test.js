@@ -18,11 +18,23 @@ describe("AlienSpaceShip - ", () => {
 
 	describe("CONSTRUCTOR - ", () => {
 		it("Initializes the object", () => {
+			spyOn(AlienSpaceShipMaths.prototype, "getTop").and.callFake(() => commonFakes.positionTop);
+			spyOn(AlienSpaceShipMaths.prototype, "getLeft").and.callFake(() => commonFakes.positionLeft);
+			spyOn(AlienSpaceShipMaths.prototype, "getWidth").and.callFake(() => commonFakes.alienSpaceShipWidth);
+			spyOn(AlienSpaceShipMaths.prototype, "getHeight").and.callFake(() => commonFakes.alienSpaceShipHeight);
 			const div = document.createElement("div");
 			ReactDOM.render(<AlienSpaceShip />, div);
 
 			expect(alienSpaceShipState.ioc instanceof IoC4Javascript).toBeTruthy();
-			expect(alienSpaceShipState.alienSpaceShipMaths instanceof AlienSpaceShipMaths).toBeTruthy();
+			expect(alienSpaceShipState.maths instanceof AlienSpaceShipMaths).toBeTruthy();
+			expect(AlienSpaceShipMaths.prototype.getTop).toHaveBeenCalled();
+			expect(AlienSpaceShipMaths.prototype.getTop.calls.count()).toEqual(commonFakes.once);
+			expect(AlienSpaceShipMaths.prototype.getLeft).toHaveBeenCalled();
+			expect(AlienSpaceShipMaths.prototype.getLeft.calls.count()).toEqual(commonFakes.once);
+			expect(AlienSpaceShipMaths.prototype.getWidth).toHaveBeenCalled();
+			expect(AlienSpaceShipMaths.prototype.getWidth.calls.count()).toEqual(commonFakes.once);
+			expect(AlienSpaceShipMaths.prototype.getHeight).toHaveBeenCalled();
+			expect(AlienSpaceShipMaths.prototype.getHeight.calls.count()).toEqual(commonFakes.once);
 		});
 	});
 });

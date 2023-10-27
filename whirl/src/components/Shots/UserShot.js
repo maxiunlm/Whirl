@@ -90,9 +90,10 @@ class UserShot extends Component {
 			return <span />;
 		}
 
-		this.state.style.transform = this.props.shot.transform;
+		let style = this.state.style;
+		style.transform = this.props.shot.transform;
 
-		return <img className="userShot" src={userShotImg} alt="." style={this.state.style} />;
+		return <img className="userShot" src={userShotImg} alt="." style={style} />;
 	}
 }
 

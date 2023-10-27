@@ -32,6 +32,7 @@ class CommonFakes {
 		this.flatAngleInDegrees = 180;
 
 		this.loadAppFakes();
+		this.loadAlienSpaceShipFakes();
 		this.loadUserSpaceShipFakes();
 		this.loadUserShotFakes();
 		this.loadEllipsePathFakes();
@@ -136,6 +137,14 @@ class CommonFakes {
 			stopShotting: function () {},
 		};
 		this.movementInterval = 0.04;
+	}
+
+	loadAlienSpaceShipFakes() {
+		// this.alienSpaceShipImage = "/images/ufoShip.png";
+		// this.alienShotImage = "/images/alienShot.png";
+		this.alienSpaceShipHeight = 70;
+		this.alienSpaceShipWidth = 40;
+		// this.movementInterval = 0.04;
 	}
 
 	loadEllipsePathFakes() {

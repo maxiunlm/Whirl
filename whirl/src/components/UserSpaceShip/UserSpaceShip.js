@@ -176,15 +176,12 @@ class UserSpaceShip extends Component {
 	render() {
 		return (
 			<div id="userSpaceShipContainer">
-				{this.shots.map((s) => {
-					return <UserShot shot={s} actions={this.actions} />;
+				{this.shots.map((s, index) => {
+					return <UserShot key={"UserShot-" + index} shot={s} actions={this.actions} />;
 				})}
 				<div id="userSpaceShip" className="userSpaceShip" style={this.state.style}>
 					<img src={this.state.image} alt="A" style={this.state.shipStyle}></img>
 				</div>
-				{/* <div className="userSpaceShip" style={{ backgroundColor: "blue", top: this.state.style.top, left: this.state.style.left }}>
-					.
-				</div> */}
 			</div>
 		);
 	}

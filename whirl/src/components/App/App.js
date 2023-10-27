@@ -4,6 +4,7 @@ import UserSpaceShip from "../UserSpaceShip/UserSpaceShip.js";
 import LeftDirection from "../Buttons/LeftDirection.js";
 import RightDirection from "../Buttons/RightDirection.js";
 import ShotButton from "../Buttons/ShotButton.js";
+import AlienSpaceShip from "../AlienSpaceShip/AlienSpaceShip";
 
 class App extends Component {
 	constructor(props) {
@@ -87,6 +88,7 @@ class App extends Component {
 		return (
 			<div>
 				<UserSpaceShip actions={this.actions} />
+				{/* <AlienSpaceShip /> */}
 				<div className="leftCircleButtons">
 					<LeftDirection
 						actionStart={(event) => this.actions.moveUserSpaceShipToLeft(event)}
